@@ -1,6 +1,6 @@
 {
   "name": "@ircam/comote-helpers",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Server component & utilities for the CoMo.te application",
   "authors": [
     "Benjamin.Matuszewski@ircam.fr",
