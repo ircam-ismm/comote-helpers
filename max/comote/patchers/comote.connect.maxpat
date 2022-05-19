@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 72.0, 343.0, 774.0, 480.0 ],
+		"rect" : [ 185.0, 222.0, 1346.0, 944.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,13 +40,90 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-12",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 223.0, 29.0, 63.0, 22.0 ],
+					"text" : "script stop"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-11",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 315.0, 29.0, 64.0, 22.0 ],
+					"text" : "script start"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bgmode" : 0,
+					"border" : 0,
+					"clickthrough" : 0,
+					"enablehscroll" : 0,
+					"enablevscroll" : 0,
+					"id" : "obj-6",
+					"lockeddragscroll" : 0,
+					"maxclass" : "bpatcher",
+					"name" : "n4m.monitor.maxpat",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"offset" : [ 0.0, 0.0 ],
+					"outlettype" : [ "bang" ],
+					"patching_rect" : [ 462.0, 29.0, 563.0, 410.0 ],
+					"viewvisibility" : 1
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-5",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"patching_rect" : [ 313.0, 80.0, 115.0, 22.0 ],
+					"saved_object_attributes" : 					{
+						"autostart" : 0,
+						"defer" : 0,
+						"node_bin_path" : "",
+						"npm_bin_path" : "",
+						"watch" : 1
+					}
+,
+					"text" : "node.script server.js"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"comment" : "",
+					"id" : "obj-1",
+					"index" : 0,
+					"maxclass" : "inlet",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 75.0, 44.0, 30.0, 30.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-32",
 					"maxclass" : "number",
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 642.0, 36.0, 50.0, 22.0 ]
+					"patching_rect" : [ 627.0, 537.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -57,7 +134,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 687.0, 125.0, 50.0, 22.0 ],
+					"patching_rect" : [ 672.0, 626.0, 50.0, 22.0 ],
 					"text" : "set 23"
 				}
 
@@ -69,7 +146,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 644.0, 82.0, 41.0, 22.0 ],
+					"patching_rect" : [ 629.0, 583.0, 41.0, 22.0 ],
 					"text" : "set $1"
 				}
 
@@ -82,7 +159,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 448.5, 125.0, 50.0, 22.0 ]
+					"patching_rect" : [ 433.5, 626.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -92,7 +169,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 429.0, 222.0, 32.0, 22.0 ],
+					"patching_rect" : [ 414.0, 723.0, 32.0, 22.0 ],
 					"text" : "print"
 				}
 
@@ -105,7 +182,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 619.0, 303.0, 152.0, 35.0 ],
+					"patching_rect" : [ 604.0, 804.0, 152.0, 35.0 ],
 					"text" : "comote/$1/devicemotion 1 2 3"
 				}
 
@@ -122,7 +199,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 461.999999999999943, 388.0, 50.0, 23.0 ],
+					"patching_rect" : [ 446.999999999999943, 889.0, 50.0, 23.0 ],
 					"text" : "print w"
 				}
 
@@ -139,7 +216,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 512.666671999999949, 421.0, 80.0, 23.0 ],
+					"patching_rect" : [ 497.666671999999949, 922.0, 80.0, 23.0 ],
 					"text" : "print default"
 				}
 
@@ -151,7 +228,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 486.0, 240.0, 169.0, 22.0 ],
+					"patching_rect" : [ 471.0, 741.0, 169.0, 22.0 ],
 					"text" : "comote/$1/devicemotion 1 2 3"
 				}
 
@@ -163,7 +240,7 @@
 					"numinlets" : 4,
 					"numoutlets" : 4,
 					"outlettype" : [ "", "", "", "" ],
-					"patching_rect" : [ 409.0, 327.0, 199.0, 22.0 ],
+					"patching_rect" : [ 394.0, 828.0, 199.0, 22.0 ],
 					"text" : "route devicemotion buttonA buttonB"
 				}
 
@@ -175,7 +252,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 606.0, 129.0, 67.0, 22.0 ],
+					"patching_rect" : [ 591.0, 630.0, 67.0, 22.0 ],
 					"text" : "udpreceive"
 				}
 
@@ -187,7 +264,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 444.0, 19.0, 150.0, 87.0 ],
+					"patching_rect" : [ 429.0, 520.0, 150.0, 87.0 ],
 					"text" : "- id\n- interval\nOSC\n- osc_hostname\n- osc_port\n- osc_autostart"
 				}
 
@@ -199,8 +276,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 46.0, 55.0, 135.0, 22.0 ],
-					"text" : "url http://127.0.0.1:8000"
+					"patching_rect" : [ 75.0, 114.0, 135.0, 22.0 ],
+					"text" : "url http://127.0.0.1:8080"
 				}
 
 			}
@@ -211,9 +288,11 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 46.0, 82.0, 346.0, 371.0 ],
+					"patching_rect" : [ 10.0, 185.5, 347.0, 481.0 ],
+					"presentation" : 1,
+					"presentation_rect" : [ -2.0, -1.0, 346.0, 371.0 ],
 					"rendermode" : 0,
-					"url" : "http://127.0.0.1:8000"
+					"url" : "http://127.0.0.1:8080"
 				}
 
 			}
@@ -224,7 +303,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 427.0, 163.0, 178.0, 22.0 ],
+					"patching_rect" : [ 412.0, 664.0, 178.0, 22.0 ],
 					"text" : "sprintf comote/%s/devicemotion"
 				}
 
@@ -241,6 +320,20 @@
 				"patchline" : 				{
 					"destination" : [ "obj-3", 0 ],
 					"source" : [ "obj-10", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 0 ],
+					"source" : [ "obj-11", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 0 ],
+					"source" : [ "obj-12", 0 ]
 				}
 
 			}
@@ -295,8 +388,40 @@
 				}
 
 			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-6", 0 ],
+					"source" : [ "obj-5", 1 ]
+				}
+
+			}
  ],
-		"dependency_cache" : [  ],
+		"dependency_cache" : [ 			{
+				"name" : "server.js",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/comote/patchers",
+				"patcherrelativepath" : ".",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "n4m.monitor.maxpat",
+				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "resize_n4m_monitor_patcher.js",
+				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "fit_jweb_to_bounds.js",
+				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+ ],
 		"autosave" : 0
 	}
 
