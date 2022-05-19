@@ -1,16 +1,8 @@
-import si from 'systeminformation';
-
 import WebSocket from 'ws';
 import isValidUTF8 from 'utf-8-validate';
 import { Server as OscServer } from 'node-osc';
 import cloneDeep from 'clone-deep';
 import assignDeep from 'assign-deep';
-
-/**
- * @typedef {Object} WifiInfos
- * @property {number} ssid - SSID of the WiFi connection
- * @property {number} ip - Related IP (IPV4)
- */
 
 /**
  * @typedef {Object} CoMoteConfig
@@ -27,33 +19,6 @@ import assignDeep from 'assign-deep';
  * @property {Boolean} autostart - enable streaming on CoMo.te application
  */
 
-
-
-/**
- * Retrieve the SSID and related IP of the first WiFi connection found, return
- * `null` if no WiFi connection found.
- *
- * @async
- * @return {WiFiInfos|null}
- */
-export async function getWifiInfos() {
-  // find first wifi connection
-  const wifiConnections = await si.wifiConnections();
-  const conn = wifiConnections[0];
-
-  if (!conn) {
-    return null;
-  }
-
-  // find related interface
-  const interfaces = await si.networkInterfaces();
-  const int = interfaces.find(int => int.iface === conn.iface);
-
-  return {
-    ssid: conn.ssid,
-    ip: int.ip4,
-  };
-}
 
 /**
  * Launch WebSocket and/or OSC server according to given `CoMoteConfig` object

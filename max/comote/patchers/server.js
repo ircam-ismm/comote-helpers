@@ -4,7 +4,7 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 const { WebSocketServer } = require('ws');
-const CoMote = require('@ircam/comote-helpers/server.js');
+const { getWifiInfos } = require('@ircam/comote-helpers/wifi-infos.js');
 
 const comoteConfig = {
   id: 0,
@@ -28,13 +28,6 @@ const server = http.createServer((req, res) => {
     '.js': 'text/javascript',
     '.json': 'application/json',
     '.css': 'text/css',
-    // '.png': 'image/png',
-    // '.jpg': 'image/jpeg',
-    // '.wav': 'audio/wav',
-    // '.mp3': 'audio/mpeg',
-    // '.svg': 'image/svg+xml',
-    // '.pdf': 'application/pdf',
-    // '.doc': 'application/msword'
   };
 
   fs.exists(pathname, (exist) => {
@@ -69,7 +62,7 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', async function connection(ws) {
-  const wifiInfos = await CoMote.getWifiInfos();
+  const wifiInfos = await getWifiInfos();
   comoteConfig.osc.hostname = wifiInfos.ip;
 
   ws.send(JSON.stringify({ type: 'wifiInfos', payload: wifiInfos }));

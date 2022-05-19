@@ -11,8 +11,9 @@ import getConfig from '../utils/getConfig.js';
 
 import infos from './schemas/infos.js';
 
-import * as CoMote from '@ircam/comote-helpers/server.js';
+import { Server as CoMoteServer } from '@ircam/comote-helpers/server.js';
 import * as CoMoteQRCode from '@ircam/comote-helpers/qrcode.js';
+import { getWifiInfos } from '@ircam/comote-helpers/wifi-infos.js';
 
 const ENV = process.env.ENV || 'default';
 
@@ -61,7 +62,7 @@ server.stateManager.registerSchema('infos', infos);
       };
     });
 
-    const wifiInfos = await CoMote.getWifiInfos();
+    const wifiInfos = await getWifiInfos();
     const comoteConfig = {
       id: 42,
       interval: 20, // period in ms
@@ -77,7 +78,7 @@ server.stateManager.registerSchema('infos', infos);
       },
     };
 
-    const comoteServer = new CoMote.Server(comoteConfig, { verbose: false });
+    const comoteServer = new CoMoteServer(comoteConfig, { verbose: false });
     await comoteServer.start();
 
     // -----------------------------------------------------------
