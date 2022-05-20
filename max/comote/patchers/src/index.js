@@ -17,8 +17,6 @@ socket.onmessage = async (event) => {
   const msg = JSON.parse(event.data);
   const { type, payload } = msg;
 
-  console.log(type, payload);
-
   switch (type) {
     case 'wifiInfos':
       wifiInfos = payload;
@@ -39,11 +37,12 @@ socket.onerror = (error) => console.log(`[error] ${error.message}`);
 function renderApp() {
   if (!qrCode) {
     render(html`
-      <h2>loading</h2>
+      <p style="margin-left: 30px">loading...</p>
   `, document.body);
   } else {
       render(html`
-        <p>${JSON.stringify(wifiInfos)}</p>
+        <p style="margin-left: 30px">WiFi SSID: ${wifiInfos.ssid}</p>
+        <p style="margin-left: 30px">WiFi IP: ${wifiInfos.ip}</p>
         <img src="${qrCode}" width="300" height="300" />
     `, document.body);
   }

@@ -14,10 +14,11 @@
     "worklet-loader": "^2.0.0"
   },
   "dependencies": {
-    "@ircam/comote-helpers": "0.0.0",
+    "@ircam/comote-helpers": "^0.1.0",
     "core-js": "^3.8.3",
     "lit": "^2.2.2",
     "node-osc": "^7.0.0",
+    "portfinder": "^1.0.28",
     "regenerator-runtime": "^0.13.7"
   },
   "scripts": {

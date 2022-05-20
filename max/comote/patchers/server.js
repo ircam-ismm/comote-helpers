@@ -1,10 +1,11 @@
-// const MAX = require('max-api');
+const Max = require('max-api');
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
 const { WebSocketServer } = require('ws');
 const { getWifiInfos } = require('@ircam/comote-helpers/wifi-infos.js');
+const portfinder = require('portfinder');
 
 const comoteConfig = {
   id: 0,
@@ -60,6 +61,7 @@ const server = http.createServer((req, res) => {
 });;
 
 const wss = new WebSocketServer({ server });
+const sockets = new Set();
 
 wss.on('connection', async function connection(ws) {
   const wifiInfos = await getWifiInfos();
@@ -67,10 +69,53 @@ wss.on('connection', async function connection(ws) {
 
   ws.send(JSON.stringify({ type: 'wifiInfos', payload: wifiInfos }));
   ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+
+  sockets.add(ws);
+
+  ws.on('close', () => {
+    sockets.delete(ws);
+  });
 });
 
-server.listen(8080, () => {
-  console.log('server listening on http://127.0.0.1:8080');
-});
+const handlers = {
+  id: id => {
+    comoteConfig.id = id;
+    sockets.forEach(ws => {
+      ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+    });
+  },
+  interval: interval => {
+    comoteConfig.interval = interval;
+    sockets.forEach(ws => {
+      ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+    });
+  },
+  osc_hostname: hostname => {
+    comoteConfig.osc.hostname = hostname;
+    sockets.forEach(ws => {
+      ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+    });
+  },
+  osc_port: port => {
+    comoteConfig.osc.port = port;
+    sockets.forEach(ws => {
+      ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+    });
+  },
+  osc_autostart: autostart => {
+    comoteConfig.osc.autostart = autostart;
+    sockets.forEach(ws => {
+      ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+    });
+  },
+};
 
-console.log('coucou');
+Max.addHandlers(handlers);
+
+portfinder.getPort((err, port) => {
+  server.listen(port, () => {
+    const url = `http://127.0.0.1:${port}`;
+    console.log(`server listening on ${url}`);
+    Max.outlet('url', url);
+  });
+});
