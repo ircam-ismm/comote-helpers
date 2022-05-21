@@ -64,7 +64,7 @@ server.stateManager.registerSchema('infos', infos);
 
     const wifiInfos = await getWifiInfos();
     const comoteConfig = {
-      id: 42,
+      id: 0,
       interval: 20, // period in ms
       ws: {
         port: 8901,
@@ -78,7 +78,7 @@ server.stateManager.registerSchema('infos', infos);
       },
     };
 
-    const comoteServer = new CoMoteServer(comoteConfig, { verbose: false });
+    const comoteServer = new CoMoteServer(comoteConfig, { verbose: true });
     await comoteServer.start();
 
     // -----------------------------------------------------------
