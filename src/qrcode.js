@@ -4,7 +4,7 @@ function formatConfigToLink(config) {
   let link = `comote://settings?`
   const query = [];
 
-  if (Number.isFinite(config.id) && config.id >= 0) {
+  if ('id' in config) {
     query.push(`id=${config.id}`);
   }
 
