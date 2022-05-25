@@ -71,11 +71,7 @@ server.stateManager.registerSchema('infos', infos);
         hostname: wifiInfos.ip,
         autostart: true,
       },
-      osc: {
-        port: 8902,
-        hostname: wifiInfos.ip,
-        autostart: false,
-      },
+      osc: null,
     };
 
     const comoteServer = new CoMoteServer(comoteConfig, { verbose: true });
