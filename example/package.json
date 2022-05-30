@@ -24,24 +24,19 @@
     "url": "https://github.com/collective-soundworks/soundworks-template"
   },
   "dependencies": {
+    "@ircam/comote-helpers": "^0.1.1",
     "@ircam/simple-components": "^2.1.0",
     "@soundworks/core": "^3.1.0",
     "@soundworks/template-helpers": "^2.0.1",
     "@webcomponents/webcomponentsjs": "^2.4.3",
-    "assign-deep": "^1.0.1",
-    "clone-deep": "^4.0.1",
     "core-js": "^3.21.1",
     "json5": "^2.2.1",
     "lit": "^2.2.4",
-    "node-osc": "^7.0.0",
-    "qrcode": "^1.5.0",
     "regenerator-runtime": "^0.13.7",
     "run-script-os": "^1.1.6",
     "serve-static": "^1.15.0",
     "source-map-support": "^0.5.21",
-    "systeminformation": "^5.11.14",
-    "template-literal": "^1.0.3",
-    "ws": "^8.5.0"
+    "template-literal": "^1.0.3"
   },
   "devDependencies": {
     "@soundworks/template-build": "^3.1.0",
