@@ -13,14 +13,31 @@ function formatConfigToLink(config) {
   }
 
   if (config.ws) {
-    const { hostname, port } = config.ws;
+    const { protocol, hostname, port, pathname } = config.ws;
 
-    if (!hostname || !Number.isInteger(port)) {
+    // build valid url
+    // only hostname is required
+    if (!hostname) {
       throw new Error(`Invalid WebSocket config: ${config.ws}`);
     }
 
-    query.push(`ws-url=ws://${hostname}:${port}`);
+    let url = `ws-url=`;
 
+    url += (protocol == 'ws' || protocol == 'wss') ? `${protocol}://` : `ws://`;
+
+    url += hostname;
+
+    if (port) {
+      url += `:${port}`;
+    }
+
+    if (pathname) {
+      url += pathname;
+    }
+
+    query.push(url);
+
+    // autostart
     if (config.ws.autostart === true) {
       query.push(`ws-enable=1`);
     }
