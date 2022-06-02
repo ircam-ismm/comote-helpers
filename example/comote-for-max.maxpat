@@ -94,18 +94,6 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-3",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 670.0, 125.0, 54.0, 22.0 ],
-					"text" : "deferlow"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-28",
 					"maxclass" : "comment",
 					"numinlets" : 1,
@@ -122,7 +110,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 75.0, 84.0, 150.0, 20.0 ],
-					"text" : "reinit object"
+					"text" : "Launch object"
 				}
 
 			}
@@ -157,7 +145,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 769.5, 171.0, 29.5, 22.0 ],
+					"patching_rect" : [ 769.5, 202.0, 29.5, 22.0 ],
 					"text" : "id 0"
 				}
 
@@ -169,7 +157,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 670.0, 171.0, 85.0, 22.0 ],
+					"patching_rect" : [ 670.0, 202.0, 85.0, 22.0 ],
 					"text" : "osc_port 8902"
 				}
 
@@ -363,7 +351,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 43.0, 146.0, 35.0, 22.0 ],
+					"patching_rect" : [ 64.0, 146.0, 35.0, 22.0 ],
 					"presentation" : 1,
 					"presentation_rect" : [ 46.0, 89.0, 35.0, 22.0 ],
 					"text" : "id 12"
@@ -781,7 +769,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-45", 0 ],
-					"midpoints" : [ 52.5, 237.5, 609.833333333333485, 237.5 ],
+					"midpoints" : [ 73.5, 237.5, 609.833333333333485, 237.5 ],
 					"order" : 0,
 					"source" : [ "obj-29", 0 ]
 				}
@@ -799,7 +787,7 @@
 				"patchline" : 				{
 					"destination" : [ "obj-37", 0 ],
 					"order" : 1,
-					"source" : [ "obj-3", 0 ]
+					"source" : [ "obj-31", 0 ]
 				}
 
 			}
@@ -807,13 +795,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-39", 0 ],
 					"order" : 0,
-					"source" : [ "obj-3", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-3", 0 ],
 					"source" : [ "obj-31", 0 ]
 				}
 
