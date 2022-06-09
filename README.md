@@ -86,7 +86,7 @@ Return the link to be encoded in the QRCode accroding to given `CoMoteConfig`
 <a name="terminal"></a>
 
 ### terminal(config)
-Create a qrcode to be logged in terminal according to given `CoMoteConfig``
+Create a qrcode to be logged in terminal according to given `CoMoteConfig`
 
 **Kind**: global function  
 

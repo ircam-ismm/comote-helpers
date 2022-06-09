@@ -3,14 +3,14 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 8,
-			"minor" : 1,
-			"revision" : 11,
+			"minor" : 2,
+			"revision" : 1,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 944.0, 87.0, 857.0, 803.0 ],
+		"rect" : [ 646.0, 79.0, 911.0, 929.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 1,
 		"default_fontsize" : 12.0,
@@ -57,7 +57,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 116.0, 108.0, 54.0, 22.0 ],
+					"patching_rect" : [ 116.0, 155.0, 54.0, 22.0 ],
 					"text" : "deferlow"
 				}
 
@@ -69,7 +69,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 20.0, 119.0, 66.0, 22.0 ],
+					"patching_rect" : [ 23.0, 44.0, 66.0, 22.0 ],
 					"text" : "route bang"
 				}
 
@@ -81,7 +81,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 257.0, 302.0, 69.0, 22.0 ],
+					"patching_rect" : [ 116.0, 444.0, 69.0, 22.0 ],
 					"text" : "prepend url"
 				}
 
@@ -93,7 +93,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 257.0, 270.0, 53.0, 22.0 ],
+					"patching_rect" : [ 116.0, 412.0, 53.0, 22.0 ],
 					"text" : "route url"
 				}
 
@@ -105,7 +105,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 310.5, 108.0, 63.0, 22.0 ],
+					"patching_rect" : [ 222.0, 193.0, 63.0, 22.0 ],
 					"text" : "script stop"
 				}
 
@@ -129,7 +129,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 116.0, 236.0, 83.0, 22.0 ],
+					"patching_rect" : [ 212.0, 302.25, 83.0, 22.0 ],
 					"text" : "route success"
 				}
 
@@ -142,7 +142,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 116.0, 326.75, 24.0, 24.0 ]
+					"patching_rect" : [ 212.0, 396.75, 24.0, 24.0 ]
 				}
 
 			}
@@ -153,7 +153,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 116.0, 298.75, 100.0, 22.0 ],
+					"patching_rect" : [ 212.0, 365.0, 100.0, 22.0 ],
 					"text" : "match completed"
 				}
 
@@ -165,7 +165,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 116.0, 266.75, 108.0, 22.0 ],
+					"patching_rect" : [ 212.0, 333.0, 108.0, 22.0 ],
 					"text" : "dict.unpack status:"
 				}
 
@@ -177,7 +177,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 116.0, 207.0, 63.0, 22.0 ],
+					"patching_rect" : [ 212.0, 273.25, 63.0, 22.0 ],
 					"text" : "route npm"
 				}
 
@@ -188,7 +188,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 545.5, 646.75, 95.0, 20.0 ],
+					"patching_rect" : [ 545.5, 736.75, 95.0, 20.0 ],
 					"text" : "resize bpatcher"
 				}
 
@@ -200,7 +200,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 545.5, 704.0, 54.0, 22.0 ],
+					"patching_rect" : [ 545.5, 794.0, 54.0, 22.0 ],
 					"text" : "deferlow"
 				}
 
@@ -212,7 +212,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 545.5, 674.0, 95.0, 22.0 ],
+					"patching_rect" : [ 545.5, 764.0, 95.0, 22.0 ],
 					"text" : "loadmess resize"
 				}
 
@@ -224,7 +224,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 545.5, 736.0, 65.0, 22.0 ],
+					"patching_rect" : [ 545.5, 826.0, 65.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"filename" : "resize.js",
 						"parameter_enable" : 0
@@ -241,7 +241,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 116.0, 78.0, 162.0, 22.0 ],
+					"patching_rect" : [ 116.0, 123.0, 162.0, 22.0 ],
 					"text" : "script npm install --only=prod"
 				}
 
@@ -253,7 +253,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 257.0, 211.0, 79.0, 22.0 ],
+					"patching_rect" : [ 410.0, 193.0, 79.0, 22.0 ],
 					"text" : "route running"
 				}
 
@@ -265,7 +265,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 235.0, 108.0, 64.0, 22.0 ],
+					"patching_rect" : [ 146.0, 193.0, 64.0, 22.0 ],
 					"text" : "script start"
 				}
 
@@ -279,13 +279,14 @@
 					"enablevscroll" : 0,
 					"id" : "obj-6",
 					"lockeddragscroll" : 0,
+					"lockedsize" : 0,
 					"maxclass" : "bpatcher",
 					"name" : "n4m.monitor.maxpat",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"offset" : [ 0.0, 0.0 ],
 					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 410.0, 137.0, 400.0, 220.0 ],
+					"patching_rect" : [ 470.0, 223.0, 336.0, 228.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -297,12 +298,10 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 116.0, 147.0, 115.0, 22.0 ],
+					"patching_rect" : [ 116.0, 237.0, 115.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
-						"node_bin_path" : "",
-						"npm_bin_path" : "",
 						"watch" : 1
 					}
 ,
@@ -319,7 +318,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 20.0, 40.0, 30.0, 30.0 ]
+					"patching_rect" : [ 23.0, 6.0, 30.0, 30.0 ]
 				}
 
 			}
@@ -330,11 +329,11 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 116.0, 400.5, 401.0, 364.5 ],
+					"patching_rect" : [ 116.0, 490.5, 401.0, 364.5 ],
 					"presentation" : 1,
 					"presentation_rect" : [ -2.0, -1.0, 346.0, 371.0 ],
 					"rendermode" : 0,
-					"url" : "http://127.0.0.1:8001"
+					"url" : "http://127.0.0.1:8000"
 				}
 
 			}
@@ -370,6 +369,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 231.5, 225.0, 126.0, 225.0, 126.0, 231.0, 125.5, 231.0 ],
 					"source" : [ "obj-109", 0 ]
 				}
 
@@ -377,6 +377,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 155.5, 225.0, 126.0, 225.0, 126.0, 231.0, 125.5, 231.0 ],
 					"source" : [ "obj-11", 0 ]
 				}
 
@@ -405,6 +406,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 79.5, 225.0, 125.5, 225.0 ],
 					"source" : [ "obj-3", 1 ]
 				}
 
@@ -498,32 +500,32 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "server.js",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/comote/patchers",
+				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
 				"patcherrelativepath" : ".",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "n4m.monitor.maxpat",
-				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
+				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "resize_n4m_monitor_patcher.js",
-				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
+				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "fit_jweb_to_bounds.js",
-				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
+				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "resize.js",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/comote/patchers",
+				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
 				"patcherrelativepath" : ".",
 				"type" : "TEXT",
 				"implicit" : 1
