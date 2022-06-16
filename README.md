@@ -28,7 +28,7 @@ This repository provides utilities to help to generate the QRCode in the target 
 
 ## Max/MSP
 
-Download the Max abstraction (SoundworksAPI.zip) from the releases page: https://github.com/ircam-ismm/comote-helpers/releases
+Download the Max abstraction (CoMo.te.zip) from the lastest release in the releases page: https://github.com/ircam-ismm/comote-helpers/releases
 Unzip the package and copy the resulting directory in `~/Documents/Max 8/Packages`
 
 For now, the package only provide abstraction `[comote.connect]` that allows you to generate a QRCode that can be 
