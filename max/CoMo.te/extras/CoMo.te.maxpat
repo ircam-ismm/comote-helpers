@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 156.0, 203.0, 1227.0, 1077.0 ],
+		"rect" : [ 484.0, 87.0, 1227.0, 1077.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -554,7 +554,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 358.833333333333485, 516.0, 180.0, 26.0 ],
+					"patching_rect" : [ 373.833333333333485, 516.0, 180.0, 26.0 ],
 					"text" : " comote.connect.maxpat"
 				}
 
@@ -666,7 +666,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 73.333333333333485, 212.0, 751.0, 24.0 ],
-					"text" : "Initiaze comote.connect.maxpat if the WiFi network has changed (might take few seconds)"
+					"text" : "Initialize comote.connect.maxpat if the WiFi network has changed (might take few seconds)"
 				}
 
 			}
@@ -842,7 +842,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"offset" : [ 0.0, 0.0 ],
-					"patching_rect" : [ 36.0, 512.0, 318.0, 370.0 ],
+					"patching_rect" : [ 41.0, 511.5, 318.0, 440.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -1170,7 +1170,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"midpoints" : [ 89.5, 304.5, 45.5, 304.5 ],
+					"midpoints" : [ 89.5, 304.5, 50.5, 304.5 ],
 					"order" : 1,
 					"source" : [ "obj-29", 0 ]
 				}
@@ -1204,7 +1204,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"midpoints" : [ 158.833333333333258, 434.0, 45.5, 434.0 ],
+					"midpoints" : [ 158.833333333333258, 434.0, 50.5, 434.0 ],
 					"source" : [ "obj-33", 0 ]
 				}
 
@@ -1212,7 +1212,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"midpoints" : [ 89.5, 370.5, 45.5, 370.5 ],
+					"midpoints" : [ 89.5, 370.5, 50.5, 370.5 ],
 					"source" : [ "obj-35", 0 ]
 				}
 
@@ -1229,7 +1229,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"midpoints" : [ 89.5, 338.5, 45.5, 338.5 ],
+					"midpoints" : [ 89.5, 338.5, 50.5, 338.5 ],
 					"order" : 1,
 					"source" : [ "obj-36", 0 ]
 				}
@@ -1253,7 +1253,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"midpoints" : [ 89.5, 404.0, 45.5, 404.0 ],
+					"midpoints" : [ 89.5, 404.0, 50.5, 404.0 ],
 					"source" : [ "obj-40", 0 ]
 				}
 
@@ -1343,7 +1343,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"midpoints" : [ 89.5, 433.0, 45.5, 433.0 ],
+					"midpoints" : [ 89.5, 433.0, 50.5, 433.0 ],
 					"source" : [ "obj-58", 0 ]
 				}
 
