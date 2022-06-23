@@ -112,6 +112,7 @@ const handlers = {
 
 Max.addHandlers(handlers);
 
+portfinder.basePort = 8888;
 portfinder.getPort((err, port) => {
   server.listen(port, () => {
     const url = `http://127.0.0.1:${port}`;
