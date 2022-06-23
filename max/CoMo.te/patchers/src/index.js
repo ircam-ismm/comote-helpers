@@ -41,12 +41,11 @@ function renderApp() {
   `, document.body);
   } else {
       render(html`
-        niap
         <p style="margin: 0 0 0 30px">WiFi SSID: ${wifiInfos.ssid}</p>
         <p style="margin: 0 0 0 30px">WiFi IP: ${wifiInfos.ip}</p>
-        <p style="margin: 0 0 0 30px">OSC Port: ${wifiInfos.ssid}</p>
-        <p style="margin: 0 0 0 30px">requested interval: ${wifiInfos.ssid}</p>
-        <p style="margin: 0 0 0 30px">OSC autostart: ${wifiInfos.ssid}</p>
+        <p style="margin: 0 0 0 30px">OSC Port: ${comoteConfig.osc.port}</p>
+        <p style="margin: 0 0 0 30px">requested interval (samp. period): ${comoteConfig.interval}</p>
+        <p style="margin: 0 0 0 30px">OSC autostart: ${comoteConfig.osc.autostart ? 1 : 0}</p>
         <img src="${qrCode}" width="300" height="300" />
     `, document.body);
   }

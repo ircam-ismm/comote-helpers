@@ -3,14 +3,14 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 8,
-			"minor" : 1,
-			"revision" : 11,
+			"minor" : 2,
+			"revision" : 1,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 484.0, 87.0, 938.0, 929.0 ],
+		"rect" : [ 630.0, 79.0, 938.0, 929.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 1,
 		"default_fontsize" : 12.0,
@@ -39,6 +39,39 @@
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-15",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 335.0, 65.0, 150.0, 20.0 ],
+					"text" : "for development"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-14",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 469.0, 464.5, 150.0, 20.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-10",
+					"maxclass" : "button",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 302.0, 65.0, 24.0, 24.0 ]
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-19",
 					"maxclass" : "message",
@@ -123,7 +156,7 @@
 					"numinlets" : 3,
 					"numoutlets" : 3,
 					"outlettype" : [ "", "", "" ],
-					"patching_rect" : [ 23.0, 44.0, 89.0, 22.0 ],
+					"patching_rect" : [ 23.0, 65.0, 92.0, 22.0 ],
 					"text" : "route bang dev"
 				}
 
@@ -321,6 +354,7 @@
 					"enablevscroll" : 0,
 					"id" : "obj-6",
 					"lockeddragscroll" : 0,
+					"lockedsize" : 0,
 					"maxclass" : "bpatcher",
 					"name" : "n4m.monitor.maxpat",
 					"numinlets" : 1,
@@ -356,11 +390,11 @@
 				"box" : 				{
 					"comment" : "",
 					"id" : "obj-1",
-					"index" : 0,
+					"index" : 1,
 					"maxclass" : "inlet",
 					"numinlets" : 0,
 					"numoutlets" : 1,
-					"outlettype" : [ "" ],
+					"outlettype" : [ "bang" ],
 					"patching_rect" : [ 23.0, 6.0, 30.0, 30.0 ]
 				}
 
@@ -374,9 +408,9 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 116.0, 516.5, 338.0, 388.5 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 0.0, 17.0, 317.2734375, 393.0 ],
+					"presentation_rect" : [ 0.0, 17.0, 317.2734375, 423.0 ],
 					"rendermode" : 0,
-					"url" : "http://127.0.0.1:8889"
+					"url" : "http://127.0.0.1:8888"
 				}
 
 			}
@@ -385,6 +419,13 @@
 				"patchline" : 				{
 					"destination" : [ "obj-3", 0 ],
 					"source" : [ "obj-1", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-19", 0 ],
+					"source" : [ "obj-10", 0 ]
 				}
 
 			}
@@ -475,6 +516,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-19", 0 ],
+					"midpoints" : [ 69.0, 96.5, 313.5, 96.5 ],
 					"source" : [ "obj-3", 1 ]
 				}
 
@@ -490,6 +532,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-39", 0 ],
+					"midpoints" : [ 32.5, 104.5, 125.5, 104.5 ],
 					"order" : 0,
 					"source" : [ "obj-3", 0 ]
 				}
@@ -498,7 +541,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
-					"midpoints" : [ 102.5, 224.0, 125.5, 224.0 ],
+					"midpoints" : [ 105.5, 224.0, 125.5, 224.0 ],
 					"source" : [ "obj-3", 2 ]
 				}
 
@@ -582,41 +625,7 @@
 				}
 
 			}
- ],
-		"dependency_cache" : [ 			{
-				"name" : "server.js",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMo.te/patchers",
-				"patcherrelativepath" : ".",
-				"type" : "TEXT",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "n4m.monitor.maxpat",
-				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
-				"type" : "JSON",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "resize_n4m_monitor_patcher.js",
-				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
-				"type" : "TEXT",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "fit_jweb_to_bounds.js",
-				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
-				"type" : "TEXT",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "resize.js",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMo.te/patchers",
-				"patcherrelativepath" : ".",
-				"type" : "TEXT",
-				"implicit" : 1
-			}
- ],
-		"autosave" : 0
+ ]
 	}
 
 }

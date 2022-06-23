@@ -103,7 +103,7 @@ const handlers = {
     });
   },
   osc_autostart: autostart => {
-    comoteConfig.osc.autostart = autostart;
+    comoteConfig.osc.autostart = !!autostart;
     sockets.forEach(ws => {
       ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
     });
