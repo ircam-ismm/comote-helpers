@@ -9,12 +9,12 @@ const portfinder = require('portfinder');
 
 const comoteConfig = {
   id: 0,
-  interval: 20, // period in ms
+  interval: 16, // period in ms
   ws: null,
   osc: {
     port: 8902,
     hostname: '',
-    autostart: false,
+    autostart: true,
   },
 };
 

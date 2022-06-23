@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 301.0, 79.0, 1227.0, 1077.0 ],
+		"rect" : [ 232.0, 79.0, 1345.0, 1077.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,12 +40,445 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"bgcolor" : [ 0.8731849193573, 0.873295426368713, 0.87312525510788, 1.0 ],
+					"fontname" : "Arial",
+					"fontsize" : 30.0,
+					"id" : "obj-3",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 41.0, 62.0, 1088.0, 40.0 ],
+					"text" : "Get motion sensors datastream from the CoMo.te smartphone app through WiFi "
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontsize" : 14.0,
+					"id" : "obj-84",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 611.5, 157.629629629629619, 162.666666666666629, 24.0 ],
+					"text" : "CoMo.te on Google Play"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"hidden" : 1,
+					"id" : "obj-85",
+					"linecount" : 4,
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 1034.833333333333485, 130.629629629629619, 300.0, 62.0 ],
+					"text" : ";\rmax launchbrowser https://play.google.com/store/apps/details?id=fr.ircam.ismm.comote"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontsize" : 14.0,
+					"id" : "obj-83",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 611.5, 126.629629629629619, 162.666666666666629, 24.0 ],
+					"text" : "CoMo.te on Apple Store"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"hidden" : 1,
+					"id" : "obj-82",
+					"linecount" : 3,
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 1034.833333333333485, 199.0, 300.0, 49.0 ],
+					"text" : ";\rmax launchbrowser https://apps.apple.com/fr/app/como-te/id1623566703"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontsize" : 14.0,
+					"id" : "obj-80",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 867.833333333333371, 472.5, 100.0, 22.0 ],
+					"text" : "default id"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontsize" : 14.0,
+					"id" : "obj-79",
+					"linecount" : 2,
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 795.5, 126.629629629629619, 226.666666666666629, 40.0 ],
+					"text" : "video and more inofrmation at https://ismm-apps.ircam.fr/comote"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"hidden" : 1,
+					"id" : "obj-77",
+					"linecount" : 3,
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 1034.833333333333485, 254.000000000000028, 223.0, 49.0 ],
+					"text" : ";\rmax launchbrowser https://ismm-apps.ircam.fr/comote"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-74",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 990.499999999999886, 768.5, 51.0, 20.0 ],
+					"text" : "deg/s"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-73",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 924.166666666666629, 768.5, 51.0, 20.0 ],
+					"text" : "deg/s"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-72",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 867.833333333333371, 768.5, 51.0, 20.0 ],
+					"text" : "deg/s"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-71",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 809.333333333333485, 768.5, 35.999999999999773, 20.0 ],
+					"text" : "m/s"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-67",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 748.166666666667084, 768.5, 35.999999999999773, 20.0 ],
+					"text" : "m/s"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-62",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 686.833333333333599, 768.5, 35.999999999999773, 20.0 ],
+					"text" : "m/s"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-24",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 979.5, 746.5, 73.0, 20.0 ],
+					"text" : "gyr.gamma"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-23",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 918.166666666666742, 746.5, 57.0, 20.0 ],
+					"text" : "gyr.beta"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-22",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 856.833333333333371, 746.5, 58.0, 20.0 ],
+					"text" : "gyr.alpha"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-21",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 795.5, 746.5, 50.0, 20.0 ],
+					"text" : "acc.z"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-20",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 734.166666666666742, 746.5, 50.0, 20.0 ],
+					"text" : "acc.y"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-19",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 672.833333333333371, 746.5, 50.0, 20.0 ],
+					"text" : "acc.x"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bubble" : 1,
+					"fontsize" : 14.0,
+					"id" : "obj-60",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 244.333333333333485, 281.0, 321.0, 26.0 ],
+					"text" : "device id (to route OSC messages)"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bubble" : 1,
+					"fontsize" : 14.0,
+					"id" : "obj-56",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 244.333333333333485, 311.0, 321.0, 26.0 ],
+					"text" : "target port for OSC messages"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bubble" : 1,
+					"fontsize" : 14.0,
+					"id" : "obj-53",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 244.333333333333485, 343.0, 321.0, 26.0 ],
+					"text" : "target ip address fro OSC messages"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bubble" : 1,
+					"fontsize" : 14.0,
+					"id" : "obj-52",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 244.333333333333485, 374.0, 321.0, 26.0 ],
+					"text" : "automatically on after scanning ther QR code"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-70",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"patching_rect" : [ 41.0, 178.0, 59.0, 22.0 ],
+					"text" : "loadbang"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-69",
+					"maxclass" : "multislider",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 611.5, 845.5, 50.0, 70.0 ],
+					"setminmax" : [ 0.0, 100.0 ],
+					"setstyle" : 5
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bubble" : 1,
+					"fontsize" : 14.0,
+					"id" : "obj-68",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 244.333333333333485, 406.0, 321.0, 26.0 ],
+					"text" : "sampling period (ms)"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bubbleside" : 2,
+					"fontsize" : 14.0,
+					"id" : "obj-66",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 194.0, 456.5, 378.0, 22.0 ],
+					"text" : "Android: sampling period can be anything > 16 ms (approx)"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"bubbleside" : 2,
+					"fontsize" : 14.0,
+					"id" : "obj-65",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 194.0, 432.5, 365.0, 22.0 ],
+					"text" : "iOS: the actual sampling period is a multiple of 16.67 ms"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-64",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 555.0, 895.5, 49.0, 20.0 ],
+					"text" : "0 ms"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-63",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 555.0, 845.5, 49.0, 20.0 ],
+					"text" : "100 ms"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontsize" : 14.0,
+					"id" : "obj-42",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 702.833333333333371, 472.5, 100.0, 22.0 ],
+					"text" : "default port"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-39",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 834.333333333333485, 472.5, 29.5, 22.0 ],
+					"text" : "id 0"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-37",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 637.833333333333371, 472.5, 63.0, 22.0 ],
+					"text" : "port 8902"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-31",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"patching_rect" : [ 834.333333333333485, 440.5, 58.0, 22.0 ],
+					"text" : "loadbang"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-59",
 					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 431.0, 837.0, 72.0, 33.0 ],
+					"patching_rect" : [ 537.0, 808.5, 72.0, 33.0 ],
 					"text" : "actual period (ms)"
 				}
 
@@ -57,8 +490,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 323.5, 247.0, 64.0, 22.0 ],
-					"text" : "interval 20"
+					"patching_rect" : [ 80.0, 406.0, 64.0, 22.0 ],
+					"text" : "interval 16"
 				}
 
 			}
@@ -71,7 +504,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 431.0, 807.0, 50.0, 22.0 ]
+					"patching_rect" : [ 611.5, 814.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -82,7 +515,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "bang", "bang" ],
-					"patching_rect" : [ 431.0, 748.0, 41.0, 22.0 ],
+					"patching_rect" : [ 611.5, 753.5, 41.0, 22.0 ],
 					"text" : "b"
 				}
 
@@ -94,21 +527,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "float", "" ],
-					"patching_rect" : [ 431.0, 778.0, 41.0, 22.0 ],
+					"patching_rect" : [ 611.5, 784.5, 41.0, 22.0 ],
 					"text" : "timer"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
-					"id" : "obj-53",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 38.0, 121.629629629629633, 593.0, 22.0 ],
-					"text" : "On the smartphone, it might be necessary to turn off/ turn on the OSC button to initialize"
 				}
 
 			}
@@ -121,19 +541,20 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 36.5, 72.629629629629619, 661.0, 42.0 ],
-					"text" : "By default a QRCode is generated according to the IP of the current WiFi connection, which must used by the smartphone app and your computer"
+					"patching_rect" : [ 41.0, 125.629629629629619, 559.0, 42.0 ],
+					"text" : "The QRCode is generated according to the IP of the current WiFi connection, which must used by the smartphone app and your computer"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"fontsize" : 18.0,
+					"bubble" : 1,
+					"fontsize" : 14.0,
 					"id" : "obj-50",
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 156.0, 347.0, 215.0, 27.0 ],
+					"patching_rect" : [ 358.833333333333485, 516.0, 180.0, 26.0 ],
 					"text" : " comote.connect.maxpat"
 				}
 
@@ -146,7 +567,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 799.0, 713.0, 50.0, 117.0 ],
+					"patching_rect" : [ 979.5, 798.5, 50.0, 117.0 ],
 					"setminmax" : [ -2000.0, 2000.0 ],
 					"setstyle" : 1
 				}
@@ -160,7 +581,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 737.666666666666742, 713.0, 50.0, 117.0 ],
+					"patching_rect" : [ 918.166666666666742, 798.5, 50.0, 117.0 ],
 					"setminmax" : [ -2000.0, 2000.0 ],
 					"setstyle" : 1
 				}
@@ -174,7 +595,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 676.333333333333371, 713.0, 50.0, 117.0 ],
+					"patching_rect" : [ 856.833333333333371, 798.5, 50.0, 117.0 ],
 					"setminmax" : [ -2000.0, 2000.0 ],
 					"setstyle" : 1
 				}
@@ -188,7 +609,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 615.0, 713.0, 50.0, 117.0 ],
+					"patching_rect" : [ 795.5, 798.5, 50.0, 117.0 ],
 					"setminmax" : [ -30.0, 30.0 ],
 					"setstyle" : 1
 				}
@@ -202,7 +623,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 553.666666666666742, 713.0, 50.0, 117.0 ],
+					"patching_rect" : [ 734.166666666666742, 798.5, 50.0, 117.0 ],
 					"setminmax" : [ -30.0, 30.0 ],
 					"setstyle" : 1
 				}
@@ -216,7 +637,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 492.333333333333371, 713.0, 50.0, 117.0 ],
+					"patching_rect" : [ 672.833333333333371, 798.5, 50.0, 117.0 ],
 					"setminmax" : [ -30.0, 30.0 ],
 					"setstyle" : 1
 				}
@@ -225,86 +646,40 @@
 , 			{
 				"box" : 				{
 					"bubbleside" : 2,
-					"fontsize" : 16.021592564012433,
+					"fontname" : "Arial Bold",
+					"fontsize" : 16.02159309387207,
 					"id" : "obj-28",
-					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 73.0, 198.999999999999972, 419.0, 42.0 ],
-					"text" : "change configuration: the QR can be regenerated using these messages"
+					"patching_rect" : [ 80.0, 249.000000000000028, 470.0, 24.0 ],
+					"text" : "configuration: the QR is regenerated using these messages"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"fontsize" : 14.0,
+					"fontname" : "Arial Bold",
+					"fontsize" : 16.0,
 					"id" : "obj-26",
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 73.0, 158.0, 294.0, 22.0 ],
-					"text" : "reinitiaze comote.connect.maxpat "
+					"patching_rect" : [ 73.333333333333485, 212.0, 751.0, 24.0 ],
+					"text" : "Initiaze comote.connect.maxpat if the WiFi network has changed (might take few seconds)"
 				}
 
 			}
 , 			{
 				"box" : 				{
+					"bgcolor" : [ 0.843137254901961, 0.584313725490196, 0.129411764705882, 1.0 ],
 					"id" : "obj-25",
 					"maxclass" : "button",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 42.0, 156.0, 24.0, 24.0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-42",
-					"maxclass" : "button",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"parameter_enable" : 0,
-					"patching_rect" : [ 572.0, 208.0, 24.0, 24.0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-39",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 671.5, 289.0, 29.5, 22.0 ],
-					"text" : "id 0"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-37",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 572.0, 289.0, 85.0, 22.0 ],
-					"text" : "osc_port 8902"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-31",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 572.0, 247.0, 58.0, 22.0 ],
-					"text" : "loadbang"
+					"patching_rect" : [ 41.0, 212.0, 24.0, 24.0 ]
 				}
 
 			}
@@ -315,7 +690,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 779.0, 483.0, 152.0, 22.0 ],
+					"patching_rect" : [ 1186.5, 524.5, 152.0, 22.0 ],
 					"text" : "sprintf /comote/%s/buttonB"
 				}
 
@@ -327,7 +702,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 663.0, 443.0, 152.0, 22.0 ],
+					"patching_rect" : [ 994.166666666666742, 579.5, 152.0, 22.0 ],
 					"text" : "sprintf /comote/%s/buttonA"
 				}
 
@@ -339,7 +714,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 547.0, 362.0, 49.0, 22.0 ],
+					"patching_rect" : [ 802.833333333333371, 506.5, 49.0, 22.0 ],
 					"text" : "route id"
 				}
 
@@ -351,7 +726,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 431.0, 443.0, 77.0, 22.0 ],
+					"patching_rect" : [ 611.5, 542.5, 77.0, 22.0 ],
 					"text" : "prepend port"
 				}
 
@@ -363,20 +738,21 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 431.0, 407.0, 85.0, 22.0 ],
+					"patching_rect" : [ 611.5, 506.5, 85.0, 22.0 ],
 					"text" : "route osc_port"
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"fontsize" : 30.0,
+					"bgcolor" : [ 0.8731849193573, 0.873295426368713, 0.87312525510788, 1.0 ],
+					"fontsize" : 36.0,
 					"id" : "obj-8",
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 36.5, 21.0, 233.0, 40.0 ],
-					"text" : "CoMo.te for Max"
+					"patching_rect" : [ 41.0, 11.0, 1124.0, 47.0 ],
+					"text" : "CoMo.te"
 				}
 
 			}
@@ -387,7 +763,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 547.0, 407.0, 181.0, 22.0 ],
+					"patching_rect" : [ 802.833333333333371, 579.5, 181.0, 22.0 ],
 					"text" : "sprintf /comote/%s/devicemotion"
 				}
 
@@ -399,7 +775,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 73.0, 285.0, 91.0, 22.0 ],
+					"patching_rect" : [ 80.0, 374.0, 91.0, 22.0 ],
 					"text" : "osc_autostart 1"
 				}
 
@@ -411,7 +787,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 175.0, 285.0, 85.0, 22.0 ],
+					"patching_rect" : [ 80.0, 311.0, 85.0, 22.0 ],
 					"text" : "osc_port 9234"
 				}
 
@@ -423,7 +799,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 73.0, 247.0, 160.0, 22.0 ],
+					"patching_rect" : [ 80.0, 343.0, 160.0, 22.0 ],
 					"text" : "osc_hostname 192.168.1.29"
 				}
 
@@ -435,8 +811,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 247.5, 247.0, 64.0, 22.0 ],
-					"text" : "interval 50"
+					"patching_rect" : [ 149.333333333333258, 406.0, 64.0, 22.0 ],
+					"text" : "interval 32"
 				}
 
 			}
@@ -447,7 +823,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 268.0, 285.0, 35.0, 22.0 ],
+					"patching_rect" : [ 80.0, 281.0, 35.0, 22.0 ],
 					"text" : "id 12"
 				}
 
@@ -467,74 +843,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"offset" : [ 0.0, 0.0 ],
-					"patching_rect" : [ 42.0, 376.0, 318.0, 370.0 ],
+					"patching_rect" : [ 36.0, 512.0, 318.0, 413.0 ],
 					"viewvisibility" : 1
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-24",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 799.0, 677.0, 73.0, 20.0 ],
-					"text" : "gyr.gamma"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-23",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 737.666666666666742, 677.0, 57.0, 20.0 ],
-					"text" : "gyr.beta"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-22",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 676.333333333333371, 677.0, 58.0, 20.0 ],
-					"text" : "gyr.alpha"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-21",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 615.0, 677.0, 50.0, 20.0 ],
-					"text" : "acc.z"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-20",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 553.666666666666742, 677.0, 50.0, 20.0 ],
-					"text" : "acc.y"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-19",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 492.333333333333371, 677.0, 50.0, 20.0 ],
-					"text" : "acc.x"
 				}
 
 			}
@@ -547,7 +857,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 799.0, 646.0, 50.0, 22.0 ]
+					"patching_rect" : [ 979.5, 718.5, 50.0, 22.0 ]
 				}
 
 			}
@@ -560,7 +870,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 737.666666666666742, 646.0, 50.0, 22.0 ]
+					"patching_rect" : [ 918.166666666666742, 718.5, 50.0, 22.0 ]
 				}
 
 			}
@@ -573,7 +883,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 676.333333333333371, 646.0, 50.0, 22.0 ]
+					"patching_rect" : [ 856.833333333333371, 718.5, 50.0, 22.0 ]
 				}
 
 			}
@@ -586,7 +896,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 615.0, 646.0, 50.0, 22.0 ]
+					"patching_rect" : [ 795.5, 718.5, 50.0, 22.0 ]
 				}
 
 			}
@@ -599,7 +909,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 553.666666666666742, 646.0, 50.0, 22.0 ]
+					"patching_rect" : [ 734.166666666666742, 718.5, 50.0, 22.0 ]
 				}
 
 			}
@@ -612,7 +922,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 492.333333333333371, 646.0, 50.0, 22.0 ]
+					"patching_rect" : [ 672.833333333333371, 718.5, 50.0, 22.0 ]
 				}
 
 			}
@@ -624,7 +934,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 431.0, 646.0, 50.0, 22.0 ]
+					"patching_rect" : [ 611.5, 718.5, 50.0, 22.0 ]
 				}
 
 			}
@@ -635,7 +945,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 7,
 					"outlettype" : [ "int", "float", "float", "float", "float", "float", "float" ],
-					"patching_rect" : [ 431.0, 602.0, 387.0, 22.0 ],
+					"patching_rect" : [ 611.5, 685.5, 387.0, 22.0 ],
 					"text" : "unpack i f f f f f f"
 				}
 
@@ -647,7 +957,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 420.0, 677.0, 72.0, 33.0 ],
+					"patching_rect" : [ 537.0, 718.5, 72.0, 33.0 ],
 					"text" : "requested period (ms)"
 				}
 
@@ -658,7 +968,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 693.666666666666629, 565.0, 63.0, 20.0 ],
+					"patching_rect" : [ 1030.833333333333485, 654.5, 63.0, 20.0 ],
 					"text" : "button B"
 				}
 
@@ -669,19 +979,20 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 575.333333333333258, 567.0, 63.0, 20.0 ],
+					"patching_rect" : [ 840.166666666666629, 651.5, 63.0, 20.0 ],
 					"text" : "button A"
 				}
 
 			}
 , 			{
 				"box" : 				{
+					"color" : [ 0.843137254901961, 0.584313725490196, 0.129411764705882, 1.0 ],
 					"id" : "obj-2",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 431.0, 483.0, 97.0, 22.0 ],
+					"patching_rect" : [ 611.5, 575.5, 97.0, 22.0 ],
 					"text" : "udpreceive 8902"
 				}
 
@@ -694,7 +1005,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 547.0, 565.0, 24.0, 24.0 ]
+					"patching_rect" : [ 802.833333333333371, 644.5, 32.0, 32.0 ]
 				}
 
 			}
@@ -706,18 +1017,19 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 663.0, 563.0, 24.0, 24.0 ]
+					"patching_rect" : [ 994.166666666666742, 648.5, 31.0, 31.0 ]
 				}
 
 			}
 , 			{
 				"box" : 				{
+					"color" : [ 0.843137254901961, 0.584313725490196, 0.129411764705882, 1.0 ],
 					"id" : "obj-11",
 					"maxclass" : "newobj",
 					"numinlets" : 4,
 					"numoutlets" : 4,
 					"outlettype" : [ "", "", "", "" ],
-					"patching_rect" : [ 431.0, 525.0, 367.0, 22.0 ],
+					"patching_rect" : [ 611.5, 614.5, 593.0, 22.0 ],
 					"text" : "route /comote/0/devicemotion /comote/0/buttonA /comote/0/buttonB"
 				}
 
@@ -760,17 +1072,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-55", 0 ],
-					"hidden" : 1,
-					"order" : 0,
-					"source" : [ "obj-1", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-7", 0 ],
-					"order" : 1,
 					"source" : [ "obj-1", 0 ]
 				}
 
@@ -860,7 +1162,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-45", 0 ],
-					"midpoints" : [ 277.5, 328.5, 556.5, 328.5 ],
+					"midpoints" : [ 89.5, 307.5, 812.333333333333371, 307.5 ],
 					"order" : 0,
 					"source" : [ "obj-29", 0 ]
 				}
@@ -869,6 +1171,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 89.5, 304.5, 45.5, 304.5 ],
 					"order" : 1,
 					"source" : [ "obj-29", 0 ]
 				}
@@ -877,6 +1180,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-37", 0 ],
+					"midpoints" : [ 843.833333333333485, 469.5, 647.333333333333371, 469.5 ],
 					"order" : 1,
 					"source" : [ "obj-31", 0 ]
 				}
@@ -885,6 +1189,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-39", 0 ],
+					"midpoints" : [ 843.833333333333485, 469.0, 843.833333333333485, 469.0 ],
 					"order" : 0,
 					"source" : [ "obj-31", 0 ]
 				}
@@ -900,6 +1205,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 158.833333333333258, 434.0, 45.5, 434.0 ],
 					"source" : [ "obj-33", 0 ]
 				}
 
@@ -907,6 +1213,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 89.5, 370.5, 45.5, 370.5 ],
 					"source" : [ "obj-35", 0 ]
 				}
 
@@ -914,7 +1221,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-43", 0 ],
-					"midpoints" : [ 184.5, 339.0, 440.5, 339.0 ],
+					"midpoints" : [ 89.5, 338.0, 621.0, 338.0 ],
 					"order" : 0,
 					"source" : [ "obj-36", 0 ]
 				}
@@ -923,6 +1230,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 89.5, 338.5, 45.5, 338.5 ],
 					"order" : 1,
 					"source" : [ "obj-36", 0 ]
 				}
@@ -938,6 +1246,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-45", 0 ],
+					"midpoints" : [ 843.833333333333485, 500.0, 812.333333333333371, 500.0 ],
 					"source" : [ "obj-39", 0 ]
 				}
 
@@ -945,14 +1254,8 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 89.5, 404.0, 45.5, 404.0 ],
 					"source" : [ "obj-40", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-31", 0 ],
-					"source" : [ "obj-42", 0 ]
 				}
 
 			}
@@ -981,7 +1284,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-46", 0 ],
-					"midpoints" : [ 556.5, 395.0, 672.5, 395.0 ],
+					"midpoints" : [ 812.333333333333371, 572.5, 1003.666666666666742, 572.5 ],
 					"order" : 1,
 					"source" : [ "obj-45", 0 ]
 				}
@@ -990,7 +1293,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-47", 0 ],
-					"midpoints" : [ 556.5, 395.0, 788.5, 395.0 ],
+					"midpoints" : [ 812.333333333333371, 517.0, 1196.0, 517.0 ],
 					"order" : 0,
 					"source" : [ "obj-45", 0 ]
 				}
@@ -1033,8 +1336,54 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-69", 0 ],
+					"source" : [ "obj-57", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
+					"midpoints" : [ 89.5, 433.0, 45.5, 433.0 ],
 					"source" : [ "obj-58", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-55", 0 ],
+					"source" : [ "obj-7", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-25", 0 ],
+					"source" : [ "obj-70", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-77", 0 ],
+					"hidden" : 1,
+					"source" : [ "obj-79", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-82", 0 ],
+					"hidden" : 1,
+					"source" : [ "obj-83", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-85", 0 ],
+					"hidden" : 1,
+					"source" : [ "obj-84", 0 ]
 				}
 
 			}
@@ -1050,14 +1399,14 @@
 		"dependency_cache" : [ 			{
 				"name" : "comote.connect.maxpat",
 				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
-				"patcherrelativepath" : "../comote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "server.js",
 				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
-				"patcherrelativepath" : "../comote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
@@ -1082,7 +1431,7 @@
 , 			{
 				"name" : "resize.js",
 				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
-				"patcherrelativepath" : "../comote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}

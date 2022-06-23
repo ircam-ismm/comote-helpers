@@ -21,8 +21,6 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "watch": "webpack --config webpack.config.js --watch",
-    "dev": "npm-run-all build --parallel start watch",
-    "start": "serve public --config ../serve.json --listen 5000"
+    "dev": "webpack --config webpack.config.js --watch"
   }
 }
