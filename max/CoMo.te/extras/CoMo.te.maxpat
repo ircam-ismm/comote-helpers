@@ -3,14 +3,14 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 8,
-			"minor" : 2,
-			"revision" : 1,
+			"minor" : 1,
+			"revision" : 11,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 232.0, 79.0, 1345.0, 1077.0 ],
+		"rect" : [ 156.0, 203.0, 1227.0, 1077.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -837,13 +837,12 @@
 					"enablevscroll" : 0,
 					"id" : "obj-5",
 					"lockeddragscroll" : 0,
-					"lockedsize" : 0,
 					"maxclass" : "bpatcher",
 					"name" : "comote.connect.maxpat",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"offset" : [ 0.0, 0.0 ],
-					"patching_rect" : [ 36.0, 512.0, 318.0, 413.0 ],
+					"patching_rect" : [ 36.0, 512.0, 318.0, 370.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -1398,39 +1397,39 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "comote.connect.maxpat",
-				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMo.te/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "server.js",
-				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMo.te/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "n4m.monitor.maxpat",
-				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
+				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "resize_n4m_monitor_patcher.js",
-				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
+				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "fit_jweb_to_bounds.js",
-				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
+				"bootpath" : "C74:/packages/Node For Max/patchers/debug-monitor",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "resize.js",
-				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMo.te/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1

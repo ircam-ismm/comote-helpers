@@ -20,7 +20,6 @@
     "ws": "^8.7.0"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "dev": "webpack --config webpack.config.js --watch"
+    "build": "npm install && webpack --config webpack.config.js"
   }
 }

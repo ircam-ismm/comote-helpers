@@ -41,11 +41,12 @@ function renderApp() {
   `, document.body);
   } else {
       render(html`
-        <p style="margin-left: 30px">WiFi SSID: ${wifiInfos.ssid}</p>
-        <p style="margin-left: 30px">WiFi IP: ${wifiInfos.ip}</p>
-        <p style="margin-left: 30px">OSC Port: ${wifiInfos.ssid}</p>
-        <p style="margin-left: 30px">requested interval: ${wifiInfos.ssid}</p>
-        <p style="margin-left: 30px">OSC autostart: ${wifiInfos.ssid}</p>
+        niap
+        <p style="margin: 0 0 0 30px">WiFi SSID: ${wifiInfos.ssid}</p>
+        <p style="margin: 0 0 0 30px">WiFi IP: ${wifiInfos.ip}</p>
+        <p style="margin: 0 0 0 30px">OSC Port: ${wifiInfos.ssid}</p>
+        <p style="margin: 0 0 0 30px">requested interval: ${wifiInfos.ssid}</p>
+        <p style="margin: 0 0 0 30px">OSC autostart: ${wifiInfos.ssid}</p>
         <img src="${qrCode}" width="300" height="300" />
     `, document.body);
   }
