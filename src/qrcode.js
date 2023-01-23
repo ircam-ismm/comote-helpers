@@ -78,7 +78,7 @@ export function rawLink(config) {
  */
 export async function terminal(config) {
   const link = formatConfigToLink(config);
-  return await QRCode.toString(link, { type: 'terminal', small: true });
+  return await QRCode.toString(link, { type: 'terminal' });
 }
 
 
