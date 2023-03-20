@@ -52,22 +52,6 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-34",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 2,
-					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 880.0, 158.0, 166.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"parameter_enable" : 0
-					}
-,
-					"text" : "spat5.osc.udpreceive"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-68",
 					"maxclass" : "newobj",
 					"numinlets" : 2,
@@ -673,7 +657,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"offset" : [ 0.0, 0.0 ],
-					"patching_rect" : [ 42.0, 376.0, 318.0, 370.0 ],
+					"patching_rect" : [ 42.0, 376.0, 318.0, 415.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -1174,25 +1158,17 @@
 
 			}
  ],
-		"parameters" : 		{
-			"parameterbanks" : 			{
-
-			}
-,
-			"inherited_shortname" : 1
-		}
-,
 		"dependency_cache" : [ 			{
 				"name" : "comote.connect.maxpat",
-				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/github/Gestural-Sound-Toolkit-V2/mod-interfaces/CoMo.te/patchers",
+				"patcherrelativepath" : "../../../../Gestural-Sound-Toolkit-V2/mod-interfaces/CoMo.te/patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "server.js",
-				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/github/Gestural-Sound-Toolkit-V2/mod-interfaces/CoMo.te/patchers",
+				"patcherrelativepath" : "../../../../Gestural-Sound-Toolkit-V2/mod-interfaces/CoMo.te/patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
@@ -1216,14 +1192,10 @@
 			}
 , 			{
 				"name" : "resize.js",
-				"bootpath" : "~/github/comote-helpers/max/comote/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/github/Gestural-Sound-Toolkit-V2/mod-interfaces/CoMo.te/patchers",
+				"patcherrelativepath" : "../../../../Gestural-Sound-Toolkit-V2/mod-interfaces/CoMo.te/patchers",
 				"type" : "TEXT",
 				"implicit" : 1
-			}
-, 			{
-				"name" : "spat5.osc.udpreceive.mxo",
-				"type" : "iLaX"
 			}
  ],
 		"autosave" : 0
