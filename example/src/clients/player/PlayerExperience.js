@@ -88,7 +88,7 @@ class PlayerExperience extends AbstractExperience {
                   value="Flash QR to retrieve settings in CoMo.te"
                   readonly
                 ></sc-text>
-                <img src="${this.qrCode}" width="300" height="300" />
+                <img src="${this.qrCode}" width="300" height="300" style="image-rendering: pixelated;"/>
               </div>
             `
           : nothing}
