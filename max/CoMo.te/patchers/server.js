@@ -5,6 +5,7 @@ const url = require('url');
 const path = require('path');
 const { WebSocketServer } = require('ws');
 const { getWifiInfos } = require('@ircam/comote-helpers/wifi-infos.js');
+const { getNetworkInterfacesInfos } = require('@ircam/comote-helpers/network-infos.js');
 const portfinder = require('portfinder');
 
 const comoteConfig = {
@@ -60,17 +61,62 @@ const server = http.createServer((req, res) => {
 
 });;
 
+console.log('server started');
+
 const wss = new WebSocketServer({ server });
 const sockets = new Set();
 
 wss.on('connection', async function connection(ws) {
   const wifiInfos = await getWifiInfos();
-  comoteConfig.osc.hostname = wifiInfos.ip;
+  const networkInterfacesInfos = await getNetworkInterfacesInfos();
+
+  const networkInfos = networkInterfacesInfos
+        .sort( (a, b) => {
+          if (a.default) {
+            // default is before
+            return -1;
+          } else if (b.default) {
+            // other is before
+            return 1;
+          } else {
+            // finally, sort by interface name
+            return a.ifaceName < b.ifaceName;
+          }
+
+        });
+  ws.send(JSON.stringify({ type: 'networkInfos', payload: networkInfos }));
+
+  // use first network interface, it should be the default one
+  if (networkInfos && networkInfos[0]) {
+    comoteConfig.osc.hostname  = networkInfos[0].ip4;
+  }
+
 
   ws.send(JSON.stringify({ type: 'wifiInfos', payload: wifiInfos }));
   ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
 
   sockets.add(ws);
+
+  ws.on('message', async (data, isBinary) => {
+    // isBinary is not always set
+    const message = (isBinary || typeof data !== 'string')
+          ? data.toString()
+          : data;
+
+    const { type, payload } = JSON.parse(message);
+
+    switch (type) {
+      case 'comoteConfig':
+        Object.assign(comoteConfig, payload);
+        ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+        break;
+
+      default:
+        console.warn('received unknown message', {type, payload});
+      break;
+    }
+  });
+
 
   ws.on('close', () => {
     sockets.delete(ws);

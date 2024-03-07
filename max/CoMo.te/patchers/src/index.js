@@ -6,6 +6,7 @@ import { render, html } from 'lit/html.js';
 const socket = new WebSocket(`ws://${window.location.host}`);
 
 let wifiInfos = null;
+let networkInfos = null;
 let comoteConfig = null;
 let qrCode = null;
 
@@ -25,6 +26,14 @@ socket.onmessage = async (event) => {
       comoteConfig = payload;
       qrCode = await CoMoteQRCode.dataURL(comoteConfig);
       break;
+
+    case 'networkInfos':
+      networkInfos = payload;
+      break;
+
+    default:
+      console.warn('received unknown message', {type, payload});
+      break;
   }
 
   renderApp();
@@ -34,30 +43,52 @@ socket.onclose = (event) => console.log(`connection closed`);
 socket.onerror = (error) => console.log(`[error] ${error.message}`);
 
 
+function selectNetworkInterface(networkInterface) {
+  comoteConfig.osc.hostname = networkInterface;
+  const msg = JSON.stringify({type: 'comoteConfig', payload: comoteConfig});
+  console.log(typeof msg, "msg = ", msg);
+  socket.send(msg);
+}
+
 function renderApp() {
+
   if (!qrCode) {
     render(html`
       <p style="margin-left: 30px">loading...</p>
   `, document.body);
   } else {
-    if (wifiInfos.ip === comoteConfig.osc.hostname) {
-      render(html`
-        <p style="margin: 0 0 0 30px">WiFi SSID: ${wifiInfos.ssid}</p>
-        <p style="margin: 0 0 0 30px">WiFi IP: ${wifiInfos.ip}</p>
-        <p style="margin: 0 0 0 30px">OSC Port: ${comoteConfig.osc.port}</p>
-        <p style="margin: 0 0 0 30px">requested interval (samp. period): ${comoteConfig.interval}</p>
-        <p style="margin: 0 0 0 30px">OSC autostart: ${comoteConfig.osc.autostart ? 1 : 0}</p>
-        <img src="${qrCode}" width="300" height="300" />
+    render(html`
+     <div style="margin-left: 30px">
+       <div>Id: ${comoteConfig.id}</div>
+       <div>Sensors sample period: ${comoteConfig.interval} ms</div>
+
+       <select
+         name="networkNetworkInterface"
+         @change=${(e) => selectNetworkInterface(e.target.value) }
+       >${networkInfos.map( (i) => html`
+           <option
+             value=${i.ip4}
+           >${i.ifaceName} (${i.type}) ${i.ip4}</
+           option>
+         `)}
+       </select>
+
+    ${wifiInfos && wifiInfos.ip === comoteConfig.osc.hostname
+        ? html`
+        <div>WiFi SSID: ${wifiInfos.ssid}</div>
+        ` : html`
+        `}
+        <div>OSC Port: ${comoteConfig.osc.port}</div>
+        <div>OSC autostart: ${comoteConfig.osc.autostart ? 1 : 0}</div>
+      </div>
+      <div>
+        <img style="image-rendering: pixelated; margin: 0; "
+             src="${qrCode}"
+             width="300"
+             height="300"
+        />
+      </div>
       `, document.body);
-    } else {
-      render(html`
-        <p style="margin: 0 0 0 30px">OSC IP: ${comoteConfig.osc.hostname}</p>
-        <p style="margin: 0 0 0 30px">OSC Port: ${comoteConfig.osc.port}</p>
-        <p style="margin: 0 0 0 30px">requested interval (samp. period): ${comoteConfig.interval}</p>
-        <p style="margin: 0 0 0 30px">OSC autostart: ${comoteConfig.osc.autostart ? 1 : 0}</p>
-        <img src="${qrCode}" width="300" height="300" />
-      `, document.body);
-    }
   }
 }
 
