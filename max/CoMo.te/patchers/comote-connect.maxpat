@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"openrect" : [ -542.0, -993.0, 336.0, 430.0 ],
+		"openrect" : [ -542.0, -993.0, 319.0, 419.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 1,
 		"default_fontsize" : 12.0,
@@ -31,7 +31,7 @@
 		"boxanimatetime" : 200,
 		"enablehscroll" : 1,
 		"enablevscroll" : 1,
-		"devicewidth" : 336.0,
+		"devicewidth" : 319.0,
 		"description" : "",
 		"digest" : "",
 		"tags" : "",
@@ -307,14 +307,16 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 116.0, 274.0, 115.0, 22.0 ],
+					"patching_rect" : [ 116.0, 274.0, 211.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
-						"watch" : 1
+						"node_bin_path" : "",
+						"npm_bin_path" : "",
+						"watch" : 0
 					}
 ,
-					"text" : "node.script server.js"
+					"text" : "node.script comote-connect-server.cjs"
 				}
 
 			}
@@ -340,7 +342,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 113.75, 554.0, 338.0, 388.5 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 0.0, -1.0, 321.0, 419.0 ],
+					"presentation_rect" : [ 0.0, 0.0, 321.0, 419.0 ],
 					"rendermode" : 0,
 					"url" : "http://127.0.0.1:8888"
 				}
@@ -502,6 +504,13 @@
 			}
  ],
 		"dependency_cache" : [ 			{
+				"name" : "comote-connect-server.cjs",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMo.te/patchers",
+				"patcherrelativepath" : ".",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
 				"name" : "fit_jweb_to_bounds.js",
 				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
 				"type" : "TEXT",
@@ -523,13 +532,6 @@
 , 			{
 				"name" : "resize_n4m_monitor_patcher.js",
 				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
-				"type" : "TEXT",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "server.js",
-				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMo.te/patchers",
-				"patcherrelativepath" : ".",
 				"type" : "TEXT",
 				"implicit" : 1
 			}

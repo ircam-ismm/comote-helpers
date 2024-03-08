@@ -21,7 +21,7 @@ const comoteConfig = {
 
 const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url);
-  let pathname = `./public${parsedUrl.pathname}`;
+  let pathname = `./comote-connect-public${parsedUrl.pathname}`;
   const ext = path.parse(pathname).ext || '.html';
   // maps file extension to MIME typere
   const map = {

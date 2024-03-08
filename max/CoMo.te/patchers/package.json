@@ -1,5 +1,5 @@
 {
-  "name": "CoMote QR code",
+  "name": "comote-connect",
   "private": true,
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -7,20 +7,22 @@
     "@babel/plugin-transform-arrow-functions": "^7.12.13",
     "@babel/preset-env": "^7.12.16",
     "babel-loader": "^8.2.2",
+    "esbuild": "^0.20.1",
     "npm-run-all": "^4.1.5",
     "webpack": "^5.22.0",
     "webpack-cli": "^4.5.0"
   },
   "dependencies": {
+    "@ircam/comote-helpers": "^0.3.3",
     "core-js": "^3.8.3",
     "lit": "^2.2.2",
-    "regenerator-runtime": "^0.13.7",
-    "@ircam/comote-helpers": "^0.1.0",
     "portfinder": "^1.0.28",
+    "regenerator-runtime": "^0.13.7",
     "ws": "^8.16.0"
   },
   "scripts": {
-    "build": "npm install && webpack --config webpack.config.js",
-    "bundle": "npm run build && rm -rf node_modules && npm install --omit=dev"
+    "build": "npm-run-all --parallel 'build:client' 'build:server'",
+    "build:client": "esbuild src/index.js --bundle --format=cjs --platform=browser --outfile=comote-connect-public/comote-connect-client.js",
+    "build:server": "esbuild server.js --bundle --format=cjs --platform=node --external:max-api --outfile=comote-connect-server.cjs"
   }
 }
