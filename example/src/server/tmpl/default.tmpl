@@ -6,25 +6,22 @@
     <meta name="theme-color" content="#000000">
 
     <title>
-      ${d.app.name} | ${d.clientType}
+      ${d.app.name} | ${d.role}
     </title>
 
     <script>
-      window.soundworksConfig = JSON.parse('${JSON.stringify(d)}');
+      window.SOUNDWORKS_CONFIG = JSON.parse('${JSON.stringify(d)}');
     </script>
-    <script src="${d.env.subpath ? `/${d.env.subpath}` : ''}/vendors/webcomponentsjs/webcomponents-bundle.js"></script>
 
     ${
-      (d.env.type === 'production')
-        ? `<script defer src="${d.env.subpath ? `/${d.env.subpath}` : ''}/build/${d.clientType}.min.js"></script>`
-        : `<script defer src="${d.env.subpath ? `/${d.env.subpath}` : ''}/build/${d.clientType}.js"></script>`
+      d.env.useMinifiedFile === true
+        ? `<script defer src="${d.env.subpath ? `/${d.env.subpath}` : ''}/build/${d.role}.min.js"></script>`
+        : `<script defer src="${d.env.subpath ? `/${d.env.subpath}` : ''}/build/${d.role}.js"></script>`
     }
 
-    <link rel="stylesheet" href="${d.env.subpath ? `/${d.env.subpath}` : ''}/css/normalize.css">
-    <link rel="stylesheet" href="${d.env.subpath ? `/${d.env.subpath}` : ''}/css/styles.css">
+    <link rel="stylesheet" href="${d.env.subpath ? `/${d.env.subpath}` : ''}/build/css/normalize.css">
+    <link rel="stylesheet" href="${d.env.subpath ? `/${d.env.subpath}` : ''}/build/css/app.css">
   </head>
 
-  <body class="loading">
-    <div id="__soundworks-container"></div>
-  </body>
+  <body class="loading ${d.role}"></body>
 </html>

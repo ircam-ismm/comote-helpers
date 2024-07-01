@@ -9,15 +9,6 @@ export default {
   },
   data: {
     type: 'any',
-    default: null,
-    nullable: true,
+    default: {},
   },
-  buttonA: {
-    type: 'boolean',
-    default: false,
-  },
-  buttonB: {
-    type: 'boolean',
-    default: false,
-  },
-}
+};

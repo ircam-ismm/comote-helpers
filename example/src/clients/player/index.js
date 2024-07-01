@@ -1,83 +1,110 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import { Client } from '@soundworks/core/client';
-import initQoS from '@soundworks/template-helpers/client/init-qos.js';
+import '@soundworks/helpers/polyfills.js';
+import { Client } from '@soundworks/core/client.js';
+import { loadConfig, launcher } from '@soundworks/helpers/browser.js';
+import { html, render } from 'lit';
 
-import PlayerExperience from './PlayerExperience.js';
+import '../components/sw-credits.js';
+import * as CoMoteQRCode from '../../../../src/qrcode.js';
 
-const config = window.soundworksConfig;
-// store experiences of emulated clients
-const experiences = new Set();
+import '@ircam/sc-components/sc-text.js';
+import '@ircam/sc-components/sc-toggle.js';
+import '@ircam/sc-components/sc-editor.js';
 
-console.info('> self.crossOriginIsolated', self.crossOriginIsolated);
+// - General documentation: https://soundworks.dev/
+// - API documentation:     https://soundworks.dev/api
+// - Issue Tracker:         https://github.com/collective-soundworks/soundworks/issues
+// - Wizard & Tools:        `npx soundworks`
 
-async function launch($container, index) {
-  try {
-    const client = new Client();
+async function main($container) {
+  /**
+   * Load configuration from config files and create the soundworks client
+   */
+  const config = loadConfig();
+  const client = new Client(config);
+  launcher.register(client, { initScreensContainer: $container });
 
-    // -------------------------------------------------------------------
-    // register plugins
-    // -------------------------------------------------------------------
-    // client.pluginManager.register(pluginName, pluginFactory, [pluginOptions], [dependencies])
+  await client.start();
 
-    // -------------------------------------------------------------------
-    // launch application
-    // -------------------------------------------------------------------
-    await client.init(config);
-    initQoS(client);
+  const global = await client.stateManager.attach('global');
 
-    const experience = new PlayerExperience(client, config, $container);
-    // store exprience for emulated clients
-    experiences.add(experience);
+  let qrCode;
+  let devicemotion = {};
+  let buttonA = false;
+  let buttonB = false;
+  let control = {};
 
-    document.body.classList.remove('loading');
+  global.onUpdate(async updates => {
+    if ('comoteConfig' in updates) {
+      qrCode = await CoMoteQRCode.dataURL(updates.comoteConfig);
+    }
 
-    // start all the things
-    await client.start();
-    experience.start();
-
-    return Promise.resolve();
-  } catch(err) {
-    console.error(err);
-  }
-}
-
-// -------------------------------------------------------------------
-// bootstrapping
-// -------------------------------------------------------------------
-const $container = document.querySelector('#__soundworks-container');
-const searchParams = new URLSearchParams(window.location.search);
-// enable instanciation of multiple clients in the same page to facilitate
-// development and testing (be careful in production...)
-const numEmulatedClients = parseInt(searchParams.get('emulate')) || 1;
-
-// special logic for emulated clients (1 click to rule them all)
-if (numEmulatedClients > 1) {
-  for (let i = 0; i < numEmulatedClients; i++) {
-    const $div = document.createElement('div');
-    $div.classList.add('emulate');
-    $container.appendChild($div);
-
-    launch($div, i);
-  }
-
-  const $initPlatformBtn = document.createElement('div');
-  $initPlatformBtn.classList.add('init-platform');
-  $initPlatformBtn.textContent = 'resume all';
-
-  function initPlatforms(e) {
-    experiences.forEach(experience => {
-      if (experience.platform) {
-        experience.platform.onUserGesture(e)
+    if ('data' in updates) {
+      if ('devicemotion' in updates.data) {
+        devicemotion = updates.data.devicemotion;
       }
-    });
-    $initPlatformBtn.removeEventListener('click', initPlatforms);
-    $initPlatformBtn.remove();
+
+      if ('control' in updates.data) {
+        if ('buttonA' in updates.data.control) {
+          buttonA = !!updates.data.control.buttonA;
+        } else if ('buttonB' in updates.data.control) {
+          buttonB = !!updates.data.control.buttonB;
+        } else {
+          control = updates.data.control;
+        }
+      }
+    }
+
+    renderApp();
+  }, true);
+
+  function renderApp() {
+    render(html`
+      <div style="padding: 20px">
+          <h1 style="margin: 20px 0">CoMote dashboard</h1>
+
+          <div style="margin-bottom: 10px;">
+            <sc-text>WiFi infos</sc-text>
+            <sc-text style="height: 80px;">${JSON.stringify(global.get('wifiInfos'), null, 2)}</sc-text>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <sc-text>Settings</sc-text>
+            <sc-editor
+              value=${JSON.stringify(global.get('comoteConfig'), null, 2)}
+              @change=${e => global.set({ comoteConfig: JSON.parse(e.detail.value) })}
+            ></sc-editor>
+          </div>
+
+          <div style="display: inline-block; vertical-align: top; margin-right: 12px">
+            <sc-text style="display: block; margin-bottom: 4px;">Flash QR to retrieve settings in CoMote</sc-text>
+            <img src=${qrCode} width="300" height="300" style="image-rendering: pixelated;"/>
+          </div>
+
+          <div style="display: inline-block; vertical-align: top; margin-right: 12px">
+            <sc-text style="width: 300px; height: 350px">${JSON.stringify(devicemotion, null, 2)}</sc-text>
+          </div>
+
+          <div style="display: inline-block; vertical-align: top; margin-right: 12px">
+            <div style="margin-bottom: 6px">
+              <sc-text>buttonA</sc-text>
+              <sc-toggle .active=${buttonA}></sc-toggle>
+            </div>
+            <div style="margin-bottom: 6px">
+              <sc-text>buttonB</sc-text>
+              <sc-toggle .active=${buttonB}></sc-toggle>
+            </div>
+            <div style="margin-bottom: 6px">
+              <sc-text>Arbitrary control (webview)</sc-text>
+              <sc-text>${JSON.stringify(control)}</sc-text>
+            </div>
+          </div>
+        </div>
+    `, $container);
   }
-
-  $initPlatformBtn.addEventListener('click', initPlatforms);
-
-  $container.appendChild($initPlatformBtn);
-} else {
-  launch($container, 0);
 }
+
+// The launcher enables instanciation of multiple clients in the same page to
+// facilitate development and testing.
+// e.g. `http://127.0.0.1:8000?emulate=10` to run 10 clients side-by-side
+launcher.execute(main, {
+  numClients: parseInt(new URLSearchParams(window.location.search).get('emulate')) || 1,
+});

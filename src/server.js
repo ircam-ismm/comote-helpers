@@ -1,13 +1,15 @@
-import WebSocket from 'ws';
+import { WebSocketServer } from 'ws';
 import isValidUTF8 from 'utf-8-validate';
 import { Server as OscServer } from 'node-osc';
 import cloneDeep from 'clone-deep';
 import assignDeep from 'assign-deep';
 
+console.log(WebSocket);
+
 /**
  * @typedef {Object} CoMoteConfig
- * @property {String} id - id of the client CoMo.te
- * @property {Number} interval - period in ms of the sensors for the client CoMo.te
+ * @property {String} id - id of the client CoMote
+ * @property {Number} interval - period in ms of the sensors for the client CoMote
  * @property {CoMoteTarget} osc - OSC configuration
  * @property {CoMoteTarget} ws - WebSocket configuration
  */
@@ -16,7 +18,7 @@ import assignDeep from 'assign-deep';
  * @typedef {Object} CoMoteTarget
  * @property {String} hostname - hostname or ip of the WebSocket or OSC server
  * @property {Number} port - listening port of the of the WebSocket or OSC server
- * @property {Boolean} autostart - enable streaming on CoMo.te application
+ * @property {Boolean} autostart - enable streaming on CoMote application
  */
 
 
@@ -43,7 +45,7 @@ export class Server {
     this._verbose = !!options.verbose;
 
     if (this._verbose) {
-      console.log('+ CoMo.te config:');
+      console.log('+ CoMote config:');
       console.log(this.config, '\n');
     }
 
@@ -66,13 +68,10 @@ export class Server {
       }
 
       if (this._verbose) {
-        console.log(`> CoMo.te: Launching WebSocket server on port: ${port}`);
+        console.log(`> CoMote: Launching WebSocket server on port: ${port}`);
       }
 
-      this._websocketServer = new WebSocket.Server({ port });
-
-      const sockets = new Map();
-
+      this._websocketServer = new WebSocketServer({ port });
       this._websocketServer.on('connection', (socket, request) => {
         // const ip = request.socket.remoteAddress;
         socket.on('message', (data, isBinary) => {
@@ -83,7 +82,7 @@ export class Server {
               data = JSON.parse(data);
 
               if (this._verbose) {
-                console.log(`> CoMo.te: new WebSocket message`, data);
+                console.log(`> CoMote: new WebSocket message`, data);
               }
 
               // console.log(data);
@@ -96,7 +95,7 @@ export class Server {
         // When a socket closes, or disconnects, remove it from the array.
         socket.on('close', (code, data) => {
           if (this._verbose) {
-            console.log('> CoMo.te: closed socket connection');
+            console.log('> CoMote: closed socket connection');
           }
         });
       });
@@ -104,14 +103,14 @@ export class Server {
       wsPromise = new Promise((resolve, reject) => {
         this._websocketServer.on('listening', () => {
           if (this._verbose) {
-            console.log(`> CoMo.te: WebSocket server listening`);
+            console.log(`> CoMote: WebSocket server listening`);
           }
 
           resolve();
         });
 
         this._websocketServer.on('error', err => {
-          console.log(`> CoMo.te: WebSocket server error`, err);
+          console.log(`> CoMote: WebSocket server error`, err);
           reject(err);
         });
       });
@@ -130,19 +129,19 @@ export class Server {
       }
 
       if (this._verbose) {
-        console.log(`> CoMo.te: Launching OSC server udp://${hostname}:${port}`);
+        console.log(`> CoMote: Launching OSC server udp://${hostname}:${port}`);
       }
 
       oscPromise = new Promise((resolve, reject) => {
         this._oscServer = new OscServer(this.config.osc.port, hostname, err => {
           if (err) {
-            console.log(`> CoMo.te: OSC server error`, err);
+            console.log(`> CoMote: OSC server error`, err);
             reject();
             return;
           }
 
           if (this._verbose) {
-            console.log(`> CoMo.te: OSC server listening`);
+            console.log(`> CoMote: OSC server listening`);
           }
 
           resolve();
@@ -152,7 +151,7 @@ export class Server {
           let address = data.shift();
 
           if (this._verbose) {
-            console.log(`> CoMo.te: new OSC message "${address}":`, data);
+            console.log(`> CoMote: new OSC message "${address}":`, data);
           }
 
           this._oscListeners.forEach(callback => callback(address, data));

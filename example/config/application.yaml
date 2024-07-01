@@ -1,0 +1,6 @@
+name: example-new
+author: ""
+clients:
+  player:
+    target: browser
+    default: true
