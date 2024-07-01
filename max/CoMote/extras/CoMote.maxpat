@@ -4,7 +4,7 @@
 		"appversion" : 		{
 			"major" : 8,
 			"minor" : 6,
-			"revision" : 1,
+			"revision" : 2,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
@@ -102,7 +102,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1449.166666666666742, 587.325925925925958, 79.0, 20.0 ],
-					"presentation_linecount" : 2,
 					"text" : "magr.gamma"
 				}
 
@@ -114,7 +113,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1387.166666666666742, 587.325925925925958, 63.0, 20.0 ],
-					"presentation_linecount" : 2,
 					"text" : "magr.beta"
 				}
 
@@ -126,7 +124,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1326.166666666666742, 587.325925925925958, 69.0, 20.0 ],
-					"presentation_linecount" : 2,
 					"text" : "mag.alpha"
 				}
 
@@ -360,7 +357,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 41.0, 54.0, 873.0, 33.0 ],
-					"text" : "Get motion sensors datastream from the CoMo.te smartphone app through WiFi "
+					"text" : "Get motion sensors datastream from the CoMote smartphone app through WiFi "
 				}
 
 			}
@@ -383,7 +380,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 403.5, 22.5, 162.666666666666629, 24.0 ],
-					"text" : "CoMo.te on Google Play"
+					"text" : "CoMote on Google Play"
 				}
 
 			}
@@ -422,7 +419,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 230.666666666666629, 22.5, 162.666666666666629, 24.0 ],
-					"text" : "CoMo.te on Apple Store"
+					"text" : "CoMote on Apple Store"
 				}
 
 			}
@@ -1050,7 +1047,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 41.0, 11.0, 173.0, 47.0 ],
-					"text" : "CoMo.te"
+					"text" : "CoMote"
 				}
 
 			}
@@ -1870,28 +1867,28 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-resize.js",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMo.te/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/Repositories/koral/Live/M4L",
+				"patcherrelativepath" : "../../../../koral/Live/M4L",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect-server.cjs",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMo.te/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/Repositories/koral/Live/M4L",
+				"patcherrelativepath" : "../../../../koral/Live/M4L",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMo.te/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/Repositories/koral/Live/M4L",
+				"patcherrelativepath" : "../../../../koral/Live/M4L",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-screenshot-3.png",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMo.te/patchers",
+				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "PNG",
 				"implicit" : 1
