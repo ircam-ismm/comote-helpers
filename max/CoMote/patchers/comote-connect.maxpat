@@ -3,8 +3,8 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 8,
-			"minor" : 6,
-			"revision" : 1,
+			"minor" : 5,
+			"revision" : 7,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
@@ -408,6 +408,8 @@
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
+						"node_bin_path" : "",
+						"npm_bin_path" : "",
 						"watch" : 0
 					}
 ,
@@ -435,11 +437,11 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 113.75, 554.0, 338.0, 388.5 ],
+					"patching_rect" : [ 108.75, 554.0, 343.0, 426.5 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 0.0, 0.0, 321.0, 419.0 ],
+					"presentation_rect" : [ 0.0, 0.0, 321.0, 435.0 ],
 					"rendermode" : 0,
-					"url" : "http://127.0.0.1:8888"
+					"url" : "http://127.0.0.1:8890"
 				}
 
 			}
@@ -695,14 +697,14 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-resize.js",
-				"bootpath" : "~/Documents/src/ircam-forge/koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : ".",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect-server.cjs",
-				"bootpath" : "~/Documents/src/ircam-forge/koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : ".",
 				"type" : "TEXT",
 				"implicit" : 1

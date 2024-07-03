@@ -3,14 +3,14 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 8,
-			"minor" : 6,
-			"revision" : 2,
+			"minor" : 5,
+			"revision" : 7,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 100.0, 1612.0, 931.0 ],
+		"rect" : [ 34.0, 106.0, 1586.0, 954.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -39,6 +39,30 @@
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-112",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1112.833333333333485, 783.0, 110.0, 20.0 ],
+					"presentation_linecount" : 2,
+					"text" : "WebView controls"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-109",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 1228.0, 783.0, 329.0, 22.0 ],
+					"text" : "/comote/0/control/my-second-slider 0.25"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-110",
 					"maxclass" : "newobj",
@@ -315,7 +339,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 41.0, 335.325925925925958, 195.5, 46.0 ],
-					"text" : "Scan the QR Code using the CoMo.te app"
+					"text" : "Scan the QR Code using the CoMote app"
 				}
 
 			}
@@ -460,8 +484,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1096.0, 54.0, 226.666666666666629, 40.0 ],
-					"text" : "video and more inofrmation at https://ismm-apps.ircam.fr/comote"
+					"patching_rect" : [ 1096.0, 54.0, 223.0, 40.0 ],
+					"text" : "video and more information at https://ismm-apps.ircam.fr/comote"
 				}
 
 			}
@@ -1138,7 +1162,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"offset" : [ 0.0, 0.0 ],
-					"patching_rect" : [ 228.5, 193.325925925925958, 318.0, 415.0 ],
+					"patching_rect" : [ 228.5, 193.325925925925958, 318.0, 425.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -1324,8 +1348,8 @@
 					"numinlets" : 5,
 					"numoutlets" : 5,
 					"outlettype" : [ "", "", "", "", "" ],
-					"patching_rect" : [ 867.5, 455.325925925925958, 593.0, 22.0 ],
-					"text" : "route /comote/0/devicemotion /comote/0/magnetometer /comote/0/buttonA /comote/0/buttonB"
+					"patching_rect" : [ 867.5, 455.325925925925958, 582.0, 22.0 ],
+					"text" : "route /comote/0/devicemotion /comote/0/magnetometer /comote/0/control/buttonA /comote/0/control/buttonB"
 				}
 
 			}
@@ -1567,8 +1591,16 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-109", 1 ],
+					"midpoints" : [ 1440.0, 500.662962962962979, 1547.5, 500.662962962962979 ],
+					"source" : [ "obj-11", 4 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-110", 0 ],
-					"midpoints" : [ 1020.5, 519.325925925925958, 1276.0, 519.325925925925958 ],
+					"midpoints" : [ 1017.75, 519.325925925925958, 1276.0, 519.325925925925958 ],
 					"source" : [ "obj-11", 1 ]
 				}
 
@@ -1867,28 +1899,28 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-resize.js",
-				"bootpath" : "~/Repositories/koral/Live/M4L",
-				"patcherrelativepath" : "../../../../koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect-server.cjs",
-				"bootpath" : "~/Repositories/koral/Live/M4L",
-				"patcherrelativepath" : "../../../../koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect.maxpat",
-				"bootpath" : "~/Repositories/koral/Live/M4L",
-				"patcherrelativepath" : "../../../../koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-screenshot-3.png",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "PNG",
 				"implicit" : 1

@@ -1,7 +1,125 @@
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+
+// node_modules/ws/lib/stream.js
+var require_stream = __commonJS({
+  "node_modules/ws/lib/stream.js"(exports2, module2) {
+    "use strict";
+    var { Duplex } = require("stream");
+    function emitClose(stream) {
+      stream.emit("close");
+    }
+    function duplexOnEnd() {
+      if (!this.destroyed && this._writableState.finished) {
+        this.destroy();
+      }
+    }
+    function duplexOnError(err) {
+      this.removeListener("error", duplexOnError);
+      this.destroy();
+      if (this.listenerCount("error") === 0) {
+        this.emit("error", err);
+      }
+    }
+    function createWebSocketStream2(ws, options) {
+      let terminateOnDestroy = true;
+      const duplex = new Duplex({
+        ...options,
+        autoDestroy: false,
+        emitClose: false,
+        objectMode: false,
+        writableObjectMode: false
+      });
+      ws.on("message", function message(msg, isBinary) {
+        const data = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
+        if (!duplex.push(data)) ws.pause();
+      });
+      ws.once("error", function error(err) {
+        if (duplex.destroyed) return;
+        terminateOnDestroy = false;
+        duplex.destroy(err);
+      });
+      ws.once("close", function close() {
+        if (duplex.destroyed) return;
+        duplex.push(null);
+      });
+      duplex._destroy = function(err, callback) {
+        if (ws.readyState === ws.CLOSED) {
+          callback(err);
+          process.nextTick(emitClose, duplex);
+          return;
+        }
+        let called = false;
+        ws.once("error", function error(err2) {
+          called = true;
+          callback(err2);
+        });
+        ws.once("close", function close() {
+          if (!called) callback(err);
+          process.nextTick(emitClose, duplex);
+        });
+        if (terminateOnDestroy) ws.terminate();
+      };
+      duplex._final = function(callback) {
+        if (ws.readyState === ws.CONNECTING) {
+          ws.once("open", function open() {
+            duplex._final(callback);
+          });
+          return;
+        }
+        if (ws._socket === null) return;
+        if (ws._socket._writableState.finished) {
+          callback();
+          if (duplex._readableState.endEmitted) duplex.destroy();
+        } else {
+          ws._socket.once("finish", function finish() {
+            callback();
+          });
+          ws.close();
+        }
+      };
+      duplex._read = function() {
+        if (ws.isPaused) ws.resume();
+      };
+      duplex._write = function(chunk, encoding, callback) {
+        if (ws.readyState === ws.CONNECTING) {
+          ws.once("open", function open() {
+            duplex._write(chunk, encoding, callback);
+          });
+          return;
+        }
+        ws.send(chunk, callback);
+      };
+      duplex.on("end", duplexOnEnd);
+      duplex.on("error", duplexOnError);
+      return duplex;
+    }
+    module2.exports = createWebSocketStream2;
+  }
+});
 
 // node_modules/ws/lib/constants.js
 var require_constants = __commonJS({
@@ -28,10 +146,8 @@ var require_buffer_util = __commonJS({
     var { EMPTY_BUFFER } = require_constants();
     var FastBuffer = Buffer[Symbol.species];
     function concat(list, totalLength) {
-      if (list.length === 0)
-        return EMPTY_BUFFER;
-      if (list.length === 1)
-        return list[0];
+      if (list.length === 0) return EMPTY_BUFFER;
+      if (list.length === 1) return list[0];
       const target = Buffer.allocUnsafe(totalLength);
       let offset = 0;
       for (let i = 0; i < list.length; i++) {
@@ -62,8 +178,7 @@ var require_buffer_util = __commonJS({
     }
     function toBuffer(data) {
       toBuffer.readOnly = true;
-      if (Buffer.isBuffer(data))
-        return data;
+      if (Buffer.isBuffer(data)) return data;
       let buf;
       if (data instanceof ArrayBuffer) {
         buf = new FastBuffer(data);
@@ -86,16 +201,12 @@ var require_buffer_util = __commonJS({
       try {
         const bufferUtil = require("bufferutil");
         module2.exports.mask = function(source, mask, output, offset, length) {
-          if (length < 48)
-            _mask(source, mask, output, offset, length);
-          else
-            bufferUtil.mask(source, mask, output, offset, length);
+          if (length < 48) _mask(source, mask, output, offset, length);
+          else bufferUtil.mask(source, mask, output, offset, length);
         };
         module2.exports.unmask = function(buffer, mask) {
-          if (buffer.length < 32)
-            _unmask(buffer, mask);
-          else
-            bufferUtil.unmask(buffer, mask);
+          if (buffer.length < 32) _unmask(buffer, mask);
+          else bufferUtil.unmask(buffer, mask);
         };
       } catch (e) {
       }
@@ -141,8 +252,7 @@ var require_limiter = __commonJS({
        * @private
        */
       [kRun]() {
-        if (this.pending === this.concurrency)
-          return;
+        if (this.pending === this.concurrency) return;
         if (this.jobs.length) {
           const job = this.jobs.shift();
           this.pending++;
@@ -438,8 +548,7 @@ var require_permessage_deflate = __commonJS({
         }
         this._inflate[kCallback] = callback;
         this._inflate.write(data);
-        if (fin)
-          this._inflate.write(TRAILER);
+        if (fin) this._inflate.write(TRAILER);
         this._inflate.flush(() => {
           const err = this._inflate[kError];
           if (err) {
@@ -558,24 +667,19 @@ var require_node_gyp_build = __commonJS({
       dir = path2.resolve(dir || ".");
       try {
         var name = runtimeRequire(path2.join(dir, "package.json")).name.toUpperCase().replace(/-/g, "_");
-        if (process.env[name + "_PREBUILD"])
-          dir = process.env[name + "_PREBUILD"];
+        if (process.env[name + "_PREBUILD"]) dir = process.env[name + "_PREBUILD"];
       } catch (err) {
       }
       if (!prebuildsOnly) {
         var release = getFirst(path2.join(dir, "build/Release"), matchBuild);
-        if (release)
-          return release;
+        if (release) return release;
         var debug = getFirst(path2.join(dir, "build/Debug"), matchBuild);
-        if (debug)
-          return debug;
+        if (debug) return debug;
       }
       var prebuild = resolve(dir);
-      if (prebuild)
-        return prebuild;
+      if (prebuild) return prebuild;
       var nearby = resolve(path2.dirname(process.execPath));
-      if (nearby)
-        return nearby;
+      if (nearby) return nearby;
       var target = [
         "platform=" + platform,
         "arch=" + arch,
@@ -593,14 +697,12 @@ var require_node_gyp_build = __commonJS({
       function resolve(dir2) {
         var tuples = readdirSync(path2.join(dir2, "prebuilds")).map(parseTuple);
         var tuple = tuples.filter(matchTuple(platform, arch)).sort(compareTuples)[0];
-        if (!tuple)
-          return;
+        if (!tuple) return;
         var prebuilds = path2.join(dir2, "prebuilds", tuple.name);
         var parsed = readdirSync(prebuilds).map(parseTags);
         var candidates = parsed.filter(matchTags(runtime, abi));
         var winner = candidates.sort(compareTags(runtime))[0];
-        if (winner)
-          return path2.join(prebuilds, winner.file);
+        if (winner) return path2.join(prebuilds, winner.file);
       }
     };
     function readdirSync(dir) {
@@ -619,24 +721,18 @@ var require_node_gyp_build = __commonJS({
     }
     function parseTuple(name) {
       var arr = name.split("-");
-      if (arr.length !== 2)
-        return;
+      if (arr.length !== 2) return;
       var platform2 = arr[0];
       var architectures = arr[1].split("+");
-      if (!platform2)
-        return;
-      if (!architectures.length)
-        return;
-      if (!architectures.every(Boolean))
-        return;
+      if (!platform2) return;
+      if (!architectures.length) return;
+      if (!architectures.every(Boolean)) return;
       return { name, platform: platform2, architectures };
     }
     function matchTuple(platform2, arch2) {
       return function(tuple) {
-        if (tuple == null)
-          return false;
-        if (tuple.platform !== platform2)
-          return false;
+        if (tuple == null) return false;
+        if (tuple.platform !== platform2) return false;
         return tuple.architectures.includes(arch2);
       };
     }
@@ -647,8 +743,7 @@ var require_node_gyp_build = __commonJS({
       var arr = file.split(".");
       var extension = arr.pop();
       var tags = { file, specificity: 0 };
-      if (extension !== "node")
-        return;
+      if (extension !== "node") return;
       for (var i = 0; i < arr.length; i++) {
         var tag = arr[i];
         if (tag === "node" || tag === "electron" || tag === "node-webkit") {
@@ -672,18 +767,12 @@ var require_node_gyp_build = __commonJS({
     }
     function matchTags(runtime2, abi2) {
       return function(tags) {
-        if (tags == null)
-          return false;
-        if (tags.runtime && tags.runtime !== runtime2 && !runtimeAgnostic(tags))
-          return false;
-        if (tags.abi && tags.abi !== abi2 && !tags.napi)
-          return false;
-        if (tags.uv && tags.uv !== uv)
-          return false;
-        if (tags.armv && tags.armv !== armv)
-          return false;
-        if (tags.libc && tags.libc !== libc)
-          return false;
+        if (tags == null) return false;
+        if (tags.runtime && tags.runtime !== runtime2 && !runtimeAgnostic(tags)) return false;
+        if (tags.abi && tags.abi !== abi2 && !tags.napi) return false;
+        if (tags.uv && tags.uv !== uv) return false;
+        if (tags.armv && tags.armv !== armv) return false;
+        if (tags.libc && tags.libc !== libc) return false;
         return true;
       };
     }
@@ -707,10 +796,8 @@ var require_node_gyp_build = __commonJS({
       return !!(process.versions && process.versions.nw);
     }
     function isElectron() {
-      if (process.versions && process.versions.electron)
-        return true;
-      if (process.env.ELECTRON_RUN_AS_NODE)
-        return true;
+      if (process.versions && process.versions.electron) return true;
+      if (process.env.ELECTRON_RUN_AS_NODE) return true;
       return typeof window !== "undefined" && window.process && window.process.type === "renderer";
     }
     function isAlpine(platform2) {
@@ -997,8 +1084,6 @@ var require_receiver = __commonJS({
     var { concat, toArrayBuffer, unmask } = require_buffer_util();
     var { isValidStatusCode, isValidUTF8 } = require_validation();
     var FastBuffer = Buffer[Symbol.species];
-    var promise = Promise.resolve();
-    var queueTask = typeof queueMicrotask === "function" ? queueMicrotask : queueMicrotaskShim;
     var GET_INFO = 0;
     var GET_PAYLOAD_LENGTH_16 = 1;
     var GET_PAYLOAD_LENGTH_64 = 2;
@@ -1006,12 +1091,12 @@ var require_receiver = __commonJS({
     var GET_DATA = 4;
     var INFLATING = 5;
     var DEFER_EVENT = 6;
-    var Receiver = class extends Writable {
+    var Receiver2 = class extends Writable {
       /**
        * Creates a Receiver instance.
        *
        * @param {Object} [options] Options object
-       * @param {Boolean} [options.allowSynchronousEvents=false] Specifies whether
+       * @param {Boolean} [options.allowSynchronousEvents=true] Specifies whether
        *     any of the `'message'`, `'ping'`, and `'pong'` events can be emitted
        *     multiple times in the same tick
        * @param {String} [options.binaryType=nodebuffer] The type for binary data
@@ -1025,7 +1110,7 @@ var require_receiver = __commonJS({
        */
       constructor(options = {}) {
         super();
-        this._allowSynchronousEvents = !!options.allowSynchronousEvents;
+        this._allowSynchronousEvents = options.allowSynchronousEvents !== void 0 ? options.allowSynchronousEvents : true;
         this._binaryType = options.binaryType || BINARY_TYPES[0];
         this._extensions = options.extensions || {};
         this._isServer = !!options.isServer;
@@ -1057,8 +1142,7 @@ var require_receiver = __commonJS({
        * @private
        */
       _write(chunk, encoding, cb) {
-        if (this._opcode === 8 && this._state == GET_INFO)
-          return cb();
+        if (this._opcode === 8 && this._state == GET_INFO) return cb();
         this._bufferedBytes += chunk.length;
         this._buffers.push(chunk);
         this.startLoop(cb);
@@ -1072,8 +1156,7 @@ var require_receiver = __commonJS({
        */
       consume(n) {
         this._bufferedBytes -= n;
-        if (n === this._buffers[0].length)
-          return this._buffers.shift();
+        if (n === this._buffers[0].length) return this._buffers.shift();
         if (n < this._buffers[0].length) {
           const buf = this._buffers[0];
           this._buffers[0] = new FastBuffer(
@@ -1132,8 +1215,7 @@ var require_receiver = __commonJS({
               return;
           }
         } while (this._loop);
-        if (!this._errored)
-          cb();
+        if (!this._errored) cb();
       }
       /**
        * Reads the first two bytes of a frame.
@@ -1255,8 +1337,7 @@ var require_receiver = __commonJS({
           cb(error);
           return;
         }
-        if (!this._fin && !this._fragmented)
-          this._fragmented = this._opcode;
+        if (!this._fin && !this._fragmented) this._fragmented = this._opcode;
         this._masked = (buf[1] & 128) === 128;
         if (this._isServer) {
           if (!this._masked) {
@@ -1281,12 +1362,9 @@ var require_receiver = __commonJS({
           cb(error);
           return;
         }
-        if (this._payloadLength === 126)
-          this._state = GET_PAYLOAD_LENGTH_16;
-        else if (this._payloadLength === 127)
-          this._state = GET_PAYLOAD_LENGTH_64;
-        else
-          this.haveLength(cb);
+        if (this._payloadLength === 126) this._state = GET_PAYLOAD_LENGTH_16;
+        else if (this._payloadLength === 127) this._state = GET_PAYLOAD_LENGTH_64;
+        else this.haveLength(cb);
       }
       /**
        * Gets extended payload length (7+16).
@@ -1350,10 +1428,8 @@ var require_receiver = __commonJS({
             return;
           }
         }
-        if (this._masked)
-          this._state = GET_MASK;
-        else
-          this._state = GET_DATA;
+        if (this._masked) this._state = GET_MASK;
+        else this._state = GET_DATA;
       }
       /**
        * Reads mask bytes.
@@ -1411,8 +1487,7 @@ var require_receiver = __commonJS({
       decompress(data, cb) {
         const perMessageDeflate = this._extensions[PerMessageDeflate.extensionName];
         perMessageDeflate.decompress(data, this._fin, (err, buf) => {
-          if (err)
-            return cb(err);
+          if (err) return cb(err);
           if (buf.length) {
             this._messageLength += buf.length;
             if (this._messageLength > this._maxPayload && this._maxPayload > 0) {
@@ -1429,8 +1504,7 @@ var require_receiver = __commonJS({
             this._fragments.push(buf);
           }
           this.dataMessage(cb);
-          if (this._state === GET_INFO)
-            this.startLoop(cb);
+          if (this._state === GET_INFO) this.startLoop(cb);
         });
       }
       /**
@@ -1459,12 +1533,12 @@ var require_receiver = __commonJS({
           } else {
             data = fragments;
           }
-          if (this._state === INFLATING || this._allowSynchronousEvents) {
+          if (this._allowSynchronousEvents) {
             this.emit("message", data, true);
             this._state = GET_INFO;
           } else {
             this._state = DEFER_EVENT;
-            queueTask(() => {
+            setImmediate(() => {
               this.emit("message", data, true);
               this._state = GET_INFO;
               this.startLoop(cb);
@@ -1488,7 +1562,7 @@ var require_receiver = __commonJS({
             this._state = GET_INFO;
           } else {
             this._state = DEFER_EVENT;
-            queueTask(() => {
+            setImmediate(() => {
               this.emit("message", buf, false);
               this._state = GET_INFO;
               this.startLoop(cb);
@@ -1550,7 +1624,7 @@ var require_receiver = __commonJS({
           this._state = GET_INFO;
         } else {
           this._state = DEFER_EVENT;
-          queueTask(() => {
+          setImmediate(() => {
             this.emit(this._opcode === 9 ? "ping" : "pong", data);
             this._state = GET_INFO;
             this.startLoop(cb);
@@ -1581,16 +1655,7 @@ var require_receiver = __commonJS({
         return err;
       }
     };
-    module2.exports = Receiver;
-    function queueMicrotaskShim(cb) {
-      promise.then(cb).catch(throwErrorNextTick);
-    }
-    function throwError(err) {
-      throw err;
-    }
-    function throwErrorNextTick(err) {
-      process.nextTick(throwError, err);
-    }
+    module2.exports = Receiver2;
   }
 });
 
@@ -1606,7 +1671,10 @@ var require_sender = __commonJS({
     var { mask: applyMask, toBuffer } = require_buffer_util();
     var kByteLength = Symbol("kByteLength");
     var maskBuffer = Buffer.alloc(4);
-    var Sender = class _Sender {
+    var RANDOM_POOL_SIZE = 8 * 1024;
+    var randomPool;
+    var randomPoolPointer = RANDOM_POOL_SIZE;
+    var Sender2 = class _Sender {
       /**
        * Creates a Sender instance.
        *
@@ -1659,7 +1727,17 @@ var require_sender = __commonJS({
           if (options.generateMask) {
             options.generateMask(mask);
           } else {
-            randomFillSync(mask, 0, 4);
+            if (randomPoolPointer === RANDOM_POOL_SIZE) {
+              if (randomPool === void 0) {
+                randomPool = Buffer.alloc(RANDOM_POOL_SIZE);
+              }
+              randomFillSync(randomPool, 0, RANDOM_POOL_SIZE);
+              randomPoolPointer = 0;
+            }
+            mask[0] = randomPool[randomPoolPointer++];
+            mask[1] = randomPool[randomPoolPointer++];
+            mask[2] = randomPool[randomPoolPointer++];
+            mask[3] = randomPool[randomPoolPointer++];
           }
           skipMasking = (mask[0] | mask[1] | mask[2] | mask[3]) === 0;
           offset = 6;
@@ -1686,8 +1764,7 @@ var require_sender = __commonJS({
         }
         const target = Buffer.allocUnsafe(merge ? dataLength + offset : offset);
         target[0] = options.fin ? options.opcode | 128 : options.opcode;
-        if (options.rsv1)
-          target[0] |= 64;
+        if (options.rsv1) target[0] |= 64;
         target[1] = payloadLength;
         if (payloadLength === 126) {
           target.writeUInt16BE(dataLength, 2);
@@ -1695,15 +1772,13 @@ var require_sender = __commonJS({
           target[2] = target[3] = 0;
           target.writeUIntBE(dataLength, 4, 6);
         }
-        if (!options.mask)
-          return [target, data];
+        if (!options.mask) return [target, data];
         target[1] |= 128;
         target[offset - 4] = mask[0];
         target[offset - 3] = mask[1];
         target[offset - 2] = mask[2];
         target[offset - 1] = mask[3];
-        if (skipMasking)
-          return [target, data];
+        if (skipMasking) return [target, data];
         if (merge) {
           applyMask(data, mask, target, offset, dataLength);
           return [target];
@@ -1874,8 +1949,7 @@ var require_sender = __commonJS({
           rsv1 = false;
           opcode = 0;
         }
-        if (options.fin)
-          this._firstFragment = true;
+        if (options.fin) this._firstFragment = true;
         if (perMessageDeflate) {
           const opts = {
             [kByteLength]: byteLength,
@@ -1944,13 +2018,11 @@ var require_sender = __commonJS({
             const err = new Error(
               "The socket was closed while data was being compressed"
             );
-            if (typeof cb === "function")
-              cb(err);
+            if (typeof cb === "function") cb(err);
             for (let i = 0; i < this._queue.length; i++) {
               const params = this._queue[i];
               const callback = params[params.length - 1];
-              if (typeof callback === "function")
-                callback(err);
+              if (typeof callback === "function") callback(err);
             }
             return;
           }
@@ -2001,7 +2073,7 @@ var require_sender = __commonJS({
         }
       }
     };
-    module2.exports = Sender;
+    module2.exports = Sender2;
   }
 });
 
@@ -2240,10 +2312,8 @@ var require_extension = __commonJS({
     "use strict";
     var { tokenChars } = require_validation();
     function push(dest, name, elem) {
-      if (dest[name] === void 0)
-        dest[name] = [elem];
-      else
-        dest[name].push(elem);
+      if (dest[name] === void 0) dest[name] = [elem];
+      else dest[name].push(elem);
     }
     function parse(header) {
       const offers = /* @__PURE__ */ Object.create(null);
@@ -2261,17 +2331,14 @@ var require_extension = __commonJS({
         code = header.charCodeAt(i);
         if (extensionName === void 0) {
           if (end === -1 && tokenChars[code] === 1) {
-            if (start === -1)
-              start = i;
+            if (start === -1) start = i;
           } else if (i !== 0 && (code === 32 || code === 9)) {
-            if (end === -1 && start !== -1)
-              end = i;
+            if (end === -1 && start !== -1) end = i;
           } else if (code === 59 || code === 44) {
             if (start === -1) {
               throw new SyntaxError(`Unexpected character at index ${i}`);
             }
-            if (end === -1)
-              end = i;
+            if (end === -1) end = i;
             const name = header.slice(start, end);
             if (code === 44) {
               push(offers, name, params);
@@ -2285,17 +2352,14 @@ var require_extension = __commonJS({
           }
         } else if (paramName === void 0) {
           if (end === -1 && tokenChars[code] === 1) {
-            if (start === -1)
-              start = i;
+            if (start === -1) start = i;
           } else if (code === 32 || code === 9) {
-            if (end === -1 && start !== -1)
-              end = i;
+            if (end === -1 && start !== -1) end = i;
           } else if (code === 59 || code === 44) {
             if (start === -1) {
               throw new SyntaxError(`Unexpected character at index ${i}`);
             }
-            if (end === -1)
-              end = i;
+            if (end === -1) end = i;
             push(params, header.slice(start, end), true);
             if (code === 44) {
               push(offers, extensionName, params);
@@ -2314,15 +2378,12 @@ var require_extension = __commonJS({
             if (tokenChars[code] !== 1) {
               throw new SyntaxError(`Unexpected character at index ${i}`);
             }
-            if (start === -1)
-              start = i;
-            else if (!mustUnescape)
-              mustUnescape = true;
+            if (start === -1) start = i;
+            else if (!mustUnescape) mustUnescape = true;
             isEscaping = false;
           } else if (inQuotes) {
             if (tokenChars[code] === 1) {
-              if (start === -1)
-                start = i;
+              if (start === -1) start = i;
             } else if (code === 34 && start !== -1) {
               inQuotes = false;
               end = i;
@@ -2334,17 +2395,14 @@ var require_extension = __commonJS({
           } else if (code === 34 && header.charCodeAt(i - 1) === 61) {
             inQuotes = true;
           } else if (end === -1 && tokenChars[code] === 1) {
-            if (start === -1)
-              start = i;
+            if (start === -1) start = i;
           } else if (start !== -1 && (code === 32 || code === 9)) {
-            if (end === -1)
-              end = i;
+            if (end === -1) end = i;
           } else if (code === 59 || code === 44) {
             if (start === -1) {
               throw new SyntaxError(`Unexpected character at index ${i}`);
             }
-            if (end === -1)
-              end = i;
+            if (end === -1) end = i;
             let value = header.slice(start, end);
             if (mustUnescape) {
               value = value.replace(/\\/g, "");
@@ -2366,8 +2424,7 @@ var require_extension = __commonJS({
       if (start === -1 || inQuotes || code === 32 || code === 9) {
         throw new SyntaxError("Unexpected end of input");
       }
-      if (end === -1)
-        end = i;
+      if (end === -1) end = i;
       const token = header.slice(start, end);
       if (extensionName === void 0) {
         push(offers, token, params);
@@ -2386,14 +2443,12 @@ var require_extension = __commonJS({
     function format(extensions) {
       return Object.keys(extensions).map((extension) => {
         let configurations = extensions[extension];
-        if (!Array.isArray(configurations))
-          configurations = [configurations];
+        if (!Array.isArray(configurations)) configurations = [configurations];
         return configurations.map((params) => {
           return [extension].concat(
             Object.keys(params).map((k) => {
               let values = params[k];
-              if (!Array.isArray(values))
-                values = [values];
+              if (!Array.isArray(values)) values = [values];
               return values.map((v) => v === true ? k : `${k}=${v}`).join("; ");
             })
           ).join("; ");
@@ -2417,8 +2472,8 @@ var require_websocket = __commonJS({
     var { Duplex, Readable } = require("stream");
     var { URL } = require("url");
     var PerMessageDeflate = require_permessage_deflate();
-    var Receiver = require_receiver();
-    var Sender = require_sender();
+    var Receiver2 = require_receiver();
+    var Sender2 = require_sender();
     var {
       BINARY_TYPES,
       EMPTY_BUFFER,
@@ -2439,7 +2494,7 @@ var require_websocket = __commonJS({
     var protocolVersions = [8, 13];
     var readyStates = ["CONNECTING", "OPEN", "CLOSING", "CLOSED"];
     var subprotocolRegex = /^[!#$%&'*+\-.0-9A-Z^_`|a-z~]+$/;
-    var WebSocket = class _WebSocket extends EventEmitter {
+    var WebSocket2 = class _WebSocket extends EventEmitter {
       /**
        * Create a new `WebSocket`.
        *
@@ -2493,18 +2548,15 @@ var require_websocket = __commonJS({
         return this._binaryType;
       }
       set binaryType(type) {
-        if (!BINARY_TYPES.includes(type))
-          return;
+        if (!BINARY_TYPES.includes(type)) return;
         this._binaryType = type;
-        if (this._receiver)
-          this._receiver._binaryType = type;
+        if (this._receiver) this._receiver._binaryType = type;
       }
       /**
        * @type {Number}
        */
       get bufferedAmount() {
-        if (!this._socket)
-          return this._bufferedAmount;
+        if (!this._socket) return this._bufferedAmount;
         return this._socket._writableState.length + this._sender._bufferedBytes;
       }
       /**
@@ -2582,7 +2634,7 @@ var require_websocket = __commonJS({
        * @private
        */
       setSocket(socket, head, options) {
-        const receiver = new Receiver({
+        const receiver = new Receiver2({
           allowSynchronousEvents: options.allowSynchronousEvents,
           binaryType: this.binaryType,
           extensions: this._extensions,
@@ -2590,7 +2642,7 @@ var require_websocket = __commonJS({
           maxPayload: options.maxPayload,
           skipUTF8Validation: options.skipUTF8Validation
         });
-        this._sender = new Sender(socket, this._extensions, options.generateMask);
+        this._sender = new Sender2(socket, this._extensions, options.generateMask);
         this._receiver = receiver;
         this._socket = socket;
         receiver[kWebSocket] = this;
@@ -2601,12 +2653,9 @@ var require_websocket = __commonJS({
         receiver.on("message", receiverOnMessage);
         receiver.on("ping", receiverOnPing);
         receiver.on("pong", receiverOnPong);
-        if (socket.setTimeout)
-          socket.setTimeout(0);
-        if (socket.setNoDelay)
-          socket.setNoDelay();
-        if (head.length > 0)
-          socket.unshift(head);
+        if (socket.setTimeout) socket.setTimeout(0);
+        if (socket.setNoDelay) socket.setNoDelay();
+        if (head.length > 0) socket.unshift(head);
         socket.on("close", socketOnClose);
         socket.on("data", socketOnData);
         socket.on("end", socketOnEnd);
@@ -2653,8 +2702,7 @@ var require_websocket = __commonJS({
        * @public
        */
       close(code, data) {
-        if (this.readyState === _WebSocket.CLOSED)
-          return;
+        if (this.readyState === _WebSocket.CLOSED) return;
         if (this.readyState === _WebSocket.CONNECTING) {
           const msg = "WebSocket was closed before the connection was established";
           abortHandshake(this, this._req, msg);
@@ -2668,8 +2716,7 @@ var require_websocket = __commonJS({
         }
         this._readyState = _WebSocket.CLOSING;
         this._sender.close(code, data, !this._isServer, (err) => {
-          if (err)
-            return;
+          if (err) return;
           this._closeFrameSent = true;
           if (this._closeFrameReceived || this._receiver._writableState.errorEmitted) {
             this._socket.end();
@@ -2711,14 +2758,12 @@ var require_websocket = __commonJS({
           cb = mask;
           mask = void 0;
         }
-        if (typeof data === "number")
-          data = data.toString();
+        if (typeof data === "number") data = data.toString();
         if (this.readyState !== _WebSocket.OPEN) {
           sendAfterClose(this, data, cb);
           return;
         }
-        if (mask === void 0)
-          mask = !this._isServer;
+        if (mask === void 0) mask = !this._isServer;
         this._sender.ping(data || EMPTY_BUFFER, mask, cb);
       }
       /**
@@ -2740,14 +2785,12 @@ var require_websocket = __commonJS({
           cb = mask;
           mask = void 0;
         }
-        if (typeof data === "number")
-          data = data.toString();
+        if (typeof data === "number") data = data.toString();
         if (this.readyState !== _WebSocket.OPEN) {
           sendAfterClose(this, data, cb);
           return;
         }
-        if (mask === void 0)
-          mask = !this._isServer;
+        if (mask === void 0) mask = !this._isServer;
         this._sender.pong(data || EMPTY_BUFFER, mask, cb);
       }
       /**
@@ -2760,8 +2803,7 @@ var require_websocket = __commonJS({
           return;
         }
         this._paused = false;
-        if (!this._receiver._writableState.needDrain)
-          this._socket.resume();
+        if (!this._receiver._writableState.needDrain) this._socket.resume();
       }
       /**
        * Send a data message.
@@ -2786,8 +2828,7 @@ var require_websocket = __commonJS({
           cb = options;
           options = {};
         }
-        if (typeof data === "number")
-          data = data.toString();
+        if (typeof data === "number") data = data.toString();
         if (this.readyState !== _WebSocket.OPEN) {
           sendAfterClose(this, data, cb);
           return;
@@ -2810,8 +2851,7 @@ var require_websocket = __commonJS({
        * @public
        */
       terminate() {
-        if (this.readyState === _WebSocket.CLOSED)
-          return;
+        if (this.readyState === _WebSocket.CLOSED) return;
         if (this.readyState === _WebSocket.CONNECTING) {
           const msg = "WebSocket was closed before the connection was established";
           abortHandshake(this, this._req, msg);
@@ -2823,35 +2863,35 @@ var require_websocket = __commonJS({
         }
       }
     };
-    Object.defineProperty(WebSocket, "CONNECTING", {
+    Object.defineProperty(WebSocket2, "CONNECTING", {
       enumerable: true,
       value: readyStates.indexOf("CONNECTING")
     });
-    Object.defineProperty(WebSocket.prototype, "CONNECTING", {
+    Object.defineProperty(WebSocket2.prototype, "CONNECTING", {
       enumerable: true,
       value: readyStates.indexOf("CONNECTING")
     });
-    Object.defineProperty(WebSocket, "OPEN", {
+    Object.defineProperty(WebSocket2, "OPEN", {
       enumerable: true,
       value: readyStates.indexOf("OPEN")
     });
-    Object.defineProperty(WebSocket.prototype, "OPEN", {
+    Object.defineProperty(WebSocket2.prototype, "OPEN", {
       enumerable: true,
       value: readyStates.indexOf("OPEN")
     });
-    Object.defineProperty(WebSocket, "CLOSING", {
+    Object.defineProperty(WebSocket2, "CLOSING", {
       enumerable: true,
       value: readyStates.indexOf("CLOSING")
     });
-    Object.defineProperty(WebSocket.prototype, "CLOSING", {
+    Object.defineProperty(WebSocket2.prototype, "CLOSING", {
       enumerable: true,
       value: readyStates.indexOf("CLOSING")
     });
-    Object.defineProperty(WebSocket, "CLOSED", {
+    Object.defineProperty(WebSocket2, "CLOSED", {
       enumerable: true,
       value: readyStates.indexOf("CLOSED")
     });
-    Object.defineProperty(WebSocket.prototype, "CLOSED", {
+    Object.defineProperty(WebSocket2.prototype, "CLOSED", {
       enumerable: true,
       value: readyStates.indexOf("CLOSED")
     });
@@ -2864,15 +2904,14 @@ var require_websocket = __commonJS({
       "readyState",
       "url"
     ].forEach((property) => {
-      Object.defineProperty(WebSocket.prototype, property, { enumerable: true });
+      Object.defineProperty(WebSocket2.prototype, property, { enumerable: true });
     });
     ["open", "error", "close", "message"].forEach((method) => {
-      Object.defineProperty(WebSocket.prototype, `on${method}`, {
+      Object.defineProperty(WebSocket2.prototype, `on${method}`, {
         enumerable: true,
         get() {
           for (const listener of this.listeners(method)) {
-            if (listener[kForOnEventAttribute])
-              return listener[kListener];
+            if (listener[kForOnEventAttribute]) return listener[kListener];
           }
           return null;
         },
@@ -2883,20 +2922,19 @@ var require_websocket = __commonJS({
               break;
             }
           }
-          if (typeof handler !== "function")
-            return;
+          if (typeof handler !== "function") return;
           this.addEventListener(method, handler, {
             [kForOnEventAttribute]: true
           });
         }
       });
     });
-    WebSocket.prototype.addEventListener = addEventListener;
-    WebSocket.prototype.removeEventListener = removeEventListener;
-    module2.exports = WebSocket;
+    WebSocket2.prototype.addEventListener = addEventListener;
+    WebSocket2.prototype.removeEventListener = removeEventListener;
+    module2.exports = WebSocket2;
     function initAsClient(websocket, address, protocols, options) {
       const opts = {
-        allowSynchronousEvents: false,
+        allowSynchronousEvents: true,
         autoPong: true,
         protocolVersion: protocolVersions[1],
         maxPayload: 100 * 1024 * 1024,
@@ -2905,7 +2943,6 @@ var require_websocket = __commonJS({
         followRedirects: false,
         maxRedirects: 10,
         ...options,
-        createConnection: void 0,
         socketPath: void 0,
         hostname: void 0,
         protocol: void 0,
@@ -2961,7 +2998,7 @@ var require_websocket = __commonJS({
       const request = isSecure ? https.request : http2.request;
       const protocolSet = /* @__PURE__ */ new Set();
       let perMessageDeflate;
-      opts.createConnection = isSecure ? tlsConnect : netConnect;
+      opts.createConnection = opts.createConnection || (isSecure ? tlsConnect : netConnect);
       opts.defaultPort = opts.defaultPort || defaultPort;
       opts.port = parsedUrl.port || defaultPort;
       opts.host = parsedUrl.hostname.startsWith("[") ? parsedUrl.hostname.slice(1, -1) : parsedUrl.hostname;
@@ -3028,8 +3065,7 @@ var require_websocket = __commonJS({
           if (!isSameHost || websocket._originalSecure && !isSecure) {
             delete opts.headers.authorization;
             delete opts.headers.cookie;
-            if (!isSameHost)
-              delete opts.headers.host;
+            if (!isSameHost) delete opts.headers.host;
             opts.auth = void 0;
           }
         }
@@ -3049,8 +3085,7 @@ var require_websocket = __commonJS({
         });
       }
       req.on("error", (err) => {
-        if (req === null || req[kAborted])
-          return;
+        if (req === null || req[kAborted]) return;
         req = websocket._req = null;
         emitErrorAndClose(websocket, err);
       });
@@ -3082,10 +3117,10 @@ var require_websocket = __commonJS({
       });
       req.on("upgrade", (res, socket, head) => {
         websocket.emit("upgrade", res);
-        if (websocket.readyState !== WebSocket.CONNECTING)
-          return;
+        if (websocket.readyState !== WebSocket2.CONNECTING) return;
         req = websocket._req = null;
-        if (res.headers.upgrade.toLowerCase() !== "websocket") {
+        const upgrade = res.headers.upgrade;
+        if (upgrade === void 0 || upgrade.toLowerCase() !== "websocket") {
           abortHandshake(websocket, socket, "Invalid Upgrade header");
           return;
         }
@@ -3109,8 +3144,7 @@ var require_websocket = __commonJS({
           abortHandshake(websocket, socket, protError);
           return;
         }
-        if (serverProt)
-          websocket._protocol = serverProt;
+        if (serverProt) websocket._protocol = serverProt;
         const secWebSocketExtensions = res.headers["sec-websocket-extensions"];
         if (secWebSocketExtensions !== void 0) {
           if (!perMessageDeflate) {
@@ -3155,7 +3189,7 @@ var require_websocket = __commonJS({
       }
     }
     function emitErrorAndClose(websocket, err) {
-      websocket._readyState = WebSocket.CLOSING;
+      websocket._readyState = WebSocket2.CLOSING;
       websocket.emit("error", err);
       websocket.emitClose();
     }
@@ -3171,7 +3205,7 @@ var require_websocket = __commonJS({
       return tls.connect(options);
     }
     function abortHandshake(websocket, stream, message) {
-      websocket._readyState = WebSocket.CLOSING;
+      websocket._readyState = WebSocket2.CLOSING;
       const err = new Error(message);
       Error.captureStackTrace(err, abortHandshake);
       if (stream.setHeader) {
@@ -3190,10 +3224,8 @@ var require_websocket = __commonJS({
     function sendAfterClose(websocket, data, cb) {
       if (data) {
         const length = toBuffer(data).length;
-        if (websocket._socket)
-          websocket._sender._bufferedBytes += length;
-        else
-          websocket._bufferedAmount += length;
+        if (websocket._socket) websocket._sender._bufferedBytes += length;
+        else websocket._bufferedAmount += length;
       }
       if (cb) {
         const err = new Error(
@@ -3207,19 +3239,15 @@ var require_websocket = __commonJS({
       websocket._closeFrameReceived = true;
       websocket._closeMessage = reason;
       websocket._closeCode = code;
-      if (websocket._socket[kWebSocket] === void 0)
-        return;
+      if (websocket._socket[kWebSocket] === void 0) return;
       websocket._socket.removeListener("data", socketOnData);
       process.nextTick(resume, websocket._socket);
-      if (code === 1005)
-        websocket.close();
-      else
-        websocket.close(code, reason);
+      if (code === 1005) websocket.close();
+      else websocket.close(code, reason);
     }
     function receiverOnDrain() {
       const websocket = this[kWebSocket];
-      if (!websocket.isPaused)
-        websocket._socket.resume();
+      if (!websocket.isPaused) websocket._socket.resume();
     }
     function receiverOnError(err) {
       const websocket = this[kWebSocket];
@@ -3238,8 +3266,7 @@ var require_websocket = __commonJS({
     }
     function receiverOnPing(data) {
       const websocket = this[kWebSocket];
-      if (websocket._autoPong)
-        websocket.pong(data, !this._isServer, NOOP);
+      if (websocket._autoPong) websocket.pong(data, !this._isServer, NOOP);
       websocket.emit("ping", data);
     }
     function receiverOnPong(data) {
@@ -3253,7 +3280,7 @@ var require_websocket = __commonJS({
       this.removeListener("close", socketOnClose);
       this.removeListener("data", socketOnData);
       this.removeListener("end", socketOnEnd);
-      websocket._readyState = WebSocket.CLOSING;
+      websocket._readyState = WebSocket2.CLOSING;
       let chunk;
       if (!this._readableState.endEmitted && !websocket._closeFrameReceived && !websocket._receiver._writableState.errorEmitted && (chunk = websocket._socket.read()) !== null) {
         websocket._receiver.write(chunk);
@@ -3275,7 +3302,7 @@ var require_websocket = __commonJS({
     }
     function socketOnEnd() {
       const websocket = this[kWebSocket];
-      websocket._readyState = WebSocket.CLOSING;
+      websocket._readyState = WebSocket2.CLOSING;
       websocket._receiver.end();
       this.end();
     }
@@ -3284,115 +3311,10 @@ var require_websocket = __commonJS({
       this.removeListener("error", socketOnError);
       this.on("error", NOOP);
       if (websocket) {
-        websocket._readyState = WebSocket.CLOSING;
+        websocket._readyState = WebSocket2.CLOSING;
         this.destroy();
       }
     }
-  }
-});
-
-// node_modules/ws/lib/stream.js
-var require_stream = __commonJS({
-  "node_modules/ws/lib/stream.js"(exports2, module2) {
-    "use strict";
-    var { Duplex } = require("stream");
-    function emitClose(stream) {
-      stream.emit("close");
-    }
-    function duplexOnEnd() {
-      if (!this.destroyed && this._writableState.finished) {
-        this.destroy();
-      }
-    }
-    function duplexOnError(err) {
-      this.removeListener("error", duplexOnError);
-      this.destroy();
-      if (this.listenerCount("error") === 0) {
-        this.emit("error", err);
-      }
-    }
-    function createWebSocketStream(ws, options) {
-      let terminateOnDestroy = true;
-      const duplex = new Duplex({
-        ...options,
-        autoDestroy: false,
-        emitClose: false,
-        objectMode: false,
-        writableObjectMode: false
-      });
-      ws.on("message", function message(msg, isBinary) {
-        const data = !isBinary && duplex._readableState.objectMode ? msg.toString() : msg;
-        if (!duplex.push(data))
-          ws.pause();
-      });
-      ws.once("error", function error(err) {
-        if (duplex.destroyed)
-          return;
-        terminateOnDestroy = false;
-        duplex.destroy(err);
-      });
-      ws.once("close", function close() {
-        if (duplex.destroyed)
-          return;
-        duplex.push(null);
-      });
-      duplex._destroy = function(err, callback) {
-        if (ws.readyState === ws.CLOSED) {
-          callback(err);
-          process.nextTick(emitClose, duplex);
-          return;
-        }
-        let called = false;
-        ws.once("error", function error(err2) {
-          called = true;
-          callback(err2);
-        });
-        ws.once("close", function close() {
-          if (!called)
-            callback(err);
-          process.nextTick(emitClose, duplex);
-        });
-        if (terminateOnDestroy)
-          ws.terminate();
-      };
-      duplex._final = function(callback) {
-        if (ws.readyState === ws.CONNECTING) {
-          ws.once("open", function open() {
-            duplex._final(callback);
-          });
-          return;
-        }
-        if (ws._socket === null)
-          return;
-        if (ws._socket._writableState.finished) {
-          callback();
-          if (duplex._readableState.endEmitted)
-            duplex.destroy();
-        } else {
-          ws._socket.once("finish", function finish() {
-            callback();
-          });
-          ws.close();
-        }
-      };
-      duplex._read = function() {
-        if (ws.isPaused)
-          ws.resume();
-      };
-      duplex._write = function(chunk, encoding, callback) {
-        if (ws.readyState === ws.CONNECTING) {
-          ws.once("open", function open() {
-            duplex._write(chunk, encoding, callback);
-          });
-          return;
-        }
-        ws.send(chunk, callback);
-      };
-      duplex.on("end", duplexOnEnd);
-      duplex.on("error", duplexOnError);
-      return duplex;
-    }
-    module2.exports = createWebSocketStream;
   }
 });
 
@@ -3409,17 +3331,14 @@ var require_subprotocol = __commonJS({
       for (i; i < header.length; i++) {
         const code = header.charCodeAt(i);
         if (end === -1 && tokenChars[code] === 1) {
-          if (start === -1)
-            start = i;
+          if (start === -1) start = i;
         } else if (i !== 0 && (code === 32 || code === 9)) {
-          if (end === -1 && start !== -1)
-            end = i;
+          if (end === -1 && start !== -1) end = i;
         } else if (code === 44) {
           if (start === -1) {
             throw new SyntaxError(`Unexpected character at index ${i}`);
           }
-          if (end === -1)
-            end = i;
+          if (end === -1) end = i;
           const protocol2 = header.slice(start, end);
           if (protocols.has(protocol2)) {
             throw new SyntaxError(`The "${protocol2}" subprotocol is duplicated`);
@@ -3455,7 +3374,7 @@ var require_websocket_server = __commonJS({
     var extension = require_extension();
     var PerMessageDeflate = require_permessage_deflate();
     var subprotocol = require_subprotocol();
-    var WebSocket = require_websocket();
+    var WebSocket2 = require_websocket();
     var { GUID, kWebSocket } = require_constants();
     var keyRegex = /^[+/0-9A-Za-z]{22}==$/;
     var RUNNING = 0;
@@ -3466,7 +3385,7 @@ var require_websocket_server = __commonJS({
        * Create a `WebSocketServer` instance.
        *
        * @param {Object} options Configuration options
-       * @param {Boolean} [options.allowSynchronousEvents=false] Specifies whether
+       * @param {Boolean} [options.allowSynchronousEvents=true] Specifies whether
        *     any of the `'message'`, `'ping'`, and `'pong'` events can be emitted
        *     multiple times in the same tick
        * @param {Boolean} [options.autoPong=true] Specifies whether or not to
@@ -3496,7 +3415,7 @@ var require_websocket_server = __commonJS({
       constructor(options, callback) {
         super();
         options = {
-          allowSynchronousEvents: false,
+          allowSynchronousEvents: true,
           autoPong: true,
           maxPayload: 100 * 1024 * 1024,
           skipUTF8Validation: false,
@@ -3511,7 +3430,7 @@ var require_websocket_server = __commonJS({
           host: null,
           path: null,
           port: null,
-          WebSocket,
+          WebSocket: WebSocket2,
           ...options
         };
         if (options.port == null && !options.server && !options.noServer || options.port != null && (options.server || options.noServer) || options.server && options.noServer) {
@@ -3547,8 +3466,7 @@ var require_websocket_server = __commonJS({
             }
           });
         }
-        if (options.perMessageDeflate === true)
-          options.perMessageDeflate = {};
+        if (options.perMessageDeflate === true) options.perMessageDeflate = {};
         if (options.clientTracking) {
           this.clients = /* @__PURE__ */ new Set();
           this._shouldEmitClose = false;
@@ -3569,8 +3487,7 @@ var require_websocket_server = __commonJS({
         if (this.options.noServer) {
           throw new Error('The server is operating in "noServer" mode');
         }
-        if (!this._server)
-          return null;
+        if (!this._server) return null;
         return this._server.address();
       }
       /**
@@ -3590,10 +3507,8 @@ var require_websocket_server = __commonJS({
           process.nextTick(emitClose, this);
           return;
         }
-        if (cb)
-          this.once("close", cb);
-        if (this._state === CLOSING)
-          return;
+        if (cb) this.once("close", cb);
+        if (this._state === CLOSING) return;
         this._state = CLOSING;
         if (this.options.noServer || this.options.server) {
           if (this._server) {
@@ -3629,8 +3544,7 @@ var require_websocket_server = __commonJS({
         if (this.options.path) {
           const index = req.url.indexOf("?");
           const pathname = index !== -1 ? req.url.slice(0, index) : req.url;
-          if (pathname !== this.options.path)
-            return false;
+          if (pathname !== this.options.path) return false;
         }
         return true;
       }
@@ -3646,18 +3560,19 @@ var require_websocket_server = __commonJS({
       handleUpgrade(req, socket, head, cb) {
         socket.on("error", socketOnError);
         const key = req.headers["sec-websocket-key"];
+        const upgrade = req.headers.upgrade;
         const version = +req.headers["sec-websocket-version"];
         if (req.method !== "GET") {
           const message = "Invalid HTTP method";
           abortHandshakeOrEmitwsClientError(this, req, socket, 405, message);
           return;
         }
-        if (req.headers.upgrade.toLowerCase() !== "websocket") {
+        if (upgrade === void 0 || upgrade.toLowerCase() !== "websocket") {
           const message = "Invalid Upgrade header";
           abortHandshakeOrEmitwsClientError(this, req, socket, 400, message);
           return;
         }
-        if (!key || !keyRegex.test(key)) {
+        if (key === void 0 || !keyRegex.test(key)) {
           const message = "Missing or invalid Sec-WebSocket-Key header";
           abortHandshakeOrEmitwsClientError(this, req, socket, 400, message);
           return;
@@ -3725,8 +3640,7 @@ var require_websocket_server = __commonJS({
             });
             return;
           }
-          if (!this.options.verifyClient(info))
-            return abortHandshake(socket, 401);
+          if (!this.options.verifyClient(info)) return abortHandshake(socket, 401);
         }
         this.completeUpgrade(extensions, key, protocols, req, socket, head, cb);
       }
@@ -3744,15 +3658,13 @@ var require_websocket_server = __commonJS({
        * @private
        */
       completeUpgrade(extensions, key, protocols, req, socket, head, cb) {
-        if (!socket.readable || !socket.writable)
-          return socket.destroy();
+        if (!socket.readable || !socket.writable) return socket.destroy();
         if (socket[kWebSocket]) {
           throw new Error(
             "server.handleUpgrade() was called more than once with the same socket, possibly due to a misconfiguration"
           );
         }
-        if (this._state > RUNNING)
-          return abortHandshake(socket, 503);
+        if (this._state > RUNNING) return abortHandshake(socket, 503);
         const digest = createHash("sha1").update(key + GUID).digest("base64");
         const headers = [
           "HTTP/1.1 101 Switching Protocols",
@@ -3798,8 +3710,7 @@ var require_websocket_server = __commonJS({
     };
     module2.exports = WebSocketServer2;
     function addListeners(server2, map) {
-      for (const event of Object.keys(map))
-        server2.on(event, map[event]);
+      for (const event of Object.keys(map)) server2.on(event, map[event]);
       return function removeListeners() {
         for (const event of Object.keys(map)) {
           server2.removeListener(event, map[event]);
@@ -3839,18 +3750,2700 @@ var require_websocket_server = __commonJS({
   }
 });
 
-// node_modules/ws/index.js
-var require_ws = __commonJS({
-  "node_modules/ws/index.js"(exports2, module2) {
+// node_modules/async/dist/async.js
+var require_async = __commonJS({
+  "node_modules/async/dist/async.js"(exports2, module2) {
+    (function(global2, factory) {
+      typeof exports2 === "object" && typeof module2 !== "undefined" ? factory(exports2) : typeof define === "function" && define.amd ? define(["exports"], factory) : factory(global2.async = global2.async || {});
+    })(exports2, function(exports3) {
+      "use strict";
+      function slice(arrayLike, start) {
+        start = start | 0;
+        var newLen = Math.max(arrayLike.length - start, 0);
+        var newArr = Array(newLen);
+        for (var idx = 0; idx < newLen; idx++) {
+          newArr[idx] = arrayLike[start + idx];
+        }
+        return newArr;
+      }
+      var apply = function(fn) {
+        var args = slice(arguments, 1);
+        return function() {
+          var callArgs = slice(arguments);
+          return fn.apply(null, args.concat(callArgs));
+        };
+      };
+      var initialParams = function(fn) {
+        return function() {
+          var args = slice(arguments);
+          var callback = args.pop();
+          fn.call(this, args, callback);
+        };
+      };
+      function isObject(value) {
+        var type = typeof value;
+        return value != null && (type == "object" || type == "function");
+      }
+      var hasSetImmediate = typeof setImmediate === "function" && setImmediate;
+      var hasNextTick = typeof process === "object" && typeof process.nextTick === "function";
+      function fallback(fn) {
+        setTimeout(fn, 0);
+      }
+      function wrap(defer) {
+        return function(fn) {
+          var args = slice(arguments, 1);
+          defer(function() {
+            fn.apply(null, args);
+          });
+        };
+      }
+      var _defer;
+      if (hasSetImmediate) {
+        _defer = setImmediate;
+      } else if (hasNextTick) {
+        _defer = process.nextTick;
+      } else {
+        _defer = fallback;
+      }
+      var setImmediate$1 = wrap(_defer);
+      function asyncify(func) {
+        return initialParams(function(args, callback) {
+          var result;
+          try {
+            result = func.apply(this, args);
+          } catch (e) {
+            return callback(e);
+          }
+          if (isObject(result) && typeof result.then === "function") {
+            result.then(function(value) {
+              invokeCallback(callback, null, value);
+            }, function(err) {
+              invokeCallback(callback, err.message ? err : new Error(err));
+            });
+          } else {
+            callback(null, result);
+          }
+        });
+      }
+      function invokeCallback(callback, error, value) {
+        try {
+          callback(error, value);
+        } catch (e) {
+          setImmediate$1(rethrow, e);
+        }
+      }
+      function rethrow(error) {
+        throw error;
+      }
+      var supportsSymbol = typeof Symbol === "function";
+      function isAsync(fn) {
+        return supportsSymbol && fn[Symbol.toStringTag] === "AsyncFunction";
+      }
+      function wrapAsync(asyncFn) {
+        return isAsync(asyncFn) ? asyncify(asyncFn) : asyncFn;
+      }
+      function applyEach$1(eachfn) {
+        return function(fns) {
+          var args = slice(arguments, 1);
+          var go = initialParams(function(args2, callback) {
+            var that = this;
+            return eachfn(fns, function(fn, cb) {
+              wrapAsync(fn).apply(that, args2.concat(cb));
+            }, callback);
+          });
+          if (args.length) {
+            return go.apply(this, args);
+          } else {
+            return go;
+          }
+        };
+      }
+      var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
+      var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+      var root = freeGlobal || freeSelf || Function("return this")();
+      var Symbol$1 = root.Symbol;
+      var objectProto = Object.prototype;
+      var hasOwnProperty = objectProto.hasOwnProperty;
+      var nativeObjectToString = objectProto.toString;
+      var symToStringTag$1 = Symbol$1 ? Symbol$1.toStringTag : void 0;
+      function getRawTag(value) {
+        var isOwn = hasOwnProperty.call(value, symToStringTag$1), tag = value[symToStringTag$1];
+        try {
+          value[symToStringTag$1] = void 0;
+          var unmasked = true;
+        } catch (e) {
+        }
+        var result = nativeObjectToString.call(value);
+        if (unmasked) {
+          if (isOwn) {
+            value[symToStringTag$1] = tag;
+          } else {
+            delete value[symToStringTag$1];
+          }
+        }
+        return result;
+      }
+      var objectProto$1 = Object.prototype;
+      var nativeObjectToString$1 = objectProto$1.toString;
+      function objectToString(value) {
+        return nativeObjectToString$1.call(value);
+      }
+      var nullTag = "[object Null]";
+      var undefinedTag = "[object Undefined]";
+      var symToStringTag = Symbol$1 ? Symbol$1.toStringTag : void 0;
+      function baseGetTag(value) {
+        if (value == null) {
+          return value === void 0 ? undefinedTag : nullTag;
+        }
+        return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
+      }
+      var asyncTag = "[object AsyncFunction]";
+      var funcTag = "[object Function]";
+      var genTag = "[object GeneratorFunction]";
+      var proxyTag = "[object Proxy]";
+      function isFunction(value) {
+        if (!isObject(value)) {
+          return false;
+        }
+        var tag = baseGetTag(value);
+        return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+      }
+      var MAX_SAFE_INTEGER = 9007199254740991;
+      function isLength(value) {
+        return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+      }
+      function isArrayLike(value) {
+        return value != null && isLength(value.length) && !isFunction(value);
+      }
+      var breakLoop = {};
+      function noop() {
+      }
+      function once(fn) {
+        return function() {
+          if (fn === null) return;
+          var callFn = fn;
+          fn = null;
+          callFn.apply(this, arguments);
+        };
+      }
+      var iteratorSymbol = typeof Symbol === "function" && Symbol.iterator;
+      var getIterator = function(coll) {
+        return iteratorSymbol && coll[iteratorSymbol] && coll[iteratorSymbol]();
+      };
+      function baseTimes(n, iteratee) {
+        var index2 = -1, result = Array(n);
+        while (++index2 < n) {
+          result[index2] = iteratee(index2);
+        }
+        return result;
+      }
+      function isObjectLike(value) {
+        return value != null && typeof value == "object";
+      }
+      var argsTag = "[object Arguments]";
+      function baseIsArguments(value) {
+        return isObjectLike(value) && baseGetTag(value) == argsTag;
+      }
+      var objectProto$3 = Object.prototype;
+      var hasOwnProperty$2 = objectProto$3.hasOwnProperty;
+      var propertyIsEnumerable = objectProto$3.propertyIsEnumerable;
+      var isArguments = baseIsArguments(/* @__PURE__ */ function() {
+        return arguments;
+      }()) ? baseIsArguments : function(value) {
+        return isObjectLike(value) && hasOwnProperty$2.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
+      };
+      var isArray = Array.isArray;
+      function stubFalse() {
+        return false;
+      }
+      var freeExports = typeof exports3 == "object" && exports3 && !exports3.nodeType && exports3;
+      var freeModule = freeExports && typeof module2 == "object" && module2 && !module2.nodeType && module2;
+      var moduleExports = freeModule && freeModule.exports === freeExports;
+      var Buffer2 = moduleExports ? root.Buffer : void 0;
+      var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : void 0;
+      var isBuffer = nativeIsBuffer || stubFalse;
+      var MAX_SAFE_INTEGER$1 = 9007199254740991;
+      var reIsUint = /^(?:0|[1-9]\d*)$/;
+      function isIndex(value, length) {
+        var type = typeof value;
+        length = length == null ? MAX_SAFE_INTEGER$1 : length;
+        return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+      }
+      var argsTag$1 = "[object Arguments]";
+      var arrayTag = "[object Array]";
+      var boolTag = "[object Boolean]";
+      var dateTag = "[object Date]";
+      var errorTag = "[object Error]";
+      var funcTag$1 = "[object Function]";
+      var mapTag = "[object Map]";
+      var numberTag = "[object Number]";
+      var objectTag = "[object Object]";
+      var regexpTag = "[object RegExp]";
+      var setTag = "[object Set]";
+      var stringTag = "[object String]";
+      var weakMapTag = "[object WeakMap]";
+      var arrayBufferTag = "[object ArrayBuffer]";
+      var dataViewTag = "[object DataView]";
+      var float32Tag = "[object Float32Array]";
+      var float64Tag = "[object Float64Array]";
+      var int8Tag = "[object Int8Array]";
+      var int16Tag = "[object Int16Array]";
+      var int32Tag = "[object Int32Array]";
+      var uint8Tag = "[object Uint8Array]";
+      var uint8ClampedTag = "[object Uint8ClampedArray]";
+      var uint16Tag = "[object Uint16Array]";
+      var uint32Tag = "[object Uint32Array]";
+      var typedArrayTags = {};
+      typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
+      typedArrayTags[argsTag$1] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag$1] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+      function baseIsTypedArray(value) {
+        return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+      }
+      function baseUnary(func) {
+        return function(value) {
+          return func(value);
+        };
+      }
+      var freeExports$1 = typeof exports3 == "object" && exports3 && !exports3.nodeType && exports3;
+      var freeModule$1 = freeExports$1 && typeof module2 == "object" && module2 && !module2.nodeType && module2;
+      var moduleExports$1 = freeModule$1 && freeModule$1.exports === freeExports$1;
+      var freeProcess = moduleExports$1 && freeGlobal.process;
+      var nodeUtil = function() {
+        try {
+          var types = freeModule$1 && freeModule$1.require && freeModule$1.require("util").types;
+          if (types) {
+            return types;
+          }
+          return freeProcess && freeProcess.binding && freeProcess.binding("util");
+        } catch (e) {
+        }
+      }();
+      var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+      var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+      var objectProto$2 = Object.prototype;
+      var hasOwnProperty$1 = objectProto$2.hasOwnProperty;
+      function arrayLikeKeys(value, inherited) {
+        var isArr = isArray(value), isArg = !isArr && isArguments(value), isBuff = !isArr && !isArg && isBuffer(value), isType = !isArr && !isArg && !isBuff && isTypedArray(value), skipIndexes = isArr || isArg || isBuff || isType, result = skipIndexes ? baseTimes(value.length, String) : [], length = result.length;
+        for (var key in value) {
+          if ((inherited || hasOwnProperty$1.call(value, key)) && !(skipIndexes && // Safari 9 has enumerable `arguments.length` in strict mode.
+          (key == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
+          isBuff && (key == "offset" || key == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
+          isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") || // Skip index properties.
+          isIndex(key, length)))) {
+            result.push(key);
+          }
+        }
+        return result;
+      }
+      var objectProto$5 = Object.prototype;
+      function isPrototype(value) {
+        var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto$5;
+        return value === proto;
+      }
+      function overArg(func, transform2) {
+        return function(arg) {
+          return func(transform2(arg));
+        };
+      }
+      var nativeKeys = overArg(Object.keys, Object);
+      var objectProto$4 = Object.prototype;
+      var hasOwnProperty$3 = objectProto$4.hasOwnProperty;
+      function baseKeys(object) {
+        if (!isPrototype(object)) {
+          return nativeKeys(object);
+        }
+        var result = [];
+        for (var key in Object(object)) {
+          if (hasOwnProperty$3.call(object, key) && key != "constructor") {
+            result.push(key);
+          }
+        }
+        return result;
+      }
+      function keys(object) {
+        return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+      }
+      function createArrayIterator(coll) {
+        var i = -1;
+        var len = coll.length;
+        return function next() {
+          return ++i < len ? { value: coll[i], key: i } : null;
+        };
+      }
+      function createES2015Iterator(iterator2) {
+        var i = -1;
+        return function next() {
+          var item = iterator2.next();
+          if (item.done)
+            return null;
+          i++;
+          return { value: item.value, key: i };
+        };
+      }
+      function createObjectIterator(obj) {
+        var okeys = keys(obj);
+        var i = -1;
+        var len = okeys.length;
+        return function next() {
+          var key = okeys[++i];
+          if (key === "__proto__") {
+            return next();
+          }
+          return i < len ? { value: obj[key], key } : null;
+        };
+      }
+      function iterator(coll) {
+        if (isArrayLike(coll)) {
+          return createArrayIterator(coll);
+        }
+        var iterator2 = getIterator(coll);
+        return iterator2 ? createES2015Iterator(iterator2) : createObjectIterator(coll);
+      }
+      function onlyOnce(fn) {
+        return function() {
+          if (fn === null) throw new Error("Callback was already called.");
+          var callFn = fn;
+          fn = null;
+          callFn.apply(this, arguments);
+        };
+      }
+      function _eachOfLimit(limit) {
+        return function(obj, iteratee, callback) {
+          callback = once(callback || noop);
+          if (limit <= 0 || !obj) {
+            return callback(null);
+          }
+          var nextElem = iterator(obj);
+          var done = false;
+          var running = 0;
+          var looping = false;
+          function iterateeCallback(err, value) {
+            running -= 1;
+            if (err) {
+              done = true;
+              callback(err);
+            } else if (value === breakLoop || done && running <= 0) {
+              done = true;
+              return callback(null);
+            } else if (!looping) {
+              replenish();
+            }
+          }
+          function replenish() {
+            looping = true;
+            while (running < limit && !done) {
+              var elem = nextElem();
+              if (elem === null) {
+                done = true;
+                if (running <= 0) {
+                  callback(null);
+                }
+                return;
+              }
+              running += 1;
+              iteratee(elem.value, elem.key, onlyOnce(iterateeCallback));
+            }
+            looping = false;
+          }
+          replenish();
+        };
+      }
+      function eachOfLimit(coll, limit, iteratee, callback) {
+        _eachOfLimit(limit)(coll, wrapAsync(iteratee), callback);
+      }
+      function doLimit(fn, limit) {
+        return function(iterable, iteratee, callback) {
+          return fn(iterable, limit, iteratee, callback);
+        };
+      }
+      function eachOfArrayLike(coll, iteratee, callback) {
+        callback = once(callback || noop);
+        var index2 = 0, completed = 0, length = coll.length;
+        if (length === 0) {
+          callback(null);
+        }
+        function iteratorCallback(err, value) {
+          if (err) {
+            callback(err);
+          } else if (++completed === length || value === breakLoop) {
+            callback(null);
+          }
+        }
+        for (; index2 < length; index2++) {
+          iteratee(coll[index2], index2, onlyOnce(iteratorCallback));
+        }
+      }
+      var eachOfGeneric = doLimit(eachOfLimit, Infinity);
+      var eachOf = function(coll, iteratee, callback) {
+        var eachOfImplementation = isArrayLike(coll) ? eachOfArrayLike : eachOfGeneric;
+        eachOfImplementation(coll, wrapAsync(iteratee), callback);
+      };
+      function doParallel(fn) {
+        return function(obj, iteratee, callback) {
+          return fn(eachOf, obj, wrapAsync(iteratee), callback);
+        };
+      }
+      function _asyncMap(eachfn, arr, iteratee, callback) {
+        callback = callback || noop;
+        arr = arr || [];
+        var results = [];
+        var counter = 0;
+        var _iteratee = wrapAsync(iteratee);
+        eachfn(arr, function(value, _, callback2) {
+          var index2 = counter++;
+          _iteratee(value, function(err, v) {
+            results[index2] = v;
+            callback2(err);
+          });
+        }, function(err) {
+          callback(err, results);
+        });
+      }
+      var map = doParallel(_asyncMap);
+      var applyEach = applyEach$1(map);
+      function doParallelLimit(fn) {
+        return function(obj, limit, iteratee, callback) {
+          return fn(_eachOfLimit(limit), obj, wrapAsync(iteratee), callback);
+        };
+      }
+      var mapLimit = doParallelLimit(_asyncMap);
+      var mapSeries = doLimit(mapLimit, 1);
+      var applyEachSeries = applyEach$1(mapSeries);
+      function arrayEach(array, iteratee) {
+        var index2 = -1, length = array == null ? 0 : array.length;
+        while (++index2 < length) {
+          if (iteratee(array[index2], index2, array) === false) {
+            break;
+          }
+        }
+        return array;
+      }
+      function createBaseFor(fromRight) {
+        return function(object, iteratee, keysFunc) {
+          var index2 = -1, iterable = Object(object), props = keysFunc(object), length = props.length;
+          while (length--) {
+            var key = props[fromRight ? length : ++index2];
+            if (iteratee(iterable[key], key, iterable) === false) {
+              break;
+            }
+          }
+          return object;
+        };
+      }
+      var baseFor = createBaseFor();
+      function baseForOwn(object, iteratee) {
+        return object && baseFor(object, iteratee, keys);
+      }
+      function baseFindIndex(array, predicate, fromIndex, fromRight) {
+        var length = array.length, index2 = fromIndex + (fromRight ? 1 : -1);
+        while (fromRight ? index2-- : ++index2 < length) {
+          if (predicate(array[index2], index2, array)) {
+            return index2;
+          }
+        }
+        return -1;
+      }
+      function baseIsNaN(value) {
+        return value !== value;
+      }
+      function strictIndexOf(array, value, fromIndex) {
+        var index2 = fromIndex - 1, length = array.length;
+        while (++index2 < length) {
+          if (array[index2] === value) {
+            return index2;
+          }
+        }
+        return -1;
+      }
+      function baseIndexOf(array, value, fromIndex) {
+        return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
+      }
+      var auto = function(tasks, concurrency, callback) {
+        if (typeof concurrency === "function") {
+          callback = concurrency;
+          concurrency = null;
+        }
+        callback = once(callback || noop);
+        var keys$$1 = keys(tasks);
+        var numTasks = keys$$1.length;
+        if (!numTasks) {
+          return callback(null);
+        }
+        if (!concurrency) {
+          concurrency = numTasks;
+        }
+        var results = {};
+        var runningTasks = 0;
+        var hasError = false;
+        var listeners = /* @__PURE__ */ Object.create(null);
+        var readyTasks = [];
+        var readyToCheck = [];
+        var uncheckedDependencies = {};
+        baseForOwn(tasks, function(task, key) {
+          if (!isArray(task)) {
+            enqueueTask(key, [task]);
+            readyToCheck.push(key);
+            return;
+          }
+          var dependencies = task.slice(0, task.length - 1);
+          var remainingDependencies = dependencies.length;
+          if (remainingDependencies === 0) {
+            enqueueTask(key, task);
+            readyToCheck.push(key);
+            return;
+          }
+          uncheckedDependencies[key] = remainingDependencies;
+          arrayEach(dependencies, function(dependencyName) {
+            if (!tasks[dependencyName]) {
+              throw new Error("async.auto task `" + key + "` has a non-existent dependency `" + dependencyName + "` in " + dependencies.join(", "));
+            }
+            addListener(dependencyName, function() {
+              remainingDependencies--;
+              if (remainingDependencies === 0) {
+                enqueueTask(key, task);
+              }
+            });
+          });
+        });
+        checkForDeadlocks();
+        processQueue();
+        function enqueueTask(key, task) {
+          readyTasks.push(function() {
+            runTask(key, task);
+          });
+        }
+        function processQueue() {
+          if (readyTasks.length === 0 && runningTasks === 0) {
+            return callback(null, results);
+          }
+          while (readyTasks.length && runningTasks < concurrency) {
+            var run = readyTasks.shift();
+            run();
+          }
+        }
+        function addListener(taskName, fn) {
+          var taskListeners = listeners[taskName];
+          if (!taskListeners) {
+            taskListeners = listeners[taskName] = [];
+          }
+          taskListeners.push(fn);
+        }
+        function taskComplete(taskName) {
+          var taskListeners = listeners[taskName] || [];
+          arrayEach(taskListeners, function(fn) {
+            fn();
+          });
+          processQueue();
+        }
+        function runTask(key, task) {
+          if (hasError) return;
+          var taskCallback = onlyOnce(function(err, result) {
+            runningTasks--;
+            if (arguments.length > 2) {
+              result = slice(arguments, 1);
+            }
+            if (err) {
+              var safeResults = {};
+              baseForOwn(results, function(val, rkey) {
+                safeResults[rkey] = val;
+              });
+              safeResults[key] = result;
+              hasError = true;
+              listeners = /* @__PURE__ */ Object.create(null);
+              callback(err, safeResults);
+            } else {
+              results[key] = result;
+              taskComplete(key);
+            }
+          });
+          runningTasks++;
+          var taskFn = wrapAsync(task[task.length - 1]);
+          if (task.length > 1) {
+            taskFn(results, taskCallback);
+          } else {
+            taskFn(taskCallback);
+          }
+        }
+        function checkForDeadlocks() {
+          var currentTask;
+          var counter = 0;
+          while (readyToCheck.length) {
+            currentTask = readyToCheck.pop();
+            counter++;
+            arrayEach(getDependents(currentTask), function(dependent) {
+              if (--uncheckedDependencies[dependent] === 0) {
+                readyToCheck.push(dependent);
+              }
+            });
+          }
+          if (counter !== numTasks) {
+            throw new Error(
+              "async.auto cannot execute tasks due to a recursive dependency"
+            );
+          }
+        }
+        function getDependents(taskName) {
+          var result = [];
+          baseForOwn(tasks, function(task, key) {
+            if (isArray(task) && baseIndexOf(task, taskName, 0) >= 0) {
+              result.push(key);
+            }
+          });
+          return result;
+        }
+      };
+      function arrayMap(array, iteratee) {
+        var index2 = -1, length = array == null ? 0 : array.length, result = Array(length);
+        while (++index2 < length) {
+          result[index2] = iteratee(array[index2], index2, array);
+        }
+        return result;
+      }
+      var symbolTag = "[object Symbol]";
+      function isSymbol(value) {
+        return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
+      }
+      var INFINITY = 1 / 0;
+      var symbolProto = Symbol$1 ? Symbol$1.prototype : void 0;
+      var symbolToString = symbolProto ? symbolProto.toString : void 0;
+      function baseToString(value) {
+        if (typeof value == "string") {
+          return value;
+        }
+        if (isArray(value)) {
+          return arrayMap(value, baseToString) + "";
+        }
+        if (isSymbol(value)) {
+          return symbolToString ? symbolToString.call(value) : "";
+        }
+        var result = value + "";
+        return result == "0" && 1 / value == -INFINITY ? "-0" : result;
+      }
+      function baseSlice(array, start, end) {
+        var index2 = -1, length = array.length;
+        if (start < 0) {
+          start = -start > length ? 0 : length + start;
+        }
+        end = end > length ? length : end;
+        if (end < 0) {
+          end += length;
+        }
+        length = start > end ? 0 : end - start >>> 0;
+        start >>>= 0;
+        var result = Array(length);
+        while (++index2 < length) {
+          result[index2] = array[index2 + start];
+        }
+        return result;
+      }
+      function castSlice(array, start, end) {
+        var length = array.length;
+        end = end === void 0 ? length : end;
+        return !start && end >= length ? array : baseSlice(array, start, end);
+      }
+      function charsEndIndex(strSymbols, chrSymbols) {
+        var index2 = strSymbols.length;
+        while (index2-- && baseIndexOf(chrSymbols, strSymbols[index2], 0) > -1) {
+        }
+        return index2;
+      }
+      function charsStartIndex(strSymbols, chrSymbols) {
+        var index2 = -1, length = strSymbols.length;
+        while (++index2 < length && baseIndexOf(chrSymbols, strSymbols[index2], 0) > -1) {
+        }
+        return index2;
+      }
+      function asciiToArray(string) {
+        return string.split("");
+      }
+      var rsAstralRange = "\\ud800-\\udfff";
+      var rsComboMarksRange = "\\u0300-\\u036f";
+      var reComboHalfMarksRange = "\\ufe20-\\ufe2f";
+      var rsComboSymbolsRange = "\\u20d0-\\u20ff";
+      var rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange;
+      var rsVarRange = "\\ufe0e\\ufe0f";
+      var rsZWJ = "\\u200d";
+      var reHasUnicode = RegExp("[" + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + "]");
+      function hasUnicode(string) {
+        return reHasUnicode.test(string);
+      }
+      var rsAstralRange$1 = "\\ud800-\\udfff";
+      var rsComboMarksRange$1 = "\\u0300-\\u036f";
+      var reComboHalfMarksRange$1 = "\\ufe20-\\ufe2f";
+      var rsComboSymbolsRange$1 = "\\u20d0-\\u20ff";
+      var rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1;
+      var rsVarRange$1 = "\\ufe0e\\ufe0f";
+      var rsAstral = "[" + rsAstralRange$1 + "]";
+      var rsCombo = "[" + rsComboRange$1 + "]";
+      var rsFitz = "\\ud83c[\\udffb-\\udfff]";
+      var rsModifier = "(?:" + rsCombo + "|" + rsFitz + ")";
+      var rsNonAstral = "[^" + rsAstralRange$1 + "]";
+      var rsRegional = "(?:\\ud83c[\\udde6-\\uddff]){2}";
+      var rsSurrPair = "[\\ud800-\\udbff][\\udc00-\\udfff]";
+      var rsZWJ$1 = "\\u200d";
+      var reOptMod = rsModifier + "?";
+      var rsOptVar = "[" + rsVarRange$1 + "]?";
+      var rsOptJoin = "(?:" + rsZWJ$1 + "(?:" + [rsNonAstral, rsRegional, rsSurrPair].join("|") + ")" + rsOptVar + reOptMod + ")*";
+      var rsSeq = rsOptVar + reOptMod + rsOptJoin;
+      var rsSymbol = "(?:" + [rsNonAstral + rsCombo + "?", rsCombo, rsRegional, rsSurrPair, rsAstral].join("|") + ")";
+      var reUnicode = RegExp(rsFitz + "(?=" + rsFitz + ")|" + rsSymbol + rsSeq, "g");
+      function unicodeToArray(string) {
+        return string.match(reUnicode) || [];
+      }
+      function stringToArray(string) {
+        return hasUnicode(string) ? unicodeToArray(string) : asciiToArray(string);
+      }
+      function toString(value) {
+        return value == null ? "" : baseToString(value);
+      }
+      var reTrim = /^\s+|\s+$/g;
+      function trim(string, chars, guard) {
+        string = toString(string);
+        if (string && (guard || chars === void 0)) {
+          return string.replace(reTrim, "");
+        }
+        if (!string || !(chars = baseToString(chars))) {
+          return string;
+        }
+        var strSymbols = stringToArray(string), chrSymbols = stringToArray(chars), start = charsStartIndex(strSymbols, chrSymbols), end = charsEndIndex(strSymbols, chrSymbols) + 1;
+        return castSlice(strSymbols, start, end).join("");
+      }
+      var FN_ARGS = /^(?:async\s+)?(function)?\s*[^\(]*\(\s*([^\)]*)\)/m;
+      var FN_ARG_SPLIT = /,/;
+      var FN_ARG = /(=.+)?(\s*)$/;
+      var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+      function parseParams(func) {
+        func = func.toString().replace(STRIP_COMMENTS, "");
+        func = func.match(FN_ARGS)[2].replace(" ", "");
+        func = func ? func.split(FN_ARG_SPLIT) : [];
+        func = func.map(function(arg) {
+          return trim(arg.replace(FN_ARG, ""));
+        });
+        return func;
+      }
+      function autoInject(tasks, callback) {
+        var newTasks = {};
+        baseForOwn(tasks, function(taskFn, key) {
+          var params;
+          var fnIsAsync = isAsync(taskFn);
+          var hasNoDeps = !fnIsAsync && taskFn.length === 1 || fnIsAsync && taskFn.length === 0;
+          if (isArray(taskFn)) {
+            params = taskFn.slice(0, -1);
+            taskFn = taskFn[taskFn.length - 1];
+            newTasks[key] = params.concat(params.length > 0 ? newTask : taskFn);
+          } else if (hasNoDeps) {
+            newTasks[key] = taskFn;
+          } else {
+            params = parseParams(taskFn);
+            if (taskFn.length === 0 && !fnIsAsync && params.length === 0) {
+              throw new Error("autoInject task functions require explicit parameters.");
+            }
+            if (!fnIsAsync) params.pop();
+            newTasks[key] = params.concat(newTask);
+          }
+          function newTask(results, taskCb) {
+            var newArgs = arrayMap(params, function(name) {
+              return results[name];
+            });
+            newArgs.push(taskCb);
+            wrapAsync(taskFn).apply(null, newArgs);
+          }
+        });
+        auto(newTasks, callback);
+      }
+      function DLL() {
+        this.head = this.tail = null;
+        this.length = 0;
+      }
+      function setInitial(dll, node) {
+        dll.length = 1;
+        dll.head = dll.tail = node;
+      }
+      DLL.prototype.removeLink = function(node) {
+        if (node.prev) node.prev.next = node.next;
+        else this.head = node.next;
+        if (node.next) node.next.prev = node.prev;
+        else this.tail = node.prev;
+        node.prev = node.next = null;
+        this.length -= 1;
+        return node;
+      };
+      DLL.prototype.empty = function() {
+        while (this.head) this.shift();
+        return this;
+      };
+      DLL.prototype.insertAfter = function(node, newNode) {
+        newNode.prev = node;
+        newNode.next = node.next;
+        if (node.next) node.next.prev = newNode;
+        else this.tail = newNode;
+        node.next = newNode;
+        this.length += 1;
+      };
+      DLL.prototype.insertBefore = function(node, newNode) {
+        newNode.prev = node.prev;
+        newNode.next = node;
+        if (node.prev) node.prev.next = newNode;
+        else this.head = newNode;
+        node.prev = newNode;
+        this.length += 1;
+      };
+      DLL.prototype.unshift = function(node) {
+        if (this.head) this.insertBefore(this.head, node);
+        else setInitial(this, node);
+      };
+      DLL.prototype.push = function(node) {
+        if (this.tail) this.insertAfter(this.tail, node);
+        else setInitial(this, node);
+      };
+      DLL.prototype.shift = function() {
+        return this.head && this.removeLink(this.head);
+      };
+      DLL.prototype.pop = function() {
+        return this.tail && this.removeLink(this.tail);
+      };
+      DLL.prototype.toArray = function() {
+        var arr = Array(this.length);
+        var curr = this.head;
+        for (var idx = 0; idx < this.length; idx++) {
+          arr[idx] = curr.data;
+          curr = curr.next;
+        }
+        return arr;
+      };
+      DLL.prototype.remove = function(testFn) {
+        var curr = this.head;
+        while (!!curr) {
+          var next = curr.next;
+          if (testFn(curr)) {
+            this.removeLink(curr);
+          }
+          curr = next;
+        }
+        return this;
+      };
+      function queue(worker, concurrency, payload) {
+        if (concurrency == null) {
+          concurrency = 1;
+        } else if (concurrency === 0) {
+          throw new Error("Concurrency must not be zero");
+        }
+        var _worker = wrapAsync(worker);
+        var numRunning = 0;
+        var workersList = [];
+        var processingScheduled = false;
+        function _insert(data, insertAtFront, callback) {
+          if (callback != null && typeof callback !== "function") {
+            throw new Error("task callback must be a function");
+          }
+          q.started = true;
+          if (!isArray(data)) {
+            data = [data];
+          }
+          if (data.length === 0 && q.idle()) {
+            return setImmediate$1(function() {
+              q.drain();
+            });
+          }
+          for (var i = 0, l = data.length; i < l; i++) {
+            var item = {
+              data: data[i],
+              callback: callback || noop
+            };
+            if (insertAtFront) {
+              q._tasks.unshift(item);
+            } else {
+              q._tasks.push(item);
+            }
+          }
+          if (!processingScheduled) {
+            processingScheduled = true;
+            setImmediate$1(function() {
+              processingScheduled = false;
+              q.process();
+            });
+          }
+        }
+        function _next(tasks) {
+          return function(err) {
+            numRunning -= 1;
+            for (var i = 0, l = tasks.length; i < l; i++) {
+              var task = tasks[i];
+              var index2 = baseIndexOf(workersList, task, 0);
+              if (index2 === 0) {
+                workersList.shift();
+              } else if (index2 > 0) {
+                workersList.splice(index2, 1);
+              }
+              task.callback.apply(task, arguments);
+              if (err != null) {
+                q.error(err, task.data);
+              }
+            }
+            if (numRunning <= q.concurrency - q.buffer) {
+              q.unsaturated();
+            }
+            if (q.idle()) {
+              q.drain();
+            }
+            q.process();
+          };
+        }
+        var isProcessing = false;
+        var q = {
+          _tasks: new DLL(),
+          concurrency,
+          payload,
+          saturated: noop,
+          unsaturated: noop,
+          buffer: concurrency / 4,
+          empty: noop,
+          drain: noop,
+          error: noop,
+          started: false,
+          paused: false,
+          push: function(data, callback) {
+            _insert(data, false, callback);
+          },
+          kill: function() {
+            q.drain = noop;
+            q._tasks.empty();
+          },
+          unshift: function(data, callback) {
+            _insert(data, true, callback);
+          },
+          remove: function(testFn) {
+            q._tasks.remove(testFn);
+          },
+          process: function() {
+            if (isProcessing) {
+              return;
+            }
+            isProcessing = true;
+            while (!q.paused && numRunning < q.concurrency && q._tasks.length) {
+              var tasks = [], data = [];
+              var l = q._tasks.length;
+              if (q.payload) l = Math.min(l, q.payload);
+              for (var i = 0; i < l; i++) {
+                var node = q._tasks.shift();
+                tasks.push(node);
+                workersList.push(node);
+                data.push(node.data);
+              }
+              numRunning += 1;
+              if (q._tasks.length === 0) {
+                q.empty();
+              }
+              if (numRunning === q.concurrency) {
+                q.saturated();
+              }
+              var cb = onlyOnce(_next(tasks));
+              _worker(data, cb);
+            }
+            isProcessing = false;
+          },
+          length: function() {
+            return q._tasks.length;
+          },
+          running: function() {
+            return numRunning;
+          },
+          workersList: function() {
+            return workersList;
+          },
+          idle: function() {
+            return q._tasks.length + numRunning === 0;
+          },
+          pause: function() {
+            q.paused = true;
+          },
+          resume: function() {
+            if (q.paused === false) {
+              return;
+            }
+            q.paused = false;
+            setImmediate$1(q.process);
+          }
+        };
+        return q;
+      }
+      function cargo(worker, payload) {
+        return queue(worker, 1, payload);
+      }
+      var eachOfSeries = doLimit(eachOfLimit, 1);
+      function reduce(coll, memo, iteratee, callback) {
+        callback = once(callback || noop);
+        var _iteratee = wrapAsync(iteratee);
+        eachOfSeries(coll, function(x, i, callback2) {
+          _iteratee(memo, x, function(err, v) {
+            memo = v;
+            callback2(err);
+          });
+        }, function(err) {
+          callback(err, memo);
+        });
+      }
+      function seq() {
+        var _functions = arrayMap(arguments, wrapAsync);
+        return function() {
+          var args = slice(arguments);
+          var that = this;
+          var cb = args[args.length - 1];
+          if (typeof cb == "function") {
+            args.pop();
+          } else {
+            cb = noop;
+          }
+          reduce(
+            _functions,
+            args,
+            function(newargs, fn, cb2) {
+              fn.apply(that, newargs.concat(function(err) {
+                var nextargs = slice(arguments, 1);
+                cb2(err, nextargs);
+              }));
+            },
+            function(err, results) {
+              cb.apply(that, [err].concat(results));
+            }
+          );
+        };
+      }
+      var compose = function() {
+        return seq.apply(null, slice(arguments).reverse());
+      };
+      var _concat = Array.prototype.concat;
+      var concatLimit = function(coll, limit, iteratee, callback) {
+        callback = callback || noop;
+        var _iteratee = wrapAsync(iteratee);
+        mapLimit(coll, limit, function(val, callback2) {
+          _iteratee(val, function(err) {
+            if (err) return callback2(err);
+            return callback2(null, slice(arguments, 1));
+          });
+        }, function(err, mapResults) {
+          var result = [];
+          for (var i = 0; i < mapResults.length; i++) {
+            if (mapResults[i]) {
+              result = _concat.apply(result, mapResults[i]);
+            }
+          }
+          return callback(err, result);
+        });
+      };
+      var concat = doLimit(concatLimit, Infinity);
+      var concatSeries = doLimit(concatLimit, 1);
+      var constant = function() {
+        var values = slice(arguments);
+        var args = [null].concat(values);
+        return function() {
+          var callback = arguments[arguments.length - 1];
+          return callback.apply(this, args);
+        };
+      };
+      function identity(value) {
+        return value;
+      }
+      function _createTester(check, getResult) {
+        return function(eachfn, arr, iteratee, cb) {
+          cb = cb || noop;
+          var testPassed = false;
+          var testResult;
+          eachfn(arr, function(value, _, callback) {
+            iteratee(value, function(err, result) {
+              if (err) {
+                callback(err);
+              } else if (check(result) && !testResult) {
+                testPassed = true;
+                testResult = getResult(true, value);
+                callback(null, breakLoop);
+              } else {
+                callback();
+              }
+            });
+          }, function(err) {
+            if (err) {
+              cb(err);
+            } else {
+              cb(null, testPassed ? testResult : getResult(false));
+            }
+          });
+        };
+      }
+      function _findGetResult(v, x) {
+        return x;
+      }
+      var detect = doParallel(_createTester(identity, _findGetResult));
+      var detectLimit = doParallelLimit(_createTester(identity, _findGetResult));
+      var detectSeries = doLimit(detectLimit, 1);
+      function consoleFunc(name) {
+        return function(fn) {
+          var args = slice(arguments, 1);
+          args.push(function(err) {
+            var args2 = slice(arguments, 1);
+            if (typeof console === "object") {
+              if (err) {
+                if (console.error) {
+                  console.error(err);
+                }
+              } else if (console[name]) {
+                arrayEach(args2, function(x) {
+                  console[name](x);
+                });
+              }
+            }
+          });
+          wrapAsync(fn).apply(null, args);
+        };
+      }
+      var dir = consoleFunc("dir");
+      function doDuring(fn, test, callback) {
+        callback = onlyOnce(callback || noop);
+        var _fn = wrapAsync(fn);
+        var _test = wrapAsync(test);
+        function next(err) {
+          if (err) return callback(err);
+          var args = slice(arguments, 1);
+          args.push(check);
+          _test.apply(this, args);
+        }
+        function check(err, truth) {
+          if (err) return callback(err);
+          if (!truth) return callback(null);
+          _fn(next);
+        }
+        check(null, true);
+      }
+      function doWhilst(iteratee, test, callback) {
+        callback = onlyOnce(callback || noop);
+        var _iteratee = wrapAsync(iteratee);
+        var next = function(err) {
+          if (err) return callback(err);
+          var args = slice(arguments, 1);
+          if (test.apply(this, args)) return _iteratee(next);
+          callback.apply(null, [null].concat(args));
+        };
+        _iteratee(next);
+      }
+      function doUntil(iteratee, test, callback) {
+        doWhilst(iteratee, function() {
+          return !test.apply(this, arguments);
+        }, callback);
+      }
+      function during(test, fn, callback) {
+        callback = onlyOnce(callback || noop);
+        var _fn = wrapAsync(fn);
+        var _test = wrapAsync(test);
+        function next(err) {
+          if (err) return callback(err);
+          _test(check);
+        }
+        function check(err, truth) {
+          if (err) return callback(err);
+          if (!truth) return callback(null);
+          _fn(next);
+        }
+        _test(check);
+      }
+      function _withoutIndex(iteratee) {
+        return function(value, index2, callback) {
+          return iteratee(value, callback);
+        };
+      }
+      function eachLimit(coll, iteratee, callback) {
+        eachOf(coll, _withoutIndex(wrapAsync(iteratee)), callback);
+      }
+      function eachLimit$1(coll, limit, iteratee, callback) {
+        _eachOfLimit(limit)(coll, _withoutIndex(wrapAsync(iteratee)), callback);
+      }
+      var eachSeries = doLimit(eachLimit$1, 1);
+      function ensureAsync(fn) {
+        if (isAsync(fn)) return fn;
+        return initialParams(function(args, callback) {
+          var sync = true;
+          args.push(function() {
+            var innerArgs = arguments;
+            if (sync) {
+              setImmediate$1(function() {
+                callback.apply(null, innerArgs);
+              });
+            } else {
+              callback.apply(null, innerArgs);
+            }
+          });
+          fn.apply(this, args);
+          sync = false;
+        });
+      }
+      function notId(v) {
+        return !v;
+      }
+      var every = doParallel(_createTester(notId, notId));
+      var everyLimit = doParallelLimit(_createTester(notId, notId));
+      var everySeries = doLimit(everyLimit, 1);
+      function baseProperty(key) {
+        return function(object) {
+          return object == null ? void 0 : object[key];
+        };
+      }
+      function filterArray(eachfn, arr, iteratee, callback) {
+        var truthValues = new Array(arr.length);
+        eachfn(arr, function(x, index2, callback2) {
+          iteratee(x, function(err, v) {
+            truthValues[index2] = !!v;
+            callback2(err);
+          });
+        }, function(err) {
+          if (err) return callback(err);
+          var results = [];
+          for (var i = 0; i < arr.length; i++) {
+            if (truthValues[i]) results.push(arr[i]);
+          }
+          callback(null, results);
+        });
+      }
+      function filterGeneric(eachfn, coll, iteratee, callback) {
+        var results = [];
+        eachfn(coll, function(x, index2, callback2) {
+          iteratee(x, function(err, v) {
+            if (err) {
+              callback2(err);
+            } else {
+              if (v) {
+                results.push({ index: index2, value: x });
+              }
+              callback2();
+            }
+          });
+        }, function(err) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, arrayMap(results.sort(function(a, b) {
+              return a.index - b.index;
+            }), baseProperty("value")));
+          }
+        });
+      }
+      function _filter(eachfn, coll, iteratee, callback) {
+        var filter2 = isArrayLike(coll) ? filterArray : filterGeneric;
+        filter2(eachfn, coll, wrapAsync(iteratee), callback || noop);
+      }
+      var filter = doParallel(_filter);
+      var filterLimit = doParallelLimit(_filter);
+      var filterSeries = doLimit(filterLimit, 1);
+      function forever(fn, errback) {
+        var done = onlyOnce(errback || noop);
+        var task = wrapAsync(ensureAsync(fn));
+        function next(err) {
+          if (err) return done(err);
+          task(next);
+        }
+        next();
+      }
+      var groupByLimit = function(coll, limit, iteratee, callback) {
+        callback = callback || noop;
+        var _iteratee = wrapAsync(iteratee);
+        mapLimit(coll, limit, function(val, callback2) {
+          _iteratee(val, function(err, key) {
+            if (err) return callback2(err);
+            return callback2(null, { key, val });
+          });
+        }, function(err, mapResults) {
+          var result = {};
+          var hasOwnProperty2 = Object.prototype.hasOwnProperty;
+          for (var i = 0; i < mapResults.length; i++) {
+            if (mapResults[i]) {
+              var key = mapResults[i].key;
+              var val = mapResults[i].val;
+              if (hasOwnProperty2.call(result, key)) {
+                result[key].push(val);
+              } else {
+                result[key] = [val];
+              }
+            }
+          }
+          return callback(err, result);
+        });
+      };
+      var groupBy = doLimit(groupByLimit, Infinity);
+      var groupBySeries = doLimit(groupByLimit, 1);
+      var log = consoleFunc("log");
+      function mapValuesLimit(obj, limit, iteratee, callback) {
+        callback = once(callback || noop);
+        var newObj = {};
+        var _iteratee = wrapAsync(iteratee);
+        eachOfLimit(obj, limit, function(val, key, next) {
+          _iteratee(val, key, function(err, result) {
+            if (err) return next(err);
+            newObj[key] = result;
+            next();
+          });
+        }, function(err) {
+          callback(err, newObj);
+        });
+      }
+      var mapValues = doLimit(mapValuesLimit, Infinity);
+      var mapValuesSeries = doLimit(mapValuesLimit, 1);
+      function has(obj, key) {
+        return key in obj;
+      }
+      function memoize(fn, hasher) {
+        var memo = /* @__PURE__ */ Object.create(null);
+        var queues = /* @__PURE__ */ Object.create(null);
+        hasher = hasher || identity;
+        var _fn = wrapAsync(fn);
+        var memoized = initialParams(function memoized2(args, callback) {
+          var key = hasher.apply(null, args);
+          if (has(memo, key)) {
+            setImmediate$1(function() {
+              callback.apply(null, memo[key]);
+            });
+          } else if (has(queues, key)) {
+            queues[key].push(callback);
+          } else {
+            queues[key] = [callback];
+            _fn.apply(null, args.concat(function() {
+              var args2 = slice(arguments);
+              memo[key] = args2;
+              var q = queues[key];
+              delete queues[key];
+              for (var i = 0, l = q.length; i < l; i++) {
+                q[i].apply(null, args2);
+              }
+            }));
+          }
+        });
+        memoized.memo = memo;
+        memoized.unmemoized = fn;
+        return memoized;
+      }
+      var _defer$1;
+      if (hasNextTick) {
+        _defer$1 = process.nextTick;
+      } else if (hasSetImmediate) {
+        _defer$1 = setImmediate;
+      } else {
+        _defer$1 = fallback;
+      }
+      var nextTick = wrap(_defer$1);
+      function _parallel(eachfn, tasks, callback) {
+        callback = callback || noop;
+        var results = isArrayLike(tasks) ? [] : {};
+        eachfn(tasks, function(task, key, callback2) {
+          wrapAsync(task)(function(err, result) {
+            if (arguments.length > 2) {
+              result = slice(arguments, 1);
+            }
+            results[key] = result;
+            callback2(err);
+          });
+        }, function(err) {
+          callback(err, results);
+        });
+      }
+      function parallelLimit(tasks, callback) {
+        _parallel(eachOf, tasks, callback);
+      }
+      function parallelLimit$1(tasks, limit, callback) {
+        _parallel(_eachOfLimit(limit), tasks, callback);
+      }
+      var queue$1 = function(worker, concurrency) {
+        var _worker = wrapAsync(worker);
+        return queue(function(items, cb) {
+          _worker(items[0], cb);
+        }, concurrency, 1);
+      };
+      var priorityQueue = function(worker, concurrency) {
+        var q = queue$1(worker, concurrency);
+        q.push = function(data, priority, callback) {
+          if (callback == null) callback = noop;
+          if (typeof callback !== "function") {
+            throw new Error("task callback must be a function");
+          }
+          q.started = true;
+          if (!isArray(data)) {
+            data = [data];
+          }
+          if (data.length === 0) {
+            return setImmediate$1(function() {
+              q.drain();
+            });
+          }
+          priority = priority || 0;
+          var nextNode = q._tasks.head;
+          while (nextNode && priority >= nextNode.priority) {
+            nextNode = nextNode.next;
+          }
+          for (var i = 0, l = data.length; i < l; i++) {
+            var item = {
+              data: data[i],
+              priority,
+              callback
+            };
+            if (nextNode) {
+              q._tasks.insertBefore(nextNode, item);
+            } else {
+              q._tasks.push(item);
+            }
+          }
+          setImmediate$1(q.process);
+        };
+        delete q.unshift;
+        return q;
+      };
+      function race(tasks, callback) {
+        callback = once(callback || noop);
+        if (!isArray(tasks)) return callback(new TypeError("First argument to race must be an array of functions"));
+        if (!tasks.length) return callback();
+        for (var i = 0, l = tasks.length; i < l; i++) {
+          wrapAsync(tasks[i])(callback);
+        }
+      }
+      function reduceRight(array, memo, iteratee, callback) {
+        var reversed = slice(array).reverse();
+        reduce(reversed, memo, iteratee, callback);
+      }
+      function reflect(fn) {
+        var _fn = wrapAsync(fn);
+        return initialParams(function reflectOn(args, reflectCallback) {
+          args.push(function callback(error, cbArg) {
+            if (error) {
+              reflectCallback(null, { error });
+            } else {
+              var value;
+              if (arguments.length <= 2) {
+                value = cbArg;
+              } else {
+                value = slice(arguments, 1);
+              }
+              reflectCallback(null, { value });
+            }
+          });
+          return _fn.apply(this, args);
+        });
+      }
+      function reflectAll(tasks) {
+        var results;
+        if (isArray(tasks)) {
+          results = arrayMap(tasks, reflect);
+        } else {
+          results = {};
+          baseForOwn(tasks, function(task, key) {
+            results[key] = reflect.call(this, task);
+          });
+        }
+        return results;
+      }
+      function reject$1(eachfn, arr, iteratee, callback) {
+        _filter(eachfn, arr, function(value, cb) {
+          iteratee(value, function(err, v) {
+            cb(err, !v);
+          });
+        }, callback);
+      }
+      var reject = doParallel(reject$1);
+      var rejectLimit = doParallelLimit(reject$1);
+      var rejectSeries = doLimit(rejectLimit, 1);
+      function constant$1(value) {
+        return function() {
+          return value;
+        };
+      }
+      function retry(opts, task, callback) {
+        var DEFAULT_TIMES = 5;
+        var DEFAULT_INTERVAL = 0;
+        var options = {
+          times: DEFAULT_TIMES,
+          intervalFunc: constant$1(DEFAULT_INTERVAL)
+        };
+        function parseTimes(acc, t) {
+          if (typeof t === "object") {
+            acc.times = +t.times || DEFAULT_TIMES;
+            acc.intervalFunc = typeof t.interval === "function" ? t.interval : constant$1(+t.interval || DEFAULT_INTERVAL);
+            acc.errorFilter = t.errorFilter;
+          } else if (typeof t === "number" || typeof t === "string") {
+            acc.times = +t || DEFAULT_TIMES;
+          } else {
+            throw new Error("Invalid arguments for async.retry");
+          }
+        }
+        if (arguments.length < 3 && typeof opts === "function") {
+          callback = task || noop;
+          task = opts;
+        } else {
+          parseTimes(options, opts);
+          callback = callback || noop;
+        }
+        if (typeof task !== "function") {
+          throw new Error("Invalid arguments for async.retry");
+        }
+        var _task = wrapAsync(task);
+        var attempt = 1;
+        function retryAttempt() {
+          _task(function(err) {
+            if (err && attempt++ < options.times && (typeof options.errorFilter != "function" || options.errorFilter(err))) {
+              setTimeout(retryAttempt, options.intervalFunc(attempt));
+            } else {
+              callback.apply(null, arguments);
+            }
+          });
+        }
+        retryAttempt();
+      }
+      var retryable = function(opts, task) {
+        if (!task) {
+          task = opts;
+          opts = null;
+        }
+        var _task = wrapAsync(task);
+        return initialParams(function(args, callback) {
+          function taskFn(cb) {
+            _task.apply(null, args.concat(cb));
+          }
+          if (opts) retry(opts, taskFn, callback);
+          else retry(taskFn, callback);
+        });
+      };
+      function series(tasks, callback) {
+        _parallel(eachOfSeries, tasks, callback);
+      }
+      var some = doParallel(_createTester(Boolean, identity));
+      var someLimit = doParallelLimit(_createTester(Boolean, identity));
+      var someSeries = doLimit(someLimit, 1);
+      function sortBy(coll, iteratee, callback) {
+        var _iteratee = wrapAsync(iteratee);
+        map(coll, function(x, callback2) {
+          _iteratee(x, function(err, criteria) {
+            if (err) return callback2(err);
+            callback2(null, { value: x, criteria });
+          });
+        }, function(err, results) {
+          if (err) return callback(err);
+          callback(null, arrayMap(results.sort(comparator), baseProperty("value")));
+        });
+        function comparator(left, right) {
+          var a = left.criteria, b = right.criteria;
+          return a < b ? -1 : a > b ? 1 : 0;
+        }
+      }
+      function timeout(asyncFn, milliseconds, info) {
+        var fn = wrapAsync(asyncFn);
+        return initialParams(function(args, callback) {
+          var timedOut = false;
+          var timer;
+          function timeoutCallback() {
+            var name = asyncFn.name || "anonymous";
+            var error = new Error('Callback function "' + name + '" timed out.');
+            error.code = "ETIMEDOUT";
+            if (info) {
+              error.info = info;
+            }
+            timedOut = true;
+            callback(error);
+          }
+          args.push(function() {
+            if (!timedOut) {
+              callback.apply(null, arguments);
+              clearTimeout(timer);
+            }
+          });
+          timer = setTimeout(timeoutCallback, milliseconds);
+          fn.apply(null, args);
+        });
+      }
+      var nativeCeil = Math.ceil;
+      var nativeMax = Math.max;
+      function baseRange(start, end, step, fromRight) {
+        var index2 = -1, length = nativeMax(nativeCeil((end - start) / (step || 1)), 0), result = Array(length);
+        while (length--) {
+          result[fromRight ? length : ++index2] = start;
+          start += step;
+        }
+        return result;
+      }
+      function timeLimit(count, limit, iteratee, callback) {
+        var _iteratee = wrapAsync(iteratee);
+        mapLimit(baseRange(0, count, 1), limit, _iteratee, callback);
+      }
+      var times = doLimit(timeLimit, Infinity);
+      var timesSeries = doLimit(timeLimit, 1);
+      function transform(coll, accumulator, iteratee, callback) {
+        if (arguments.length <= 3) {
+          callback = iteratee;
+          iteratee = accumulator;
+          accumulator = isArray(coll) ? [] : {};
+        }
+        callback = once(callback || noop);
+        var _iteratee = wrapAsync(iteratee);
+        eachOf(coll, function(v, k, cb) {
+          _iteratee(accumulator, v, k, cb);
+        }, function(err) {
+          callback(err, accumulator);
+        });
+      }
+      function tryEach(tasks, callback) {
+        var error = null;
+        var result;
+        callback = callback || noop;
+        eachSeries(tasks, function(task, callback2) {
+          wrapAsync(task)(function(err, res) {
+            if (arguments.length > 2) {
+              result = slice(arguments, 1);
+            } else {
+              result = res;
+            }
+            error = err;
+            callback2(!err);
+          });
+        }, function() {
+          callback(error, result);
+        });
+      }
+      function unmemoize(fn) {
+        return function() {
+          return (fn.unmemoized || fn).apply(null, arguments);
+        };
+      }
+      function whilst(test, iteratee, callback) {
+        callback = onlyOnce(callback || noop);
+        var _iteratee = wrapAsync(iteratee);
+        if (!test()) return callback(null);
+        var next = function(err) {
+          if (err) return callback(err);
+          if (test()) return _iteratee(next);
+          var args = slice(arguments, 1);
+          callback.apply(null, [null].concat(args));
+        };
+        _iteratee(next);
+      }
+      function until(test, iteratee, callback) {
+        whilst(function() {
+          return !test.apply(this, arguments);
+        }, iteratee, callback);
+      }
+      var waterfall = function(tasks, callback) {
+        callback = once(callback || noop);
+        if (!isArray(tasks)) return callback(new Error("First argument to waterfall must be an array of functions"));
+        if (!tasks.length) return callback();
+        var taskIndex = 0;
+        function nextTask(args) {
+          var task = wrapAsync(tasks[taskIndex++]);
+          args.push(onlyOnce(next));
+          task.apply(null, args);
+        }
+        function next(err) {
+          if (err || taskIndex === tasks.length) {
+            return callback.apply(null, arguments);
+          }
+          nextTask(slice(arguments, 1));
+        }
+        nextTask([]);
+      };
+      var index = {
+        apply,
+        applyEach,
+        applyEachSeries,
+        asyncify,
+        auto,
+        autoInject,
+        cargo,
+        compose,
+        concat,
+        concatLimit,
+        concatSeries,
+        constant,
+        detect,
+        detectLimit,
+        detectSeries,
+        dir,
+        doDuring,
+        doUntil,
+        doWhilst,
+        during,
+        each: eachLimit,
+        eachLimit: eachLimit$1,
+        eachOf,
+        eachOfLimit,
+        eachOfSeries,
+        eachSeries,
+        ensureAsync,
+        every,
+        everyLimit,
+        everySeries,
+        filter,
+        filterLimit,
+        filterSeries,
+        forever,
+        groupBy,
+        groupByLimit,
+        groupBySeries,
+        log,
+        map,
+        mapLimit,
+        mapSeries,
+        mapValues,
+        mapValuesLimit,
+        mapValuesSeries,
+        memoize,
+        nextTick,
+        parallel: parallelLimit,
+        parallelLimit: parallelLimit$1,
+        priorityQueue,
+        queue: queue$1,
+        race,
+        reduce,
+        reduceRight,
+        reflect,
+        reflectAll,
+        reject,
+        rejectLimit,
+        rejectSeries,
+        retry,
+        retryable,
+        seq,
+        series,
+        setImmediate: setImmediate$1,
+        some,
+        someLimit,
+        someSeries,
+        sortBy,
+        timeout,
+        times,
+        timesLimit: timeLimit,
+        timesSeries,
+        transform,
+        tryEach,
+        unmemoize,
+        until,
+        waterfall,
+        whilst,
+        // aliases
+        all: every,
+        allLimit: everyLimit,
+        allSeries: everySeries,
+        any: some,
+        anyLimit: someLimit,
+        anySeries: someSeries,
+        find: detect,
+        findLimit: detectLimit,
+        findSeries: detectSeries,
+        forEach: eachLimit,
+        forEachSeries: eachSeries,
+        forEachLimit: eachLimit$1,
+        forEachOf: eachOf,
+        forEachOfSeries: eachOfSeries,
+        forEachOfLimit: eachOfLimit,
+        inject: reduce,
+        foldl: reduce,
+        foldr: reduceRight,
+        select: filter,
+        selectLimit: filterLimit,
+        selectSeries: filterSeries,
+        wrapSync: asyncify
+      };
+      exports3["default"] = index;
+      exports3.apply = apply;
+      exports3.applyEach = applyEach;
+      exports3.applyEachSeries = applyEachSeries;
+      exports3.asyncify = asyncify;
+      exports3.auto = auto;
+      exports3.autoInject = autoInject;
+      exports3.cargo = cargo;
+      exports3.compose = compose;
+      exports3.concat = concat;
+      exports3.concatLimit = concatLimit;
+      exports3.concatSeries = concatSeries;
+      exports3.constant = constant;
+      exports3.detect = detect;
+      exports3.detectLimit = detectLimit;
+      exports3.detectSeries = detectSeries;
+      exports3.dir = dir;
+      exports3.doDuring = doDuring;
+      exports3.doUntil = doUntil;
+      exports3.doWhilst = doWhilst;
+      exports3.during = during;
+      exports3.each = eachLimit;
+      exports3.eachLimit = eachLimit$1;
+      exports3.eachOf = eachOf;
+      exports3.eachOfLimit = eachOfLimit;
+      exports3.eachOfSeries = eachOfSeries;
+      exports3.eachSeries = eachSeries;
+      exports3.ensureAsync = ensureAsync;
+      exports3.every = every;
+      exports3.everyLimit = everyLimit;
+      exports3.everySeries = everySeries;
+      exports3.filter = filter;
+      exports3.filterLimit = filterLimit;
+      exports3.filterSeries = filterSeries;
+      exports3.forever = forever;
+      exports3.groupBy = groupBy;
+      exports3.groupByLimit = groupByLimit;
+      exports3.groupBySeries = groupBySeries;
+      exports3.log = log;
+      exports3.map = map;
+      exports3.mapLimit = mapLimit;
+      exports3.mapSeries = mapSeries;
+      exports3.mapValues = mapValues;
+      exports3.mapValuesLimit = mapValuesLimit;
+      exports3.mapValuesSeries = mapValuesSeries;
+      exports3.memoize = memoize;
+      exports3.nextTick = nextTick;
+      exports3.parallel = parallelLimit;
+      exports3.parallelLimit = parallelLimit$1;
+      exports3.priorityQueue = priorityQueue;
+      exports3.queue = queue$1;
+      exports3.race = race;
+      exports3.reduce = reduce;
+      exports3.reduceRight = reduceRight;
+      exports3.reflect = reflect;
+      exports3.reflectAll = reflectAll;
+      exports3.reject = reject;
+      exports3.rejectLimit = rejectLimit;
+      exports3.rejectSeries = rejectSeries;
+      exports3.retry = retry;
+      exports3.retryable = retryable;
+      exports3.seq = seq;
+      exports3.series = series;
+      exports3.setImmediate = setImmediate$1;
+      exports3.some = some;
+      exports3.someLimit = someLimit;
+      exports3.someSeries = someSeries;
+      exports3.sortBy = sortBy;
+      exports3.timeout = timeout;
+      exports3.times = times;
+      exports3.timesLimit = timeLimit;
+      exports3.timesSeries = timesSeries;
+      exports3.transform = transform;
+      exports3.tryEach = tryEach;
+      exports3.unmemoize = unmemoize;
+      exports3.until = until;
+      exports3.waterfall = waterfall;
+      exports3.whilst = whilst;
+      exports3.all = every;
+      exports3.allLimit = everyLimit;
+      exports3.allSeries = everySeries;
+      exports3.any = some;
+      exports3.anyLimit = someLimit;
+      exports3.anySeries = someSeries;
+      exports3.find = detect;
+      exports3.findLimit = detectLimit;
+      exports3.findSeries = detectSeries;
+      exports3.forEach = eachLimit;
+      exports3.forEachSeries = eachSeries;
+      exports3.forEachLimit = eachLimit$1;
+      exports3.forEachOf = eachOf;
+      exports3.forEachOfSeries = eachOfSeries;
+      exports3.forEachOfLimit = eachOfLimit;
+      exports3.inject = reduce;
+      exports3.foldl = reduce;
+      exports3.foldr = reduceRight;
+      exports3.select = filter;
+      exports3.selectLimit = filterLimit;
+      exports3.selectSeries = filterSeries;
+      exports3.wrapSync = asyncify;
+      Object.defineProperty(exports3, "__esModule", { value: true });
+    });
+  }
+});
+
+// node_modules/ms/index.js
+var require_ms = __commonJS({
+  "node_modules/ms/index.js"(exports2, module2) {
+    var s = 1e3;
+    var m = s * 60;
+    var h = m * 60;
+    var d = h * 24;
+    var w = d * 7;
+    var y = d * 365.25;
+    module2.exports = function(val, options) {
+      options = options || {};
+      var type = typeof val;
+      if (type === "string" && val.length > 0) {
+        return parse(val);
+      } else if (type === "number" && isFinite(val)) {
+        return options.long ? fmtLong(val) : fmtShort(val);
+      }
+      throw new Error(
+        "val is not a non-empty string or a valid number. val=" + JSON.stringify(val)
+      );
+    };
+    function parse(str) {
+      str = String(str);
+      if (str.length > 100) {
+        return;
+      }
+      var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
+        str
+      );
+      if (!match) {
+        return;
+      }
+      var n = parseFloat(match[1]);
+      var type = (match[2] || "ms").toLowerCase();
+      switch (type) {
+        case "years":
+        case "year":
+        case "yrs":
+        case "yr":
+        case "y":
+          return n * y;
+        case "weeks":
+        case "week":
+        case "w":
+          return n * w;
+        case "days":
+        case "day":
+        case "d":
+          return n * d;
+        case "hours":
+        case "hour":
+        case "hrs":
+        case "hr":
+        case "h":
+          return n * h;
+        case "minutes":
+        case "minute":
+        case "mins":
+        case "min":
+        case "m":
+          return n * m;
+        case "seconds":
+        case "second":
+        case "secs":
+        case "sec":
+        case "s":
+          return n * s;
+        case "milliseconds":
+        case "millisecond":
+        case "msecs":
+        case "msec":
+        case "ms":
+          return n;
+        default:
+          return void 0;
+      }
+    }
+    function fmtShort(ms) {
+      var msAbs = Math.abs(ms);
+      if (msAbs >= d) {
+        return Math.round(ms / d) + "d";
+      }
+      if (msAbs >= h) {
+        return Math.round(ms / h) + "h";
+      }
+      if (msAbs >= m) {
+        return Math.round(ms / m) + "m";
+      }
+      if (msAbs >= s) {
+        return Math.round(ms / s) + "s";
+      }
+      return ms + "ms";
+    }
+    function fmtLong(ms) {
+      var msAbs = Math.abs(ms);
+      if (msAbs >= d) {
+        return plural(ms, msAbs, d, "day");
+      }
+      if (msAbs >= h) {
+        return plural(ms, msAbs, h, "hour");
+      }
+      if (msAbs >= m) {
+        return plural(ms, msAbs, m, "minute");
+      }
+      if (msAbs >= s) {
+        return plural(ms, msAbs, s, "second");
+      }
+      return ms + " ms";
+    }
+    function plural(ms, msAbs, n, name) {
+      var isPlural = msAbs >= n * 1.5;
+      return Math.round(ms / n) + " " + name + (isPlural ? "s" : "");
+    }
+  }
+});
+
+// node_modules/portfinder/node_modules/debug/src/common.js
+var require_common = __commonJS({
+  "node_modules/portfinder/node_modules/debug/src/common.js"(exports2, module2) {
     "use strict";
-    var WebSocket = require_websocket();
-    WebSocket.createWebSocketStream = require_stream();
-    WebSocket.Server = require_websocket_server();
-    WebSocket.Receiver = require_receiver();
-    WebSocket.Sender = require_sender();
-    WebSocket.WebSocket = WebSocket;
-    WebSocket.WebSocketServer = WebSocket.Server;
-    module2.exports = WebSocket;
+    function setup(env) {
+      createDebug.debug = createDebug;
+      createDebug.default = createDebug;
+      createDebug.coerce = coerce;
+      createDebug.disable = disable;
+      createDebug.enable = enable;
+      createDebug.enabled = enabled;
+      createDebug.humanize = require_ms();
+      Object.keys(env).forEach(function(key) {
+        createDebug[key] = env[key];
+      });
+      createDebug.instances = [];
+      createDebug.names = [];
+      createDebug.skips = [];
+      createDebug.formatters = {};
+      function selectColor(namespace) {
+        var hash = 0;
+        for (var i = 0; i < namespace.length; i++) {
+          hash = (hash << 5) - hash + namespace.charCodeAt(i);
+          hash |= 0;
+        }
+        return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+      }
+      createDebug.selectColor = selectColor;
+      function createDebug(namespace) {
+        var prevTime;
+        function debug() {
+          if (!debug.enabled) {
+            return;
+          }
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          var self2 = debug;
+          var curr = Number(/* @__PURE__ */ new Date());
+          var ms = curr - (prevTime || curr);
+          self2.diff = ms;
+          self2.prev = prevTime;
+          self2.curr = curr;
+          prevTime = curr;
+          args[0] = createDebug.coerce(args[0]);
+          if (typeof args[0] !== "string") {
+            args.unshift("%O");
+          }
+          var index = 0;
+          args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
+            if (match === "%%") {
+              return match;
+            }
+            index++;
+            var formatter = createDebug.formatters[format];
+            if (typeof formatter === "function") {
+              var val = args[index];
+              match = formatter.call(self2, val);
+              args.splice(index, 1);
+              index--;
+            }
+            return match;
+          });
+          createDebug.formatArgs.call(self2, args);
+          var logFn = self2.log || createDebug.log;
+          logFn.apply(self2, args);
+        }
+        debug.namespace = namespace;
+        debug.enabled = createDebug.enabled(namespace);
+        debug.useColors = createDebug.useColors();
+        debug.color = selectColor(namespace);
+        debug.destroy = destroy;
+        debug.extend = extend;
+        if (typeof createDebug.init === "function") {
+          createDebug.init(debug);
+        }
+        createDebug.instances.push(debug);
+        return debug;
+      }
+      function destroy() {
+        var index = createDebug.instances.indexOf(this);
+        if (index !== -1) {
+          createDebug.instances.splice(index, 1);
+          return true;
+        }
+        return false;
+      }
+      function extend(namespace, delimiter) {
+        return createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
+      }
+      function enable(namespaces) {
+        createDebug.save(namespaces);
+        createDebug.names = [];
+        createDebug.skips = [];
+        var i;
+        var split = (typeof namespaces === "string" ? namespaces : "").split(/[\s,]+/);
+        var len = split.length;
+        for (i = 0; i < len; i++) {
+          if (!split[i]) {
+            continue;
+          }
+          namespaces = split[i].replace(/\*/g, ".*?");
+          if (namespaces[0] === "-") {
+            createDebug.skips.push(new RegExp("^" + namespaces.substr(1) + "$"));
+          } else {
+            createDebug.names.push(new RegExp("^" + namespaces + "$"));
+          }
+        }
+        for (i = 0; i < createDebug.instances.length; i++) {
+          var instance = createDebug.instances[i];
+          instance.enabled = createDebug.enabled(instance.namespace);
+        }
+      }
+      function disable() {
+        createDebug.enable("");
+      }
+      function enabled(name) {
+        if (name[name.length - 1] === "*") {
+          return true;
+        }
+        var i;
+        var len;
+        for (i = 0, len = createDebug.skips.length; i < len; i++) {
+          if (createDebug.skips[i].test(name)) {
+            return false;
+          }
+        }
+        for (i = 0, len = createDebug.names.length; i < len; i++) {
+          if (createDebug.names[i].test(name)) {
+            return true;
+          }
+        }
+        return false;
+      }
+      function coerce(val) {
+        if (val instanceof Error) {
+          return val.stack || val.message;
+        }
+        return val;
+      }
+      createDebug.enable(createDebug.load());
+      return createDebug;
+    }
+    module2.exports = setup;
+  }
+});
+
+// node_modules/portfinder/node_modules/debug/src/browser.js
+var require_browser = __commonJS({
+  "node_modules/portfinder/node_modules/debug/src/browser.js"(exports2, module2) {
+    "use strict";
+    function _typeof(obj) {
+      if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+        _typeof = function _typeof2(obj2) {
+          return typeof obj2;
+        };
+      } else {
+        _typeof = function _typeof2(obj2) {
+          return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+        };
+      }
+      return _typeof(obj);
+    }
+    exports2.log = log;
+    exports2.formatArgs = formatArgs;
+    exports2.save = save;
+    exports2.load = load;
+    exports2.useColors = useColors;
+    exports2.storage = localstorage();
+    exports2.colors = ["#0000CC", "#0000FF", "#0033CC", "#0033FF", "#0066CC", "#0066FF", "#0099CC", "#0099FF", "#00CC00", "#00CC33", "#00CC66", "#00CC99", "#00CCCC", "#00CCFF", "#3300CC", "#3300FF", "#3333CC", "#3333FF", "#3366CC", "#3366FF", "#3399CC", "#3399FF", "#33CC00", "#33CC33", "#33CC66", "#33CC99", "#33CCCC", "#33CCFF", "#6600CC", "#6600FF", "#6633CC", "#6633FF", "#66CC00", "#66CC33", "#9900CC", "#9900FF", "#9933CC", "#9933FF", "#99CC00", "#99CC33", "#CC0000", "#CC0033", "#CC0066", "#CC0099", "#CC00CC", "#CC00FF", "#CC3300", "#CC3333", "#CC3366", "#CC3399", "#CC33CC", "#CC33FF", "#CC6600", "#CC6633", "#CC9900", "#CC9933", "#CCCC00", "#CCCC33", "#FF0000", "#FF0033", "#FF0066", "#FF0099", "#FF00CC", "#FF00FF", "#FF3300", "#FF3333", "#FF3366", "#FF3399", "#FF33CC", "#FF33FF", "#FF6600", "#FF6633", "#FF9900", "#FF9933", "#FFCC00", "#FFCC33"];
+    function useColors() {
+      if (typeof window !== "undefined" && window.process && (window.process.type === "renderer" || window.process.__nwjs)) {
+        return true;
+      }
+      if (typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+        return false;
+      }
+      return typeof document !== "undefined" && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || // Is firebug? http://stackoverflow.com/a/398120/376773
+      typeof window !== "undefined" && window.console && (window.console.firebug || window.console.exception && window.console.table) || // Is firefox >= v31?
+      // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+      typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31 || // Double check webkit in userAgent just in case we are in a worker
+      typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
+    }
+    function formatArgs(args) {
+      args[0] = (this.useColors ? "%c" : "") + this.namespace + (this.useColors ? " %c" : " ") + args[0] + (this.useColors ? "%c " : " ") + "+" + module2.exports.humanize(this.diff);
+      if (!this.useColors) {
+        return;
+      }
+      var c = "color: " + this.color;
+      args.splice(1, 0, c, "color: inherit");
+      var index = 0;
+      var lastC = 0;
+      args[0].replace(/%[a-zA-Z%]/g, function(match) {
+        if (match === "%%") {
+          return;
+        }
+        index++;
+        if (match === "%c") {
+          lastC = index;
+        }
+      });
+      args.splice(lastC, 0, c);
+    }
+    function log() {
+      var _console;
+      return (typeof console === "undefined" ? "undefined" : _typeof(console)) === "object" && console.log && (_console = console).log.apply(_console, arguments);
+    }
+    function save(namespaces) {
+      try {
+        if (namespaces) {
+          exports2.storage.setItem("debug", namespaces);
+        } else {
+          exports2.storage.removeItem("debug");
+        }
+      } catch (error) {
+      }
+    }
+    function load() {
+      var r;
+      try {
+        r = exports2.storage.getItem("debug");
+      } catch (error) {
+      }
+      if (!r && typeof process !== "undefined" && "env" in process) {
+        r = process.env.DEBUG;
+      }
+      return r;
+    }
+    function localstorage() {
+      try {
+        return localStorage;
+      } catch (error) {
+      }
+    }
+    module2.exports = require_common()(exports2);
+    var formatters = module2.exports.formatters;
+    formatters.j = function(v) {
+      try {
+        return JSON.stringify(v);
+      } catch (error) {
+        return "[UnexpectedJSONParseError]: " + error.message;
+      }
+    };
+  }
+});
+
+// node_modules/portfinder/node_modules/debug/src/node.js
+var require_node = __commonJS({
+  "node_modules/portfinder/node_modules/debug/src/node.js"(exports2, module2) {
+    "use strict";
+    var tty = require("tty");
+    var util = require("util");
+    exports2.init = init;
+    exports2.log = log;
+    exports2.formatArgs = formatArgs;
+    exports2.save = save;
+    exports2.load = load;
+    exports2.useColors = useColors;
+    exports2.colors = [6, 2, 3, 4, 5, 1];
+    try {
+      supportsColor = require("supports-color");
+      if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
+        exports2.colors = [20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68, 69, 74, 75, 76, 77, 78, 79, 80, 81, 92, 93, 98, 99, 112, 113, 128, 129, 134, 135, 148, 149, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 220, 221];
+      }
+    } catch (error) {
+    }
+    var supportsColor;
+    exports2.inspectOpts = Object.keys(process.env).filter(function(key) {
+      return /^debug_/i.test(key);
+    }).reduce(function(obj, key) {
+      var prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, function(_, k) {
+        return k.toUpperCase();
+      });
+      var val = process.env[key];
+      if (/^(yes|on|true|enabled)$/i.test(val)) {
+        val = true;
+      } else if (/^(no|off|false|disabled)$/i.test(val)) {
+        val = false;
+      } else if (val === "null") {
+        val = null;
+      } else {
+        val = Number(val);
+      }
+      obj[prop] = val;
+      return obj;
+    }, {});
+    function useColors() {
+      return "colors" in exports2.inspectOpts ? Boolean(exports2.inspectOpts.colors) : tty.isatty(process.stderr.fd);
+    }
+    function formatArgs(args) {
+      var name = this.namespace, useColors2 = this.useColors;
+      if (useColors2) {
+        var c = this.color;
+        var colorCode = "\x1B[3" + (c < 8 ? c : "8;5;" + c);
+        var prefix = "  ".concat(colorCode, ";1m").concat(name, " \x1B[0m");
+        args[0] = prefix + args[0].split("\n").join("\n" + prefix);
+        args.push(colorCode + "m+" + module2.exports.humanize(this.diff) + "\x1B[0m");
+      } else {
+        args[0] = getDate() + name + " " + args[0];
+      }
+    }
+    function getDate() {
+      if (exports2.inspectOpts.hideDate) {
+        return "";
+      }
+      return (/* @__PURE__ */ new Date()).toISOString() + " ";
+    }
+    function log() {
+      return process.stderr.write(util.format.apply(util, arguments) + "\n");
+    }
+    function save(namespaces) {
+      if (namespaces) {
+        process.env.DEBUG = namespaces;
+      } else {
+        delete process.env.DEBUG;
+      }
+    }
+    function load() {
+      return process.env.DEBUG;
+    }
+    function init(debug) {
+      debug.inspectOpts = {};
+      var keys = Object.keys(exports2.inspectOpts);
+      for (var i = 0; i < keys.length; i++) {
+        debug.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
+      }
+    }
+    module2.exports = require_common()(exports2);
+    var formatters = module2.exports.formatters;
+    formatters.o = function(v) {
+      this.inspectOpts.colors = this.useColors;
+      return util.inspect(v, this.inspectOpts).split("\n").map(function(str) {
+        return str.trim();
+      }).join(" ");
+    };
+    formatters.O = function(v) {
+      this.inspectOpts.colors = this.useColors;
+      return util.inspect(v, this.inspectOpts);
+    };
+  }
+});
+
+// node_modules/portfinder/node_modules/debug/src/index.js
+var require_src = __commonJS({
+  "node_modules/portfinder/node_modules/debug/src/index.js"(exports2, module2) {
+    "use strict";
+    if (typeof process === "undefined" || process.type === "renderer" || process.browser === true || process.__nwjs) {
+      module2.exports = require_browser();
+    } else {
+      module2.exports = require_node();
+    }
+  }
+});
+
+// node_modules/portfinder/node_modules/mkdirp/index.js
+var require_mkdirp = __commonJS({
+  "node_modules/portfinder/node_modules/mkdirp/index.js"(exports2, module2) {
+    var path2 = require("path");
+    var fs2 = require("fs");
+    var _0777 = parseInt("0777", 8);
+    module2.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
+    function mkdirP(p, opts, f, made) {
+      if (typeof opts === "function") {
+        f = opts;
+        opts = {};
+      } else if (!opts || typeof opts !== "object") {
+        opts = { mode: opts };
+      }
+      var mode = opts.mode;
+      var xfs = opts.fs || fs2;
+      if (mode === void 0) {
+        mode = _0777;
+      }
+      if (!made) made = null;
+      var cb = f || /* istanbul ignore next */
+      function() {
+      };
+      p = path2.resolve(p);
+      xfs.mkdir(p, mode, function(er) {
+        if (!er) {
+          made = made || p;
+          return cb(null, made);
+        }
+        switch (er.code) {
+          case "ENOENT":
+            if (path2.dirname(p) === p) return cb(er);
+            mkdirP(path2.dirname(p), opts, function(er2, made2) {
+              if (er2) cb(er2, made2);
+              else mkdirP(p, opts, cb, made2);
+            });
+            break;
+          default:
+            xfs.stat(p, function(er2, stat) {
+              if (er2 || !stat.isDirectory()) cb(er, made);
+              else cb(null, made);
+            });
+            break;
+        }
+      });
+    }
+    mkdirP.sync = function sync(p, opts, made) {
+      if (!opts || typeof opts !== "object") {
+        opts = { mode: opts };
+      }
+      var mode = opts.mode;
+      var xfs = opts.fs || fs2;
+      if (mode === void 0) {
+        mode = _0777;
+      }
+      if (!made) made = null;
+      p = path2.resolve(p);
+      try {
+        xfs.mkdirSync(p, mode);
+        made = made || p;
+      } catch (err0) {
+        switch (err0.code) {
+          case "ENOENT":
+            made = sync(path2.dirname(p), opts, made);
+            sync(p, opts, made);
+            break;
+          default:
+            var stat;
+            try {
+              stat = xfs.statSync(p);
+            } catch (err1) {
+              throw err0;
+            }
+            if (!stat.isDirectory()) throw err0;
+            break;
+        }
+      }
+      return made;
+    };
+  }
+});
+
+// node_modules/portfinder/lib/portfinder.js
+var require_portfinder = __commonJS({
+  "node_modules/portfinder/lib/portfinder.js"(exports2) {
+    "use strict";
+    var fs2 = require("fs");
+    var os = require("os");
+    var net = require("net");
+    var path2 = require("path");
+    var _async = require_async();
+    var debug = require_src();
+    var mkdirp = require_mkdirp().mkdirp;
+    var debugTestPort = debug("portfinder:testPort");
+    var debugGetPort = debug("portfinder:getPort");
+    var debugDefaultHosts = debug("portfinder:defaultHosts");
+    var internals = {};
+    internals.testPort = function(options, callback) {
+      if (!callback) {
+        callback = options;
+        options = {};
+      }
+      options.server = options.server || net.createServer(function() {
+      });
+      debugTestPort("entered testPort(): trying", options.host, "port", options.port);
+      function onListen() {
+        debugTestPort("done w/ testPort(): OK", options.host, "port", options.port);
+        options.server.removeListener("error", onError);
+        options.server.close();
+        callback(null, options.port);
+      }
+      function onError(err) {
+        debugTestPort("done w/ testPort(): failed", options.host, "w/ port", options.port, "with error", err.code);
+        options.server.removeListener("listening", onListen);
+        if (!(err.code == "EADDRINUSE" || err.code == "EACCES")) {
+          return callback(err);
+        }
+        var nextPort = exports2.nextPort(options.port);
+        if (nextPort > exports2.highestPort) {
+          return callback(new Error("No open ports available"));
+        }
+        internals.testPort({
+          port: nextPort,
+          host: options.host,
+          server: options.server
+        }, callback);
+      }
+      options.server.once("error", onError);
+      options.server.once("listening", onListen);
+      if (options.host) {
+        options.server.listen(options.port, options.host);
+      } else {
+        options.server.listen(options.port);
+      }
+    };
+    exports2.basePort = 8e3;
+    exports2.setBasePort = function(port) {
+      exports2.basePort = port;
+    };
+    exports2.highestPort = 65535;
+    exports2.setHighestPort = function(port) {
+      exports2.highestPort = port;
+    };
+    exports2.basePath = "/tmp/portfinder";
+    exports2.getPort = function(options, callback) {
+      if (!callback) {
+        callback = options;
+        options = {};
+      }
+      options.port = Number(options.port) || Number(exports2.basePort);
+      options.host = options.host || null;
+      options.stopPort = Number(options.stopPort) || Number(exports2.highestPort);
+      if (!options.startPort) {
+        options.startPort = Number(options.port);
+        if (options.startPort < 0) {
+          throw Error("Provided options.startPort(" + options.startPort + ") is less than 0, which are cannot be bound.");
+        }
+        if (options.stopPort < options.startPort) {
+          throw Error("Provided options.stopPort(" + options.stopPort + "is less than options.startPort (" + options.startPort + ")");
+        }
+      }
+      if (options.host) {
+        if (exports2._defaultHosts.indexOf(options.host) !== -1) {
+          exports2._defaultHosts.push(options.host);
+        }
+      }
+      var openPorts = [], currentHost;
+      return _async.eachSeries(exports2._defaultHosts, function(host, next) {
+        debugGetPort("in eachSeries() iteration callback: host is", host);
+        return internals.testPort({ host, port: options.port }, function(err, port) {
+          if (err) {
+            debugGetPort("in eachSeries() iteration callback testPort() callback", "with an err:", err.code);
+            currentHost = host;
+            return next(err);
+          } else {
+            debugGetPort(
+              "in eachSeries() iteration callback testPort() callback",
+              "with a success for port",
+              port
+            );
+            openPorts.push(port);
+            return next();
+          }
+        });
+      }, function(err) {
+        if (err) {
+          debugGetPort("in eachSeries() result callback: err is", err);
+          if (err.code === "EADDRNOTAVAIL" || err.code === "EINVAL") {
+            if (options.host === currentHost) {
+              var msg = "Provided host " + options.host + " could NOT be bound. Please provide a different host address or hostname";
+              return callback(Error(msg));
+            } else {
+              var idx = exports2._defaultHosts.indexOf(currentHost);
+              exports2._defaultHosts.splice(idx, 1);
+              return exports2.getPort(options, callback);
+            }
+          } else {
+            return callback(err);
+          }
+        }
+        openPorts.sort(function(a, b) {
+          return a - b;
+        });
+        debugGetPort("in eachSeries() result callback: openPorts is", openPorts);
+        if (openPorts[0] === openPorts[openPorts.length - 1]) {
+          if (openPorts[0] <= options.stopPort) {
+            return callback(null, openPorts[0]);
+          } else {
+            var msg = "No open ports found in between " + options.startPort + " and " + options.stopPort;
+            return callback(Error(msg));
+          }
+        } else {
+          return exports2.getPort({ port: openPorts.pop(), host: options.host, startPort: options.startPort, stopPort: options.stopPort }, callback);
+        }
+      });
+    };
+    exports2.getPortPromise = function(options) {
+      if (typeof Promise !== "function") {
+        throw Error("Native promise support is not available in this version of node.Please install a polyfill and assign Promise to global.Promise before calling this method");
+      }
+      if (!options) {
+        options = {};
+      }
+      return new Promise(function(resolve, reject) {
+        exports2.getPort(options, function(err, port) {
+          if (err) {
+            return reject(err);
+          }
+          resolve(port);
+        });
+      });
+    };
+    exports2.getPorts = function(count, options, callback) {
+      if (!callback) {
+        callback = options;
+        options = {};
+      }
+      var lastPort = null;
+      _async.timesSeries(count, function(index, asyncCallback) {
+        if (lastPort) {
+          options.port = exports2.nextPort(lastPort);
+        }
+        exports2.getPort(options, function(err, port) {
+          if (err) {
+            asyncCallback(err);
+          } else {
+            lastPort = port;
+            asyncCallback(null, port);
+          }
+        });
+      }, callback);
+    };
+    exports2.getSocket = function(options, callback) {
+      if (!callback) {
+        callback = options;
+        options = {};
+      }
+      options.mod = options.mod || parseInt(755, 8);
+      options.path = options.path || exports2.basePath + ".sock";
+      function testSocket() {
+        fs2.stat(options.path, function(err) {
+          if (err) {
+            if (err.code == "ENOENT") {
+              callback(null, options.path);
+            } else {
+              callback(err);
+            }
+          } else {
+            options.path = exports2.nextSocket(options.path);
+            exports2.getSocket(options, callback);
+          }
+        });
+      }
+      function createAndTestSocket(dir) {
+        mkdirp(dir, options.mod, function(err) {
+          if (err) {
+            return callback(err);
+          }
+          options.exists = true;
+          testSocket();
+        });
+      }
+      function checkAndTestSocket() {
+        var dir = path2.dirname(options.path);
+        fs2.stat(dir, function(err, stats) {
+          if (err || !stats.isDirectory()) {
+            return createAndTestSocket(dir);
+          }
+          options.exists = true;
+          testSocket();
+        });
+      }
+      return options.exists ? testSocket() : checkAndTestSocket();
+    };
+    exports2.nextPort = function(port) {
+      return port + 1;
+    };
+    exports2.nextSocket = function(socketPath) {
+      var dir = path2.dirname(socketPath), name = path2.basename(socketPath, ".sock"), match = name.match(/^([a-zA-z]+)(\d*)$/i), index = parseInt(match[2]), base = match[1];
+      if (isNaN(index)) {
+        index = 0;
+      }
+      index += 1;
+      return path2.join(dir, base + index + ".sock");
+    };
+    exports2._defaultHosts = function() {
+      var interfaces = {};
+      try {
+        interfaces = os.networkInterfaces();
+      } catch (e) {
+        if (e.syscall === "uv_interface_addresses") {
+        } else {
+          throw e;
+        }
+      }
+      var interfaceNames = Object.keys(interfaces), hiddenButImportantHost = "0.0.0.0", results = [hiddenButImportantHost];
+      for (var i = 0; i < interfaceNames.length; i++) {
+        var _interface = interfaces[interfaceNames[i]];
+        for (var j = 0; j < _interface.length; j++) {
+          var curr = _interface[j];
+          results.push(curr.address);
+        }
+      }
+      results.push(null);
+      debugDefaultHosts("exports._defaultHosts is: %o", results);
+      return results;
+    }();
   }
 });
 
@@ -3859,7 +6452,7 @@ var require_package = __commonJS({
   "node_modules/systeminformation/package.json"(exports2, module2) {
     module2.exports = {
       name: "systeminformation",
-      version: "5.22.0",
+      version: "5.22.11",
       description: "Advanced, lightweight system and OS information library",
       license: "MIT",
       author: "Sebastian Hildebrandt <hildebrandt@plus-innovations.com> (https://plus-innovations.com)",
@@ -3996,7 +6589,7 @@ var require_util = __commonJS({
       windowsHide: true,
       maxBuffer: 1024 * 2e4,
       encoding: "UTF-8",
-      env: util._extend({}, process.env, { LANG: "en_US.UTF-8" })
+      env: Object.assign({}, process.env, { LANG: "en_US.UTF-8" })
     };
     function toInt(value) {
       let result = parseInt(value, 10);
@@ -4004,6 +6597,20 @@ var require_util = __commonJS({
         result = 0;
       }
       return result;
+    }
+    function splitByNumber(str) {
+      let numberStarted = false;
+      let num = "";
+      let cpart = "";
+      for (const c of str) {
+        if (c >= "0" && c <= "9" || numberStarted) {
+          numberStarted = true;
+          num += c;
+        } else {
+          cpart += c;
+        }
+      }
+      return [cpart, num];
     }
     var stringReplace = new String().replace;
     var stringToLower = new String().toLowerCase;
@@ -4303,7 +6910,7 @@ var require_util = __commonJS({
           windowsHide: true,
           maxBuffer: 1024 * 2e4,
           encoding: "UTF-8",
-          env: util._extend({}, process.env, { LANG: "en_US.UTF-8" })
+          env: Object.assign({}, process.env, { LANG: "en_US.UTF-8" })
         });
         if (_psChild && _psChild.pid) {
           _psPersistent = true;
@@ -4321,7 +6928,9 @@ var require_util = __commonJS({
             powerShellProceedResults(_psResult + _psError);
           });
           _psChild.on("close", function() {
-            _psChild.kill();
+            if (_psChild) {
+              _psChild.kill();
+            }
           });
         }
       }
@@ -4373,7 +6982,7 @@ var require_util = __commonJS({
                 windowsHide: true,
                 maxBuffer: 1024 * 2e4,
                 encoding: "UTF-8",
-                env: util._extend({}, process.env, { LANG: "en_US.UTF-8" })
+                env: Object.assign({}, process.env, { LANG: "en_US.UTF-8" })
               });
               if (child && !child.pid) {
                 child.on("error", function() {
@@ -5188,6 +7797,7 @@ var require_util = __commonJS({
     function noop() {
     }
     exports2.toInt = toInt;
+    exports2.splitByNumber = splitByNumber;
     exports2.execOptsWin = execOptsWin;
     exports2.getCodepage = getCodepage;
     exports2.execWin = execWin;
@@ -5445,12 +8055,14 @@ var require_system = __commonJS({
             exec("ioreg -c IOPlatformExpertDevice -d 2", function(error, stdout) {
               if (!error) {
                 let lines = stdout.toString().replace(/[<>"]/g, "").split("\n");
+                const model = util.splitByNumber(util.getValue(lines, "model", "=", true));
+                const version = util.getValue(lines, "version", "=", true);
                 result.manufacturer = util.getValue(lines, "manufacturer", "=", true);
-                result.model = util.getValue(lines, "model", "=", true, true);
-                result.version = util.getValue(lines, "version", "=", true);
+                result.model = version ? util.getValue(lines, "model", "=", true) : model[0];
+                result.version = version || model[1];
                 result.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
                 result.uuid = util.getValue(lines, "ioplatformuuid", "=", true).toLowerCase();
-                result.sku = util.getValue(lines, "board-id", "=", true);
+                result.sku = util.getValue(lines, "board-id", "=", true) || util.getValue(lines, "target-sub-type", "=", true);
               }
               if (callback) {
                 callback(result);
@@ -5862,6 +8474,31 @@ var require_system = __commonJS({
       });
     }
     exports2.baseboard = baseboard;
+    function macOsChassisType(model) {
+      model = model.toLowerCase();
+      if (model.startsWith("macbookair")) {
+        return "Notebook";
+      }
+      if (model.startsWith("macbookpro")) {
+        return "Laptop";
+      }
+      if (model.startsWith("macbook")) {
+        return "Notebook";
+      }
+      if (model.startsWith("macmini")) {
+        return "Desktop";
+      }
+      if (model.startsWith("imac")) {
+        return "Desktop";
+      }
+      if (model.startsWith("macstudio")) {
+        return "Desktop";
+      }
+      if (model.startsWith("macpro")) {
+        return "Tower";
+      }
+      return "Other";
+    }
     function chassis(callback) {
       const chassisTypes = [
         "Other",
@@ -5948,11 +8585,16 @@ var require_system = __commonJS({
             exec("ioreg -c IOPlatformExpertDevice -d 2", function(error, stdout) {
               if (!error) {
                 let lines = stdout.toString().replace(/[<>"]/g, "").split("\n");
+                const model = util.getValue(lines, "model", "=", true);
+                const modelParts = util.splitByNumber(model);
+                const version = util.getValue(lines, "version", "=", true);
                 result.manufacturer = util.getValue(lines, "manufacturer", "=", true);
-                result.model = util.getValue(lines, "model", "=", true);
-                result.version = util.getValue(lines, "version", "=", true);
+                result.model = version ? util.getValue(lines, "model", "=", true) : modelParts[0];
+                result.type = macOsChassisType(result.model);
+                result.version = version || model;
                 result.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
-                result.assetTag = util.getValue(lines, "board-id", "=", true);
+                result.assetTag = util.getValue(lines, "board-id", "=", true) || util.getValue(lines, "target-type", "=", true);
+                result.sku = util.getValue(lines, "target-sub-type", "=", true);
               }
               if (callback) {
                 callback(result);
@@ -6246,6 +8888,7 @@ var require_osinfo = __commonJS({
               result.codename = result.release.startsWith("12.") ? "macOS Monterey" : result.codename;
               result.codename = result.release.startsWith("13.") ? "macOS Ventura" : result.codename;
               result.codename = result.release.startsWith("14.") ? "macOS Sonoma" : result.codename;
+              result.codename = result.release.startsWith("15.") ? "macOS Sequoia" : result.codename;
               result.uefi = true;
               result.codepage = util.getCodepage();
               if (callback) {
@@ -7043,8 +9686,8 @@ var require_osinfo = __commonJS({
             });
           }
           if (_linux) {
-            const cmd = `echo -n "os: "; cat /var/lib/dbus/machine-id 2> /dev/null; echo;
-echo -n "os: "; cat /etc/machine-id 2> /dev/null; echo;
+            const cmd = `echo -n "os: "; cat /var/lib/dbus/machine-id 2> /dev/null ||
+cat /etc/machine-id 2> /dev/null; echo;
 echo -n "hardware: "; cat /sys/class/dmi/id/product_uuid 2> /dev/null; echo;`;
             exec(cmd, function(error, stdout) {
               const lines = stdout.toString().split("\n");
@@ -8976,7 +11619,7 @@ var require_memory = __commonJS({
       "04CD": "G-Skill",
       "059B": "Crucial",
       "00CE": "Samsung",
-      "1315": "Crutial",
+      "1315": "Crucial",
       "014F": "Transcend Information",
       "2C00": "Micron Technology Inc.",
       "802C": "Micron Technology Inc.",
@@ -9379,7 +12022,7 @@ var require_memory = __commonJS({
             const memoryTypes = "Unknown|Other|DRAM|Synchronous DRAM|Cache DRAM|EDO|EDRAM|VRAM|SRAM|RAM|ROM|FLASH|EEPROM|FEPROM|EPROM|CDRAM|3DRAM|SDRAM|SGRAM|RDRAM|DDR|DDR2|DDR2 FB-DIMM|Reserved|DDR3|FBD2|DDR4|LPDDR|LPDDR2|LPDDR3|LPDDR4|Logical non-volatile device|HBM|HBM2|DDR5|LPDDR5".split("|");
             const FormFactors = "Unknown|Other|SIP|DIP|ZIP|SOJ|Proprietary|SIMM|DIMM|TSOP|PGA|RIMM|SODIMM|SRIMM|SMD|SSMP|QFP|TQFP|SOIC|LCC|PLCC|BGA|FPBGA|LGA".split("|");
             try {
-              util.powerShell("Get-CimInstance Win32_PhysicalMemory | select DataWidth,TotalWidth,Capacity,BankLabel,MemoryType,SMBIOSMemoryType,ConfiguredClockSpeed,FormFactor,Manufacturer,PartNumber,SerialNumber,ConfiguredVoltage,MinVoltage,MaxVoltage | fl").then((stdout, error) => {
+              util.powerShell("Get-CimInstance Win32_PhysicalMemory | select DataWidth,TotalWidth,Capacity,BankLabel,MemoryType,SMBIOSMemoryType,ConfiguredClockSpeed,FormFactor,Manufacturer,PartNumber,SerialNumber,ConfiguredVoltage,MinVoltage,MaxVoltage,Tag | fl").then((stdout, error) => {
                 if (!error) {
                   let devices = stdout.toString().split(/\n\s*\n/);
                   devices.shift();
@@ -9388,10 +12031,12 @@ var require_memory = __commonJS({
                     const dataWidth = util.toInt(util.getValue(lines, "DataWidth", ":"));
                     const totalWidth = util.toInt(util.getValue(lines, "TotalWidth", ":"));
                     const size = parseInt(util.getValue(lines, "Capacity", ":"), 10) || 0;
+                    const tag = util.getValue(lines, "Tag", ":");
+                    const tagInt = util.splitByNumber(tag);
                     if (size) {
                       result.push({
                         size,
-                        bank: util.getValue(lines, "BankLabel", ":"),
+                        bank: util.getValue(lines, "BankLabel", ":") + (tagInt[1] ? "/" + tagInt[1] : ""),
                         // BankLabel
                         type: memoryTypes[parseInt(util.getValue(lines, "MemoryType", ":"), 10) || parseInt(util.getValue(lines, "SMBIOSMemoryType", ":"), 10)],
                         ecc: dataWidth && totalWidth ? totalWidth > dataWidth : false,
@@ -9634,7 +12279,7 @@ var require_battery = __commonJS({
             try {
               const workload = [];
               workload.push(util.powerShell("Get-CimInstance Win32_Battery | select BatteryStatus, DesignCapacity, DesignVoltage, EstimatedChargeRemaining, DeviceID | fl"));
-              workload.push(util.powerShell("(Get-CimInstance -Class BatteryStaticData -Namespace ROOT/WMI).DesignedCapacity"));
+              workload.push(util.powerShell("(Get-WmiObject -Class BatteryStaticData -Namespace ROOT/WMI).DesignedCapacity"));
               workload.push(util.powerShell("(Get-CimInstance -Class BatteryFullChargedCapacity -Namespace ROOT/WMI).FullChargedCapacity"));
               util.promiseAll(
                 workload
@@ -13212,7 +15857,7 @@ var require_network = __commonJS({
                         ifaceName = detail.name;
                         dhcp = detail.dhcp;
                         operstate = detail.operstate;
-                        speed = detail.speed;
+                        speed = operstate === "up" ? detail.speed : 0;
                         type = detail.type;
                         foundFirst = true;
                       }
@@ -14488,6 +17133,10 @@ var require_wifi = __commonJS({
       }
       return result;
     }
+    function formatBssid(s) {
+      s = s.replace(/</g, "").replace(/>/g, "").match(/.{1,2}/g) || [];
+      return s.join(":");
+    }
     function wifiConnections(callback) {
       return new Promise((resolve) => {
         process.nextTick(() => {
@@ -14549,12 +17198,17 @@ var require_wifi = __commonJS({
                 const lines = parts1[1].split("\n\n")[0].split("\n");
                 const iface = util.getValue(lines, "BSD Device Name", ":", true);
                 const model = util.getValue(lines, "hardware", ":", true);
-                cmd = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I";
+                cmd = '/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I 2>/dev/null; echo "######" ; ioreg -n AppleBCMWLANSkywalkInterface -r 2>/dev/null';
                 exec(cmd, function(error2, stdout2) {
-                  const lines2 = stdout2.toString().split("\n");
-                  if (lines.length > 10) {
+                  const parts = stdout2.toString().split("######");
+                  const lines2 = parts[0].split("\n");
+                  let lines3 = [];
+                  if (parts[1].indexOf("  | {") > 0 && parts[1].indexOf("  | }") > parts[1].indexOf("  | {")) {
+                    lines3 = parts[1].split("  | {")[1].split("  | }")[0].replace(/ \| /g, "").replace(/"/g, "").split("\n");
+                  }
+                  if (lines2.length > 10) {
                     const ssid = util.getValue(lines2, "ssid", ":", true);
-                    const bssid = util.getValue(lines2, "bssid", ":", true);
+                    const bssid = util.getValue(lines2, "bssid", ":", true) || formatBssid(util.getValue(lines3, "IO80211BSSID", "=", true));
                     const security = util.getValue(lines2, "link auth", ":", true);
                     const txRate = util.getValue(lines2, "lastTxRate", ":", true);
                     const channel = util.getValue(lines2, "channel", ":", true).split(",")[0];
@@ -14574,6 +17228,32 @@ var require_wifi = __commonJS({
                         security,
                         signalLevel,
                         quality: wifiQualityFromDB(signalLevel),
+                        txRate
+                      });
+                    }
+                  }
+                  if (lines3.length > 10) {
+                    const ssid = util.getValue(lines3, "IO80211SSID", "=", true);
+                    const bssid = formatBssid(util.getValue(lines3, "IO80211BSSID", "=", true));
+                    const security = "";
+                    const txRate = -1;
+                    const signalLevel = -1;
+                    const quality = -1;
+                    const channel = util.getValue(lines3, "IO80211Channel", "=", true);
+                    const type = "802.11";
+                    if ((ssid || bssid) && !result.length) {
+                      result.push({
+                        id: "Wi-Fi",
+                        iface,
+                        model,
+                        ssid,
+                        bssid,
+                        channel: util.toInt(channel),
+                        frequency: channel ? wifiFrequencyFromChannel(channel) : null,
+                        type,
+                        security,
+                        signalLevel,
+                        quality,
                         txRate
                       });
                     }
@@ -18886,2932 +21566,57 @@ var require_lib = __commonJS({
   }
 });
 
-// node_modules/@ircam/comote-helpers/wifi-infos.js
-var require_wifi_infos = __commonJS({
-  "node_modules/@ircam/comote-helpers/wifi-infos.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.getWifiInfos = getWifiInfos2;
-    var _systeminformation = _interopRequireDefault(require_lib());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    async function getWifiInfos2() {
-      const wifiConnections = await _systeminformation.default.wifiConnections();
-      const conn = wifiConnections[0];
-      if (!conn) {
-        return null;
-      }
-      const interfaces = await _systeminformation.default.networkInterfaces();
-      const int = interfaces.find((int2) => int2.iface === conn.iface);
-      return {
-        ssid: conn.ssid,
-        ip: int.ip4
-      };
-    }
-  }
-});
+// max/CoMote/patchers/src/server.js
+var import_node_http = __toESM(require("node:http"), 1);
+var import_node_fs = __toESM(require("node:fs"), 1);
+var import_node_url = __toESM(require("node:url"), 1);
+var import_node_path = __toESM(require("node:path"), 1);
+var import_max_api = __toESM(require("max-api"), 1);
 
-// node_modules/@ircam/comote-helpers/network-infos.js
-var require_network_infos = __commonJS({
-  "node_modules/@ircam/comote-helpers/network-infos.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.getNetworkInterfacesInfos = getNetworkInterfacesInfos2;
-    var _systeminformation = _interopRequireDefault(require_lib());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    async function getNetworkInterfacesInfos2({
-      interfaceFilter = (i) => {
-        return i.ip4 && i.ip4 !== "127.0.0.1" && i.ip4 !== "localhost";
-      }
-    } = {}) {
-      const interfaces = await _systeminformation.default.networkInterfaces();
-      if (!interfaces) {
-        return null;
-      }
-      if (typeof interfaceFilter !== "function") {
-        return interfaces;
-      }
-      return interfaces.filter(interfaceFilter);
-    }
-  }
-});
+// node_modules/ws/wrapper.mjs
+var import_stream = __toESM(require_stream(), 1);
+var import_receiver = __toESM(require_receiver(), 1);
+var import_sender = __toESM(require_sender(), 1);
+var import_websocket = __toESM(require_websocket(), 1);
+var import_websocket_server = __toESM(require_websocket_server(), 1);
 
-// node_modules/async/dist/async.js
-var require_async = __commonJS({
-  "node_modules/async/dist/async.js"(exports2, module2) {
-    (function(global2, factory) {
-      typeof exports2 === "object" && typeof module2 !== "undefined" ? factory(exports2) : typeof define === "function" && define.amd ? define(["exports"], factory) : factory(global2.async = global2.async || {});
-    })(exports2, function(exports3) {
-      "use strict";
-      function slice(arrayLike, start) {
-        start = start | 0;
-        var newLen = Math.max(arrayLike.length - start, 0);
-        var newArr = Array(newLen);
-        for (var idx = 0; idx < newLen; idx++) {
-          newArr[idx] = arrayLike[start + idx];
-        }
-        return newArr;
-      }
-      var apply = function(fn) {
-        var args = slice(arguments, 1);
-        return function() {
-          var callArgs = slice(arguments);
-          return fn.apply(null, args.concat(callArgs));
-        };
-      };
-      var initialParams = function(fn) {
-        return function() {
-          var args = slice(arguments);
-          var callback = args.pop();
-          fn.call(this, args, callback);
-        };
-      };
-      function isObject(value) {
-        var type = typeof value;
-        return value != null && (type == "object" || type == "function");
-      }
-      var hasSetImmediate = typeof setImmediate === "function" && setImmediate;
-      var hasNextTick = typeof process === "object" && typeof process.nextTick === "function";
-      function fallback(fn) {
-        setTimeout(fn, 0);
-      }
-      function wrap(defer) {
-        return function(fn) {
-          var args = slice(arguments, 1);
-          defer(function() {
-            fn.apply(null, args);
-          });
-        };
-      }
-      var _defer;
-      if (hasSetImmediate) {
-        _defer = setImmediate;
-      } else if (hasNextTick) {
-        _defer = process.nextTick;
-      } else {
-        _defer = fallback;
-      }
-      var setImmediate$1 = wrap(_defer);
-      function asyncify(func) {
-        return initialParams(function(args, callback) {
-          var result;
-          try {
-            result = func.apply(this, args);
-          } catch (e) {
-            return callback(e);
-          }
-          if (isObject(result) && typeof result.then === "function") {
-            result.then(function(value) {
-              invokeCallback(callback, null, value);
-            }, function(err) {
-              invokeCallback(callback, err.message ? err : new Error(err));
-            });
-          } else {
-            callback(null, result);
-          }
-        });
-      }
-      function invokeCallback(callback, error, value) {
-        try {
-          callback(error, value);
-        } catch (e) {
-          setImmediate$1(rethrow, e);
-        }
-      }
-      function rethrow(error) {
-        throw error;
-      }
-      var supportsSymbol = typeof Symbol === "function";
-      function isAsync(fn) {
-        return supportsSymbol && fn[Symbol.toStringTag] === "AsyncFunction";
-      }
-      function wrapAsync(asyncFn) {
-        return isAsync(asyncFn) ? asyncify(asyncFn) : asyncFn;
-      }
-      function applyEach$1(eachfn) {
-        return function(fns) {
-          var args = slice(arguments, 1);
-          var go = initialParams(function(args2, callback) {
-            var that = this;
-            return eachfn(fns, function(fn, cb) {
-              wrapAsync(fn).apply(that, args2.concat(cb));
-            }, callback);
-          });
-          if (args.length) {
-            return go.apply(this, args);
-          } else {
-            return go;
-          }
-        };
-      }
-      var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
-      var freeSelf = typeof self == "object" && self && self.Object === Object && self;
-      var root = freeGlobal || freeSelf || Function("return this")();
-      var Symbol$1 = root.Symbol;
-      var objectProto = Object.prototype;
-      var hasOwnProperty = objectProto.hasOwnProperty;
-      var nativeObjectToString = objectProto.toString;
-      var symToStringTag$1 = Symbol$1 ? Symbol$1.toStringTag : void 0;
-      function getRawTag(value) {
-        var isOwn = hasOwnProperty.call(value, symToStringTag$1), tag = value[symToStringTag$1];
-        try {
-          value[symToStringTag$1] = void 0;
-          var unmasked = true;
-        } catch (e) {
-        }
-        var result = nativeObjectToString.call(value);
-        if (unmasked) {
-          if (isOwn) {
-            value[symToStringTag$1] = tag;
-          } else {
-            delete value[symToStringTag$1];
-          }
-        }
-        return result;
-      }
-      var objectProto$1 = Object.prototype;
-      var nativeObjectToString$1 = objectProto$1.toString;
-      function objectToString(value) {
-        return nativeObjectToString$1.call(value);
-      }
-      var nullTag = "[object Null]";
-      var undefinedTag = "[object Undefined]";
-      var symToStringTag = Symbol$1 ? Symbol$1.toStringTag : void 0;
-      function baseGetTag(value) {
-        if (value == null) {
-          return value === void 0 ? undefinedTag : nullTag;
-        }
-        return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
-      }
-      var asyncTag = "[object AsyncFunction]";
-      var funcTag = "[object Function]";
-      var genTag = "[object GeneratorFunction]";
-      var proxyTag = "[object Proxy]";
-      function isFunction(value) {
-        if (!isObject(value)) {
-          return false;
-        }
-        var tag = baseGetTag(value);
-        return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
-      }
-      var MAX_SAFE_INTEGER = 9007199254740991;
-      function isLength(value) {
-        return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-      }
-      function isArrayLike(value) {
-        return value != null && isLength(value.length) && !isFunction(value);
-      }
-      var breakLoop = {};
-      function noop() {
-      }
-      function once(fn) {
-        return function() {
-          if (fn === null)
-            return;
-          var callFn = fn;
-          fn = null;
-          callFn.apply(this, arguments);
-        };
-      }
-      var iteratorSymbol = typeof Symbol === "function" && Symbol.iterator;
-      var getIterator = function(coll) {
-        return iteratorSymbol && coll[iteratorSymbol] && coll[iteratorSymbol]();
-      };
-      function baseTimes(n, iteratee) {
-        var index2 = -1, result = Array(n);
-        while (++index2 < n) {
-          result[index2] = iteratee(index2);
-        }
-        return result;
-      }
-      function isObjectLike(value) {
-        return value != null && typeof value == "object";
-      }
-      var argsTag = "[object Arguments]";
-      function baseIsArguments(value) {
-        return isObjectLike(value) && baseGetTag(value) == argsTag;
-      }
-      var objectProto$3 = Object.prototype;
-      var hasOwnProperty$2 = objectProto$3.hasOwnProperty;
-      var propertyIsEnumerable = objectProto$3.propertyIsEnumerable;
-      var isArguments = baseIsArguments(/* @__PURE__ */ function() {
-        return arguments;
-      }()) ? baseIsArguments : function(value) {
-        return isObjectLike(value) && hasOwnProperty$2.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
-      };
-      var isArray = Array.isArray;
-      function stubFalse() {
-        return false;
-      }
-      var freeExports = typeof exports3 == "object" && exports3 && !exports3.nodeType && exports3;
-      var freeModule = freeExports && typeof module2 == "object" && module2 && !module2.nodeType && module2;
-      var moduleExports = freeModule && freeModule.exports === freeExports;
-      var Buffer2 = moduleExports ? root.Buffer : void 0;
-      var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : void 0;
-      var isBuffer = nativeIsBuffer || stubFalse;
-      var MAX_SAFE_INTEGER$1 = 9007199254740991;
-      var reIsUint = /^(?:0|[1-9]\d*)$/;
-      function isIndex(value, length) {
-        var type = typeof value;
-        length = length == null ? MAX_SAFE_INTEGER$1 : length;
-        return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
-      }
-      var argsTag$1 = "[object Arguments]";
-      var arrayTag = "[object Array]";
-      var boolTag = "[object Boolean]";
-      var dateTag = "[object Date]";
-      var errorTag = "[object Error]";
-      var funcTag$1 = "[object Function]";
-      var mapTag = "[object Map]";
-      var numberTag = "[object Number]";
-      var objectTag = "[object Object]";
-      var regexpTag = "[object RegExp]";
-      var setTag = "[object Set]";
-      var stringTag = "[object String]";
-      var weakMapTag = "[object WeakMap]";
-      var arrayBufferTag = "[object ArrayBuffer]";
-      var dataViewTag = "[object DataView]";
-      var float32Tag = "[object Float32Array]";
-      var float64Tag = "[object Float64Array]";
-      var int8Tag = "[object Int8Array]";
-      var int16Tag = "[object Int16Array]";
-      var int32Tag = "[object Int32Array]";
-      var uint8Tag = "[object Uint8Array]";
-      var uint8ClampedTag = "[object Uint8ClampedArray]";
-      var uint16Tag = "[object Uint16Array]";
-      var uint32Tag = "[object Uint32Array]";
-      var typedArrayTags = {};
-      typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
-      typedArrayTags[argsTag$1] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag$1] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
-      function baseIsTypedArray(value) {
-        return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
-      }
-      function baseUnary(func) {
-        return function(value) {
-          return func(value);
-        };
-      }
-      var freeExports$1 = typeof exports3 == "object" && exports3 && !exports3.nodeType && exports3;
-      var freeModule$1 = freeExports$1 && typeof module2 == "object" && module2 && !module2.nodeType && module2;
-      var moduleExports$1 = freeModule$1 && freeModule$1.exports === freeExports$1;
-      var freeProcess = moduleExports$1 && freeGlobal.process;
-      var nodeUtil = function() {
-        try {
-          var types = freeModule$1 && freeModule$1.require && freeModule$1.require("util").types;
-          if (types) {
-            return types;
-          }
-          return freeProcess && freeProcess.binding && freeProcess.binding("util");
-        } catch (e) {
-        }
-      }();
-      var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
-      var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
-      var objectProto$2 = Object.prototype;
-      var hasOwnProperty$1 = objectProto$2.hasOwnProperty;
-      function arrayLikeKeys(value, inherited) {
-        var isArr = isArray(value), isArg = !isArr && isArguments(value), isBuff = !isArr && !isArg && isBuffer(value), isType = !isArr && !isArg && !isBuff && isTypedArray(value), skipIndexes = isArr || isArg || isBuff || isType, result = skipIndexes ? baseTimes(value.length, String) : [], length = result.length;
-        for (var key in value) {
-          if ((inherited || hasOwnProperty$1.call(value, key)) && !(skipIndexes && // Safari 9 has enumerable `arguments.length` in strict mode.
-          (key == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
-          isBuff && (key == "offset" || key == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
-          isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") || // Skip index properties.
-          isIndex(key, length)))) {
-            result.push(key);
-          }
-        }
-        return result;
-      }
-      var objectProto$5 = Object.prototype;
-      function isPrototype(value) {
-        var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto$5;
-        return value === proto;
-      }
-      function overArg(func, transform2) {
-        return function(arg) {
-          return func(transform2(arg));
-        };
-      }
-      var nativeKeys = overArg(Object.keys, Object);
-      var objectProto$4 = Object.prototype;
-      var hasOwnProperty$3 = objectProto$4.hasOwnProperty;
-      function baseKeys(object) {
-        if (!isPrototype(object)) {
-          return nativeKeys(object);
-        }
-        var result = [];
-        for (var key in Object(object)) {
-          if (hasOwnProperty$3.call(object, key) && key != "constructor") {
-            result.push(key);
-          }
-        }
-        return result;
-      }
-      function keys(object) {
-        return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
-      }
-      function createArrayIterator(coll) {
-        var i = -1;
-        var len = coll.length;
-        return function next() {
-          return ++i < len ? { value: coll[i], key: i } : null;
-        };
-      }
-      function createES2015Iterator(iterator2) {
-        var i = -1;
-        return function next() {
-          var item = iterator2.next();
-          if (item.done)
-            return null;
-          i++;
-          return { value: item.value, key: i };
-        };
-      }
-      function createObjectIterator(obj) {
-        var okeys = keys(obj);
-        var i = -1;
-        var len = okeys.length;
-        return function next() {
-          var key = okeys[++i];
-          if (key === "__proto__") {
-            return next();
-          }
-          return i < len ? { value: obj[key], key } : null;
-        };
-      }
-      function iterator(coll) {
-        if (isArrayLike(coll)) {
-          return createArrayIterator(coll);
-        }
-        var iterator2 = getIterator(coll);
-        return iterator2 ? createES2015Iterator(iterator2) : createObjectIterator(coll);
-      }
-      function onlyOnce(fn) {
-        return function() {
-          if (fn === null)
-            throw new Error("Callback was already called.");
-          var callFn = fn;
-          fn = null;
-          callFn.apply(this, arguments);
-        };
-      }
-      function _eachOfLimit(limit) {
-        return function(obj, iteratee, callback) {
-          callback = once(callback || noop);
-          if (limit <= 0 || !obj) {
-            return callback(null);
-          }
-          var nextElem = iterator(obj);
-          var done = false;
-          var running = 0;
-          var looping = false;
-          function iterateeCallback(err, value) {
-            running -= 1;
-            if (err) {
-              done = true;
-              callback(err);
-            } else if (value === breakLoop || done && running <= 0) {
-              done = true;
-              return callback(null);
-            } else if (!looping) {
-              replenish();
-            }
-          }
-          function replenish() {
-            looping = true;
-            while (running < limit && !done) {
-              var elem = nextElem();
-              if (elem === null) {
-                done = true;
-                if (running <= 0) {
-                  callback(null);
-                }
-                return;
-              }
-              running += 1;
-              iteratee(elem.value, elem.key, onlyOnce(iterateeCallback));
-            }
-            looping = false;
-          }
-          replenish();
-        };
-      }
-      function eachOfLimit(coll, limit, iteratee, callback) {
-        _eachOfLimit(limit)(coll, wrapAsync(iteratee), callback);
-      }
-      function doLimit(fn, limit) {
-        return function(iterable, iteratee, callback) {
-          return fn(iterable, limit, iteratee, callback);
-        };
-      }
-      function eachOfArrayLike(coll, iteratee, callback) {
-        callback = once(callback || noop);
-        var index2 = 0, completed = 0, length = coll.length;
-        if (length === 0) {
-          callback(null);
-        }
-        function iteratorCallback(err, value) {
-          if (err) {
-            callback(err);
-          } else if (++completed === length || value === breakLoop) {
-            callback(null);
-          }
-        }
-        for (; index2 < length; index2++) {
-          iteratee(coll[index2], index2, onlyOnce(iteratorCallback));
-        }
-      }
-      var eachOfGeneric = doLimit(eachOfLimit, Infinity);
-      var eachOf = function(coll, iteratee, callback) {
-        var eachOfImplementation = isArrayLike(coll) ? eachOfArrayLike : eachOfGeneric;
-        eachOfImplementation(coll, wrapAsync(iteratee), callback);
-      };
-      function doParallel(fn) {
-        return function(obj, iteratee, callback) {
-          return fn(eachOf, obj, wrapAsync(iteratee), callback);
-        };
-      }
-      function _asyncMap(eachfn, arr, iteratee, callback) {
-        callback = callback || noop;
-        arr = arr || [];
-        var results = [];
-        var counter = 0;
-        var _iteratee = wrapAsync(iteratee);
-        eachfn(arr, function(value, _, callback2) {
-          var index2 = counter++;
-          _iteratee(value, function(err, v) {
-            results[index2] = v;
-            callback2(err);
-          });
-        }, function(err) {
-          callback(err, results);
-        });
-      }
-      var map = doParallel(_asyncMap);
-      var applyEach = applyEach$1(map);
-      function doParallelLimit(fn) {
-        return function(obj, limit, iteratee, callback) {
-          return fn(_eachOfLimit(limit), obj, wrapAsync(iteratee), callback);
-        };
-      }
-      var mapLimit = doParallelLimit(_asyncMap);
-      var mapSeries = doLimit(mapLimit, 1);
-      var applyEachSeries = applyEach$1(mapSeries);
-      function arrayEach(array, iteratee) {
-        var index2 = -1, length = array == null ? 0 : array.length;
-        while (++index2 < length) {
-          if (iteratee(array[index2], index2, array) === false) {
-            break;
-          }
-        }
-        return array;
-      }
-      function createBaseFor(fromRight) {
-        return function(object, iteratee, keysFunc) {
-          var index2 = -1, iterable = Object(object), props = keysFunc(object), length = props.length;
-          while (length--) {
-            var key = props[fromRight ? length : ++index2];
-            if (iteratee(iterable[key], key, iterable) === false) {
-              break;
-            }
-          }
-          return object;
-        };
-      }
-      var baseFor = createBaseFor();
-      function baseForOwn(object, iteratee) {
-        return object && baseFor(object, iteratee, keys);
-      }
-      function baseFindIndex(array, predicate, fromIndex, fromRight) {
-        var length = array.length, index2 = fromIndex + (fromRight ? 1 : -1);
-        while (fromRight ? index2-- : ++index2 < length) {
-          if (predicate(array[index2], index2, array)) {
-            return index2;
-          }
-        }
-        return -1;
-      }
-      function baseIsNaN(value) {
-        return value !== value;
-      }
-      function strictIndexOf(array, value, fromIndex) {
-        var index2 = fromIndex - 1, length = array.length;
-        while (++index2 < length) {
-          if (array[index2] === value) {
-            return index2;
-          }
-        }
-        return -1;
-      }
-      function baseIndexOf(array, value, fromIndex) {
-        return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
-      }
-      var auto = function(tasks, concurrency, callback) {
-        if (typeof concurrency === "function") {
-          callback = concurrency;
-          concurrency = null;
-        }
-        callback = once(callback || noop);
-        var keys$$1 = keys(tasks);
-        var numTasks = keys$$1.length;
-        if (!numTasks) {
-          return callback(null);
-        }
-        if (!concurrency) {
-          concurrency = numTasks;
-        }
-        var results = {};
-        var runningTasks = 0;
-        var hasError = false;
-        var listeners = /* @__PURE__ */ Object.create(null);
-        var readyTasks = [];
-        var readyToCheck = [];
-        var uncheckedDependencies = {};
-        baseForOwn(tasks, function(task, key) {
-          if (!isArray(task)) {
-            enqueueTask(key, [task]);
-            readyToCheck.push(key);
-            return;
-          }
-          var dependencies = task.slice(0, task.length - 1);
-          var remainingDependencies = dependencies.length;
-          if (remainingDependencies === 0) {
-            enqueueTask(key, task);
-            readyToCheck.push(key);
-            return;
-          }
-          uncheckedDependencies[key] = remainingDependencies;
-          arrayEach(dependencies, function(dependencyName) {
-            if (!tasks[dependencyName]) {
-              throw new Error("async.auto task `" + key + "` has a non-existent dependency `" + dependencyName + "` in " + dependencies.join(", "));
-            }
-            addListener(dependencyName, function() {
-              remainingDependencies--;
-              if (remainingDependencies === 0) {
-                enqueueTask(key, task);
-              }
-            });
-          });
-        });
-        checkForDeadlocks();
-        processQueue();
-        function enqueueTask(key, task) {
-          readyTasks.push(function() {
-            runTask(key, task);
-          });
-        }
-        function processQueue() {
-          if (readyTasks.length === 0 && runningTasks === 0) {
-            return callback(null, results);
-          }
-          while (readyTasks.length && runningTasks < concurrency) {
-            var run = readyTasks.shift();
-            run();
-          }
-        }
-        function addListener(taskName, fn) {
-          var taskListeners = listeners[taskName];
-          if (!taskListeners) {
-            taskListeners = listeners[taskName] = [];
-          }
-          taskListeners.push(fn);
-        }
-        function taskComplete(taskName) {
-          var taskListeners = listeners[taskName] || [];
-          arrayEach(taskListeners, function(fn) {
-            fn();
-          });
-          processQueue();
-        }
-        function runTask(key, task) {
-          if (hasError)
-            return;
-          var taskCallback = onlyOnce(function(err, result) {
-            runningTasks--;
-            if (arguments.length > 2) {
-              result = slice(arguments, 1);
-            }
-            if (err) {
-              var safeResults = {};
-              baseForOwn(results, function(val, rkey) {
-                safeResults[rkey] = val;
-              });
-              safeResults[key] = result;
-              hasError = true;
-              listeners = /* @__PURE__ */ Object.create(null);
-              callback(err, safeResults);
-            } else {
-              results[key] = result;
-              taskComplete(key);
-            }
-          });
-          runningTasks++;
-          var taskFn = wrapAsync(task[task.length - 1]);
-          if (task.length > 1) {
-            taskFn(results, taskCallback);
-          } else {
-            taskFn(taskCallback);
-          }
-        }
-        function checkForDeadlocks() {
-          var currentTask;
-          var counter = 0;
-          while (readyToCheck.length) {
-            currentTask = readyToCheck.pop();
-            counter++;
-            arrayEach(getDependents(currentTask), function(dependent) {
-              if (--uncheckedDependencies[dependent] === 0) {
-                readyToCheck.push(dependent);
-              }
-            });
-          }
-          if (counter !== numTasks) {
-            throw new Error(
-              "async.auto cannot execute tasks due to a recursive dependency"
-            );
-          }
-        }
-        function getDependents(taskName) {
-          var result = [];
-          baseForOwn(tasks, function(task, key) {
-            if (isArray(task) && baseIndexOf(task, taskName, 0) >= 0) {
-              result.push(key);
-            }
-          });
-          return result;
-        }
-      };
-      function arrayMap(array, iteratee) {
-        var index2 = -1, length = array == null ? 0 : array.length, result = Array(length);
-        while (++index2 < length) {
-          result[index2] = iteratee(array[index2], index2, array);
-        }
-        return result;
-      }
-      var symbolTag = "[object Symbol]";
-      function isSymbol(value) {
-        return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
-      }
-      var INFINITY = 1 / 0;
-      var symbolProto = Symbol$1 ? Symbol$1.prototype : void 0;
-      var symbolToString = symbolProto ? symbolProto.toString : void 0;
-      function baseToString(value) {
-        if (typeof value == "string") {
-          return value;
-        }
-        if (isArray(value)) {
-          return arrayMap(value, baseToString) + "";
-        }
-        if (isSymbol(value)) {
-          return symbolToString ? symbolToString.call(value) : "";
-        }
-        var result = value + "";
-        return result == "0" && 1 / value == -INFINITY ? "-0" : result;
-      }
-      function baseSlice(array, start, end) {
-        var index2 = -1, length = array.length;
-        if (start < 0) {
-          start = -start > length ? 0 : length + start;
-        }
-        end = end > length ? length : end;
-        if (end < 0) {
-          end += length;
-        }
-        length = start > end ? 0 : end - start >>> 0;
-        start >>>= 0;
-        var result = Array(length);
-        while (++index2 < length) {
-          result[index2] = array[index2 + start];
-        }
-        return result;
-      }
-      function castSlice(array, start, end) {
-        var length = array.length;
-        end = end === void 0 ? length : end;
-        return !start && end >= length ? array : baseSlice(array, start, end);
-      }
-      function charsEndIndex(strSymbols, chrSymbols) {
-        var index2 = strSymbols.length;
-        while (index2-- && baseIndexOf(chrSymbols, strSymbols[index2], 0) > -1) {
-        }
-        return index2;
-      }
-      function charsStartIndex(strSymbols, chrSymbols) {
-        var index2 = -1, length = strSymbols.length;
-        while (++index2 < length && baseIndexOf(chrSymbols, strSymbols[index2], 0) > -1) {
-        }
-        return index2;
-      }
-      function asciiToArray(string) {
-        return string.split("");
-      }
-      var rsAstralRange = "\\ud800-\\udfff";
-      var rsComboMarksRange = "\\u0300-\\u036f";
-      var reComboHalfMarksRange = "\\ufe20-\\ufe2f";
-      var rsComboSymbolsRange = "\\u20d0-\\u20ff";
-      var rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange;
-      var rsVarRange = "\\ufe0e\\ufe0f";
-      var rsZWJ = "\\u200d";
-      var reHasUnicode = RegExp("[" + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + "]");
-      function hasUnicode(string) {
-        return reHasUnicode.test(string);
-      }
-      var rsAstralRange$1 = "\\ud800-\\udfff";
-      var rsComboMarksRange$1 = "\\u0300-\\u036f";
-      var reComboHalfMarksRange$1 = "\\ufe20-\\ufe2f";
-      var rsComboSymbolsRange$1 = "\\u20d0-\\u20ff";
-      var rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1;
-      var rsVarRange$1 = "\\ufe0e\\ufe0f";
-      var rsAstral = "[" + rsAstralRange$1 + "]";
-      var rsCombo = "[" + rsComboRange$1 + "]";
-      var rsFitz = "\\ud83c[\\udffb-\\udfff]";
-      var rsModifier = "(?:" + rsCombo + "|" + rsFitz + ")";
-      var rsNonAstral = "[^" + rsAstralRange$1 + "]";
-      var rsRegional = "(?:\\ud83c[\\udde6-\\uddff]){2}";
-      var rsSurrPair = "[\\ud800-\\udbff][\\udc00-\\udfff]";
-      var rsZWJ$1 = "\\u200d";
-      var reOptMod = rsModifier + "?";
-      var rsOptVar = "[" + rsVarRange$1 + "]?";
-      var rsOptJoin = "(?:" + rsZWJ$1 + "(?:" + [rsNonAstral, rsRegional, rsSurrPair].join("|") + ")" + rsOptVar + reOptMod + ")*";
-      var rsSeq = rsOptVar + reOptMod + rsOptJoin;
-      var rsSymbol = "(?:" + [rsNonAstral + rsCombo + "?", rsCombo, rsRegional, rsSurrPair, rsAstral].join("|") + ")";
-      var reUnicode = RegExp(rsFitz + "(?=" + rsFitz + ")|" + rsSymbol + rsSeq, "g");
-      function unicodeToArray(string) {
-        return string.match(reUnicode) || [];
-      }
-      function stringToArray(string) {
-        return hasUnicode(string) ? unicodeToArray(string) : asciiToArray(string);
-      }
-      function toString(value) {
-        return value == null ? "" : baseToString(value);
-      }
-      var reTrim = /^\s+|\s+$/g;
-      function trim(string, chars, guard) {
-        string = toString(string);
-        if (string && (guard || chars === void 0)) {
-          return string.replace(reTrim, "");
-        }
-        if (!string || !(chars = baseToString(chars))) {
-          return string;
-        }
-        var strSymbols = stringToArray(string), chrSymbols = stringToArray(chars), start = charsStartIndex(strSymbols, chrSymbols), end = charsEndIndex(strSymbols, chrSymbols) + 1;
-        return castSlice(strSymbols, start, end).join("");
-      }
-      var FN_ARGS = /^(?:async\s+)?(function)?\s*[^\(]*\(\s*([^\)]*)\)/m;
-      var FN_ARG_SPLIT = /,/;
-      var FN_ARG = /(=.+)?(\s*)$/;
-      var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-      function parseParams(func) {
-        func = func.toString().replace(STRIP_COMMENTS, "");
-        func = func.match(FN_ARGS)[2].replace(" ", "");
-        func = func ? func.split(FN_ARG_SPLIT) : [];
-        func = func.map(function(arg) {
-          return trim(arg.replace(FN_ARG, ""));
-        });
-        return func;
-      }
-      function autoInject(tasks, callback) {
-        var newTasks = {};
-        baseForOwn(tasks, function(taskFn, key) {
-          var params;
-          var fnIsAsync = isAsync(taskFn);
-          var hasNoDeps = !fnIsAsync && taskFn.length === 1 || fnIsAsync && taskFn.length === 0;
-          if (isArray(taskFn)) {
-            params = taskFn.slice(0, -1);
-            taskFn = taskFn[taskFn.length - 1];
-            newTasks[key] = params.concat(params.length > 0 ? newTask : taskFn);
-          } else if (hasNoDeps) {
-            newTasks[key] = taskFn;
-          } else {
-            params = parseParams(taskFn);
-            if (taskFn.length === 0 && !fnIsAsync && params.length === 0) {
-              throw new Error("autoInject task functions require explicit parameters.");
-            }
-            if (!fnIsAsync)
-              params.pop();
-            newTasks[key] = params.concat(newTask);
-          }
-          function newTask(results, taskCb) {
-            var newArgs = arrayMap(params, function(name) {
-              return results[name];
-            });
-            newArgs.push(taskCb);
-            wrapAsync(taskFn).apply(null, newArgs);
-          }
-        });
-        auto(newTasks, callback);
-      }
-      function DLL() {
-        this.head = this.tail = null;
-        this.length = 0;
-      }
-      function setInitial(dll, node) {
-        dll.length = 1;
-        dll.head = dll.tail = node;
-      }
-      DLL.prototype.removeLink = function(node) {
-        if (node.prev)
-          node.prev.next = node.next;
-        else
-          this.head = node.next;
-        if (node.next)
-          node.next.prev = node.prev;
-        else
-          this.tail = node.prev;
-        node.prev = node.next = null;
-        this.length -= 1;
-        return node;
-      };
-      DLL.prototype.empty = function() {
-        while (this.head)
-          this.shift();
-        return this;
-      };
-      DLL.prototype.insertAfter = function(node, newNode) {
-        newNode.prev = node;
-        newNode.next = node.next;
-        if (node.next)
-          node.next.prev = newNode;
-        else
-          this.tail = newNode;
-        node.next = newNode;
-        this.length += 1;
-      };
-      DLL.prototype.insertBefore = function(node, newNode) {
-        newNode.prev = node.prev;
-        newNode.next = node;
-        if (node.prev)
-          node.prev.next = newNode;
-        else
-          this.head = newNode;
-        node.prev = newNode;
-        this.length += 1;
-      };
-      DLL.prototype.unshift = function(node) {
-        if (this.head)
-          this.insertBefore(this.head, node);
-        else
-          setInitial(this, node);
-      };
-      DLL.prototype.push = function(node) {
-        if (this.tail)
-          this.insertAfter(this.tail, node);
-        else
-          setInitial(this, node);
-      };
-      DLL.prototype.shift = function() {
-        return this.head && this.removeLink(this.head);
-      };
-      DLL.prototype.pop = function() {
-        return this.tail && this.removeLink(this.tail);
-      };
-      DLL.prototype.toArray = function() {
-        var arr = Array(this.length);
-        var curr = this.head;
-        for (var idx = 0; idx < this.length; idx++) {
-          arr[idx] = curr.data;
-          curr = curr.next;
-        }
-        return arr;
-      };
-      DLL.prototype.remove = function(testFn) {
-        var curr = this.head;
-        while (!!curr) {
-          var next = curr.next;
-          if (testFn(curr)) {
-            this.removeLink(curr);
-          }
-          curr = next;
-        }
-        return this;
-      };
-      function queue(worker, concurrency, payload) {
-        if (concurrency == null) {
-          concurrency = 1;
-        } else if (concurrency === 0) {
-          throw new Error("Concurrency must not be zero");
-        }
-        var _worker = wrapAsync(worker);
-        var numRunning = 0;
-        var workersList = [];
-        var processingScheduled = false;
-        function _insert(data, insertAtFront, callback) {
-          if (callback != null && typeof callback !== "function") {
-            throw new Error("task callback must be a function");
-          }
-          q.started = true;
-          if (!isArray(data)) {
-            data = [data];
-          }
-          if (data.length === 0 && q.idle()) {
-            return setImmediate$1(function() {
-              q.drain();
-            });
-          }
-          for (var i = 0, l = data.length; i < l; i++) {
-            var item = {
-              data: data[i],
-              callback: callback || noop
-            };
-            if (insertAtFront) {
-              q._tasks.unshift(item);
-            } else {
-              q._tasks.push(item);
-            }
-          }
-          if (!processingScheduled) {
-            processingScheduled = true;
-            setImmediate$1(function() {
-              processingScheduled = false;
-              q.process();
-            });
-          }
-        }
-        function _next(tasks) {
-          return function(err) {
-            numRunning -= 1;
-            for (var i = 0, l = tasks.length; i < l; i++) {
-              var task = tasks[i];
-              var index2 = baseIndexOf(workersList, task, 0);
-              if (index2 === 0) {
-                workersList.shift();
-              } else if (index2 > 0) {
-                workersList.splice(index2, 1);
-              }
-              task.callback.apply(task, arguments);
-              if (err != null) {
-                q.error(err, task.data);
-              }
-            }
-            if (numRunning <= q.concurrency - q.buffer) {
-              q.unsaturated();
-            }
-            if (q.idle()) {
-              q.drain();
-            }
-            q.process();
-          };
-        }
-        var isProcessing = false;
-        var q = {
-          _tasks: new DLL(),
-          concurrency,
-          payload,
-          saturated: noop,
-          unsaturated: noop,
-          buffer: concurrency / 4,
-          empty: noop,
-          drain: noop,
-          error: noop,
-          started: false,
-          paused: false,
-          push: function(data, callback) {
-            _insert(data, false, callback);
-          },
-          kill: function() {
-            q.drain = noop;
-            q._tasks.empty();
-          },
-          unshift: function(data, callback) {
-            _insert(data, true, callback);
-          },
-          remove: function(testFn) {
-            q._tasks.remove(testFn);
-          },
-          process: function() {
-            if (isProcessing) {
-              return;
-            }
-            isProcessing = true;
-            while (!q.paused && numRunning < q.concurrency && q._tasks.length) {
-              var tasks = [], data = [];
-              var l = q._tasks.length;
-              if (q.payload)
-                l = Math.min(l, q.payload);
-              for (var i = 0; i < l; i++) {
-                var node = q._tasks.shift();
-                tasks.push(node);
-                workersList.push(node);
-                data.push(node.data);
-              }
-              numRunning += 1;
-              if (q._tasks.length === 0) {
-                q.empty();
-              }
-              if (numRunning === q.concurrency) {
-                q.saturated();
-              }
-              var cb = onlyOnce(_next(tasks));
-              _worker(data, cb);
-            }
-            isProcessing = false;
-          },
-          length: function() {
-            return q._tasks.length;
-          },
-          running: function() {
-            return numRunning;
-          },
-          workersList: function() {
-            return workersList;
-          },
-          idle: function() {
-            return q._tasks.length + numRunning === 0;
-          },
-          pause: function() {
-            q.paused = true;
-          },
-          resume: function() {
-            if (q.paused === false) {
-              return;
-            }
-            q.paused = false;
-            setImmediate$1(q.process);
-          }
-        };
-        return q;
-      }
-      function cargo(worker, payload) {
-        return queue(worker, 1, payload);
-      }
-      var eachOfSeries = doLimit(eachOfLimit, 1);
-      function reduce(coll, memo, iteratee, callback) {
-        callback = once(callback || noop);
-        var _iteratee = wrapAsync(iteratee);
-        eachOfSeries(coll, function(x, i, callback2) {
-          _iteratee(memo, x, function(err, v) {
-            memo = v;
-            callback2(err);
-          });
-        }, function(err) {
-          callback(err, memo);
-        });
-      }
-      function seq() {
-        var _functions = arrayMap(arguments, wrapAsync);
-        return function() {
-          var args = slice(arguments);
-          var that = this;
-          var cb = args[args.length - 1];
-          if (typeof cb == "function") {
-            args.pop();
-          } else {
-            cb = noop;
-          }
-          reduce(
-            _functions,
-            args,
-            function(newargs, fn, cb2) {
-              fn.apply(that, newargs.concat(function(err) {
-                var nextargs = slice(arguments, 1);
-                cb2(err, nextargs);
-              }));
-            },
-            function(err, results) {
-              cb.apply(that, [err].concat(results));
-            }
-          );
-        };
-      }
-      var compose = function() {
-        return seq.apply(null, slice(arguments).reverse());
-      };
-      var _concat = Array.prototype.concat;
-      var concatLimit = function(coll, limit, iteratee, callback) {
-        callback = callback || noop;
-        var _iteratee = wrapAsync(iteratee);
-        mapLimit(coll, limit, function(val, callback2) {
-          _iteratee(val, function(err) {
-            if (err)
-              return callback2(err);
-            return callback2(null, slice(arguments, 1));
-          });
-        }, function(err, mapResults) {
-          var result = [];
-          for (var i = 0; i < mapResults.length; i++) {
-            if (mapResults[i]) {
-              result = _concat.apply(result, mapResults[i]);
-            }
-          }
-          return callback(err, result);
-        });
-      };
-      var concat = doLimit(concatLimit, Infinity);
-      var concatSeries = doLimit(concatLimit, 1);
-      var constant = function() {
-        var values = slice(arguments);
-        var args = [null].concat(values);
-        return function() {
-          var callback = arguments[arguments.length - 1];
-          return callback.apply(this, args);
-        };
-      };
-      function identity(value) {
-        return value;
-      }
-      function _createTester(check, getResult) {
-        return function(eachfn, arr, iteratee, cb) {
-          cb = cb || noop;
-          var testPassed = false;
-          var testResult;
-          eachfn(arr, function(value, _, callback) {
-            iteratee(value, function(err, result) {
-              if (err) {
-                callback(err);
-              } else if (check(result) && !testResult) {
-                testPassed = true;
-                testResult = getResult(true, value);
-                callback(null, breakLoop);
-              } else {
-                callback();
-              }
-            });
-          }, function(err) {
-            if (err) {
-              cb(err);
-            } else {
-              cb(null, testPassed ? testResult : getResult(false));
-            }
-          });
-        };
-      }
-      function _findGetResult(v, x) {
-        return x;
-      }
-      var detect = doParallel(_createTester(identity, _findGetResult));
-      var detectLimit = doParallelLimit(_createTester(identity, _findGetResult));
-      var detectSeries = doLimit(detectLimit, 1);
-      function consoleFunc(name) {
-        return function(fn) {
-          var args = slice(arguments, 1);
-          args.push(function(err) {
-            var args2 = slice(arguments, 1);
-            if (typeof console === "object") {
-              if (err) {
-                if (console.error) {
-                  console.error(err);
-                }
-              } else if (console[name]) {
-                arrayEach(args2, function(x) {
-                  console[name](x);
-                });
-              }
-            }
-          });
-          wrapAsync(fn).apply(null, args);
-        };
-      }
-      var dir = consoleFunc("dir");
-      function doDuring(fn, test, callback) {
-        callback = onlyOnce(callback || noop);
-        var _fn = wrapAsync(fn);
-        var _test = wrapAsync(test);
-        function next(err) {
-          if (err)
-            return callback(err);
-          var args = slice(arguments, 1);
-          args.push(check);
-          _test.apply(this, args);
-        }
-        function check(err, truth) {
-          if (err)
-            return callback(err);
-          if (!truth)
-            return callback(null);
-          _fn(next);
-        }
-        check(null, true);
-      }
-      function doWhilst(iteratee, test, callback) {
-        callback = onlyOnce(callback || noop);
-        var _iteratee = wrapAsync(iteratee);
-        var next = function(err) {
-          if (err)
-            return callback(err);
-          var args = slice(arguments, 1);
-          if (test.apply(this, args))
-            return _iteratee(next);
-          callback.apply(null, [null].concat(args));
-        };
-        _iteratee(next);
-      }
-      function doUntil(iteratee, test, callback) {
-        doWhilst(iteratee, function() {
-          return !test.apply(this, arguments);
-        }, callback);
-      }
-      function during(test, fn, callback) {
-        callback = onlyOnce(callback || noop);
-        var _fn = wrapAsync(fn);
-        var _test = wrapAsync(test);
-        function next(err) {
-          if (err)
-            return callback(err);
-          _test(check);
-        }
-        function check(err, truth) {
-          if (err)
-            return callback(err);
-          if (!truth)
-            return callback(null);
-          _fn(next);
-        }
-        _test(check);
-      }
-      function _withoutIndex(iteratee) {
-        return function(value, index2, callback) {
-          return iteratee(value, callback);
-        };
-      }
-      function eachLimit(coll, iteratee, callback) {
-        eachOf(coll, _withoutIndex(wrapAsync(iteratee)), callback);
-      }
-      function eachLimit$1(coll, limit, iteratee, callback) {
-        _eachOfLimit(limit)(coll, _withoutIndex(wrapAsync(iteratee)), callback);
-      }
-      var eachSeries = doLimit(eachLimit$1, 1);
-      function ensureAsync(fn) {
-        if (isAsync(fn))
-          return fn;
-        return initialParams(function(args, callback) {
-          var sync = true;
-          args.push(function() {
-            var innerArgs = arguments;
-            if (sync) {
-              setImmediate$1(function() {
-                callback.apply(null, innerArgs);
-              });
-            } else {
-              callback.apply(null, innerArgs);
-            }
-          });
-          fn.apply(this, args);
-          sync = false;
-        });
-      }
-      function notId(v) {
-        return !v;
-      }
-      var every = doParallel(_createTester(notId, notId));
-      var everyLimit = doParallelLimit(_createTester(notId, notId));
-      var everySeries = doLimit(everyLimit, 1);
-      function baseProperty(key) {
-        return function(object) {
-          return object == null ? void 0 : object[key];
-        };
-      }
-      function filterArray(eachfn, arr, iteratee, callback) {
-        var truthValues = new Array(arr.length);
-        eachfn(arr, function(x, index2, callback2) {
-          iteratee(x, function(err, v) {
-            truthValues[index2] = !!v;
-            callback2(err);
-          });
-        }, function(err) {
-          if (err)
-            return callback(err);
-          var results = [];
-          for (var i = 0; i < arr.length; i++) {
-            if (truthValues[i])
-              results.push(arr[i]);
-          }
-          callback(null, results);
-        });
-      }
-      function filterGeneric(eachfn, coll, iteratee, callback) {
-        var results = [];
-        eachfn(coll, function(x, index2, callback2) {
-          iteratee(x, function(err, v) {
-            if (err) {
-              callback2(err);
-            } else {
-              if (v) {
-                results.push({ index: index2, value: x });
-              }
-              callback2();
-            }
-          });
-        }, function(err) {
-          if (err) {
-            callback(err);
-          } else {
-            callback(null, arrayMap(results.sort(function(a, b) {
-              return a.index - b.index;
-            }), baseProperty("value")));
-          }
-        });
-      }
-      function _filter(eachfn, coll, iteratee, callback) {
-        var filter2 = isArrayLike(coll) ? filterArray : filterGeneric;
-        filter2(eachfn, coll, wrapAsync(iteratee), callback || noop);
-      }
-      var filter = doParallel(_filter);
-      var filterLimit = doParallelLimit(_filter);
-      var filterSeries = doLimit(filterLimit, 1);
-      function forever(fn, errback) {
-        var done = onlyOnce(errback || noop);
-        var task = wrapAsync(ensureAsync(fn));
-        function next(err) {
-          if (err)
-            return done(err);
-          task(next);
-        }
-        next();
-      }
-      var groupByLimit = function(coll, limit, iteratee, callback) {
-        callback = callback || noop;
-        var _iteratee = wrapAsync(iteratee);
-        mapLimit(coll, limit, function(val, callback2) {
-          _iteratee(val, function(err, key) {
-            if (err)
-              return callback2(err);
-            return callback2(null, { key, val });
-          });
-        }, function(err, mapResults) {
-          var result = {};
-          var hasOwnProperty2 = Object.prototype.hasOwnProperty;
-          for (var i = 0; i < mapResults.length; i++) {
-            if (mapResults[i]) {
-              var key = mapResults[i].key;
-              var val = mapResults[i].val;
-              if (hasOwnProperty2.call(result, key)) {
-                result[key].push(val);
-              } else {
-                result[key] = [val];
-              }
-            }
-          }
-          return callback(err, result);
-        });
-      };
-      var groupBy = doLimit(groupByLimit, Infinity);
-      var groupBySeries = doLimit(groupByLimit, 1);
-      var log = consoleFunc("log");
-      function mapValuesLimit(obj, limit, iteratee, callback) {
-        callback = once(callback || noop);
-        var newObj = {};
-        var _iteratee = wrapAsync(iteratee);
-        eachOfLimit(obj, limit, function(val, key, next) {
-          _iteratee(val, key, function(err, result) {
-            if (err)
-              return next(err);
-            newObj[key] = result;
-            next();
-          });
-        }, function(err) {
-          callback(err, newObj);
-        });
-      }
-      var mapValues = doLimit(mapValuesLimit, Infinity);
-      var mapValuesSeries = doLimit(mapValuesLimit, 1);
-      function has(obj, key) {
-        return key in obj;
-      }
-      function memoize(fn, hasher) {
-        var memo = /* @__PURE__ */ Object.create(null);
-        var queues = /* @__PURE__ */ Object.create(null);
-        hasher = hasher || identity;
-        var _fn = wrapAsync(fn);
-        var memoized = initialParams(function memoized2(args, callback) {
-          var key = hasher.apply(null, args);
-          if (has(memo, key)) {
-            setImmediate$1(function() {
-              callback.apply(null, memo[key]);
-            });
-          } else if (has(queues, key)) {
-            queues[key].push(callback);
-          } else {
-            queues[key] = [callback];
-            _fn.apply(null, args.concat(function() {
-              var args2 = slice(arguments);
-              memo[key] = args2;
-              var q = queues[key];
-              delete queues[key];
-              for (var i = 0, l = q.length; i < l; i++) {
-                q[i].apply(null, args2);
-              }
-            }));
-          }
-        });
-        memoized.memo = memo;
-        memoized.unmemoized = fn;
-        return memoized;
-      }
-      var _defer$1;
-      if (hasNextTick) {
-        _defer$1 = process.nextTick;
-      } else if (hasSetImmediate) {
-        _defer$1 = setImmediate;
-      } else {
-        _defer$1 = fallback;
-      }
-      var nextTick = wrap(_defer$1);
-      function _parallel(eachfn, tasks, callback) {
-        callback = callback || noop;
-        var results = isArrayLike(tasks) ? [] : {};
-        eachfn(tasks, function(task, key, callback2) {
-          wrapAsync(task)(function(err, result) {
-            if (arguments.length > 2) {
-              result = slice(arguments, 1);
-            }
-            results[key] = result;
-            callback2(err);
-          });
-        }, function(err) {
-          callback(err, results);
-        });
-      }
-      function parallelLimit(tasks, callback) {
-        _parallel(eachOf, tasks, callback);
-      }
-      function parallelLimit$1(tasks, limit, callback) {
-        _parallel(_eachOfLimit(limit), tasks, callback);
-      }
-      var queue$1 = function(worker, concurrency) {
-        var _worker = wrapAsync(worker);
-        return queue(function(items, cb) {
-          _worker(items[0], cb);
-        }, concurrency, 1);
-      };
-      var priorityQueue = function(worker, concurrency) {
-        var q = queue$1(worker, concurrency);
-        q.push = function(data, priority, callback) {
-          if (callback == null)
-            callback = noop;
-          if (typeof callback !== "function") {
-            throw new Error("task callback must be a function");
-          }
-          q.started = true;
-          if (!isArray(data)) {
-            data = [data];
-          }
-          if (data.length === 0) {
-            return setImmediate$1(function() {
-              q.drain();
-            });
-          }
-          priority = priority || 0;
-          var nextNode = q._tasks.head;
-          while (nextNode && priority >= nextNode.priority) {
-            nextNode = nextNode.next;
-          }
-          for (var i = 0, l = data.length; i < l; i++) {
-            var item = {
-              data: data[i],
-              priority,
-              callback
-            };
-            if (nextNode) {
-              q._tasks.insertBefore(nextNode, item);
-            } else {
-              q._tasks.push(item);
-            }
-          }
-          setImmediate$1(q.process);
-        };
-        delete q.unshift;
-        return q;
-      };
-      function race(tasks, callback) {
-        callback = once(callback || noop);
-        if (!isArray(tasks))
-          return callback(new TypeError("First argument to race must be an array of functions"));
-        if (!tasks.length)
-          return callback();
-        for (var i = 0, l = tasks.length; i < l; i++) {
-          wrapAsync(tasks[i])(callback);
-        }
-      }
-      function reduceRight(array, memo, iteratee, callback) {
-        var reversed = slice(array).reverse();
-        reduce(reversed, memo, iteratee, callback);
-      }
-      function reflect(fn) {
-        var _fn = wrapAsync(fn);
-        return initialParams(function reflectOn(args, reflectCallback) {
-          args.push(function callback(error, cbArg) {
-            if (error) {
-              reflectCallback(null, { error });
-            } else {
-              var value;
-              if (arguments.length <= 2) {
-                value = cbArg;
-              } else {
-                value = slice(arguments, 1);
-              }
-              reflectCallback(null, { value });
-            }
-          });
-          return _fn.apply(this, args);
-        });
-      }
-      function reflectAll(tasks) {
-        var results;
-        if (isArray(tasks)) {
-          results = arrayMap(tasks, reflect);
-        } else {
-          results = {};
-          baseForOwn(tasks, function(task, key) {
-            results[key] = reflect.call(this, task);
-          });
-        }
-        return results;
-      }
-      function reject$1(eachfn, arr, iteratee, callback) {
-        _filter(eachfn, arr, function(value, cb) {
-          iteratee(value, function(err, v) {
-            cb(err, !v);
-          });
-        }, callback);
-      }
-      var reject = doParallel(reject$1);
-      var rejectLimit = doParallelLimit(reject$1);
-      var rejectSeries = doLimit(rejectLimit, 1);
-      function constant$1(value) {
-        return function() {
-          return value;
-        };
-      }
-      function retry(opts, task, callback) {
-        var DEFAULT_TIMES = 5;
-        var DEFAULT_INTERVAL = 0;
-        var options = {
-          times: DEFAULT_TIMES,
-          intervalFunc: constant$1(DEFAULT_INTERVAL)
-        };
-        function parseTimes(acc, t) {
-          if (typeof t === "object") {
-            acc.times = +t.times || DEFAULT_TIMES;
-            acc.intervalFunc = typeof t.interval === "function" ? t.interval : constant$1(+t.interval || DEFAULT_INTERVAL);
-            acc.errorFilter = t.errorFilter;
-          } else if (typeof t === "number" || typeof t === "string") {
-            acc.times = +t || DEFAULT_TIMES;
-          } else {
-            throw new Error("Invalid arguments for async.retry");
-          }
-        }
-        if (arguments.length < 3 && typeof opts === "function") {
-          callback = task || noop;
-          task = opts;
-        } else {
-          parseTimes(options, opts);
-          callback = callback || noop;
-        }
-        if (typeof task !== "function") {
-          throw new Error("Invalid arguments for async.retry");
-        }
-        var _task = wrapAsync(task);
-        var attempt = 1;
-        function retryAttempt() {
-          _task(function(err) {
-            if (err && attempt++ < options.times && (typeof options.errorFilter != "function" || options.errorFilter(err))) {
-              setTimeout(retryAttempt, options.intervalFunc(attempt));
-            } else {
-              callback.apply(null, arguments);
-            }
-          });
-        }
-        retryAttempt();
-      }
-      var retryable = function(opts, task) {
-        if (!task) {
-          task = opts;
-          opts = null;
-        }
-        var _task = wrapAsync(task);
-        return initialParams(function(args, callback) {
-          function taskFn(cb) {
-            _task.apply(null, args.concat(cb));
-          }
-          if (opts)
-            retry(opts, taskFn, callback);
-          else
-            retry(taskFn, callback);
-        });
-      };
-      function series(tasks, callback) {
-        _parallel(eachOfSeries, tasks, callback);
-      }
-      var some = doParallel(_createTester(Boolean, identity));
-      var someLimit = doParallelLimit(_createTester(Boolean, identity));
-      var someSeries = doLimit(someLimit, 1);
-      function sortBy(coll, iteratee, callback) {
-        var _iteratee = wrapAsync(iteratee);
-        map(coll, function(x, callback2) {
-          _iteratee(x, function(err, criteria) {
-            if (err)
-              return callback2(err);
-            callback2(null, { value: x, criteria });
-          });
-        }, function(err, results) {
-          if (err)
-            return callback(err);
-          callback(null, arrayMap(results.sort(comparator), baseProperty("value")));
-        });
-        function comparator(left, right) {
-          var a = left.criteria, b = right.criteria;
-          return a < b ? -1 : a > b ? 1 : 0;
-        }
-      }
-      function timeout(asyncFn, milliseconds, info) {
-        var fn = wrapAsync(asyncFn);
-        return initialParams(function(args, callback) {
-          var timedOut = false;
-          var timer;
-          function timeoutCallback() {
-            var name = asyncFn.name || "anonymous";
-            var error = new Error('Callback function "' + name + '" timed out.');
-            error.code = "ETIMEDOUT";
-            if (info) {
-              error.info = info;
-            }
-            timedOut = true;
-            callback(error);
-          }
-          args.push(function() {
-            if (!timedOut) {
-              callback.apply(null, arguments);
-              clearTimeout(timer);
-            }
-          });
-          timer = setTimeout(timeoutCallback, milliseconds);
-          fn.apply(null, args);
-        });
-      }
-      var nativeCeil = Math.ceil;
-      var nativeMax = Math.max;
-      function baseRange(start, end, step, fromRight) {
-        var index2 = -1, length = nativeMax(nativeCeil((end - start) / (step || 1)), 0), result = Array(length);
-        while (length--) {
-          result[fromRight ? length : ++index2] = start;
-          start += step;
-        }
-        return result;
-      }
-      function timeLimit(count, limit, iteratee, callback) {
-        var _iteratee = wrapAsync(iteratee);
-        mapLimit(baseRange(0, count, 1), limit, _iteratee, callback);
-      }
-      var times = doLimit(timeLimit, Infinity);
-      var timesSeries = doLimit(timeLimit, 1);
-      function transform(coll, accumulator, iteratee, callback) {
-        if (arguments.length <= 3) {
-          callback = iteratee;
-          iteratee = accumulator;
-          accumulator = isArray(coll) ? [] : {};
-        }
-        callback = once(callback || noop);
-        var _iteratee = wrapAsync(iteratee);
-        eachOf(coll, function(v, k, cb) {
-          _iteratee(accumulator, v, k, cb);
-        }, function(err) {
-          callback(err, accumulator);
-        });
-      }
-      function tryEach(tasks, callback) {
-        var error = null;
-        var result;
-        callback = callback || noop;
-        eachSeries(tasks, function(task, callback2) {
-          wrapAsync(task)(function(err, res) {
-            if (arguments.length > 2) {
-              result = slice(arguments, 1);
-            } else {
-              result = res;
-            }
-            error = err;
-            callback2(!err);
-          });
-        }, function() {
-          callback(error, result);
-        });
-      }
-      function unmemoize(fn) {
-        return function() {
-          return (fn.unmemoized || fn).apply(null, arguments);
-        };
-      }
-      function whilst(test, iteratee, callback) {
-        callback = onlyOnce(callback || noop);
-        var _iteratee = wrapAsync(iteratee);
-        if (!test())
-          return callback(null);
-        var next = function(err) {
-          if (err)
-            return callback(err);
-          if (test())
-            return _iteratee(next);
-          var args = slice(arguments, 1);
-          callback.apply(null, [null].concat(args));
-        };
-        _iteratee(next);
-      }
-      function until(test, iteratee, callback) {
-        whilst(function() {
-          return !test.apply(this, arguments);
-        }, iteratee, callback);
-      }
-      var waterfall = function(tasks, callback) {
-        callback = once(callback || noop);
-        if (!isArray(tasks))
-          return callback(new Error("First argument to waterfall must be an array of functions"));
-        if (!tasks.length)
-          return callback();
-        var taskIndex = 0;
-        function nextTask(args) {
-          var task = wrapAsync(tasks[taskIndex++]);
-          args.push(onlyOnce(next));
-          task.apply(null, args);
-        }
-        function next(err) {
-          if (err || taskIndex === tasks.length) {
-            return callback.apply(null, arguments);
-          }
-          nextTask(slice(arguments, 1));
-        }
-        nextTask([]);
-      };
-      var index = {
-        apply,
-        applyEach,
-        applyEachSeries,
-        asyncify,
-        auto,
-        autoInject,
-        cargo,
-        compose,
-        concat,
-        concatLimit,
-        concatSeries,
-        constant,
-        detect,
-        detectLimit,
-        detectSeries,
-        dir,
-        doDuring,
-        doUntil,
-        doWhilst,
-        during,
-        each: eachLimit,
-        eachLimit: eachLimit$1,
-        eachOf,
-        eachOfLimit,
-        eachOfSeries,
-        eachSeries,
-        ensureAsync,
-        every,
-        everyLimit,
-        everySeries,
-        filter,
-        filterLimit,
-        filterSeries,
-        forever,
-        groupBy,
-        groupByLimit,
-        groupBySeries,
-        log,
-        map,
-        mapLimit,
-        mapSeries,
-        mapValues,
-        mapValuesLimit,
-        mapValuesSeries,
-        memoize,
-        nextTick,
-        parallel: parallelLimit,
-        parallelLimit: parallelLimit$1,
-        priorityQueue,
-        queue: queue$1,
-        race,
-        reduce,
-        reduceRight,
-        reflect,
-        reflectAll,
-        reject,
-        rejectLimit,
-        rejectSeries,
-        retry,
-        retryable,
-        seq,
-        series,
-        setImmediate: setImmediate$1,
-        some,
-        someLimit,
-        someSeries,
-        sortBy,
-        timeout,
-        times,
-        timesLimit: timeLimit,
-        timesSeries,
-        transform,
-        tryEach,
-        unmemoize,
-        until,
-        waterfall,
-        whilst,
-        // aliases
-        all: every,
-        allLimit: everyLimit,
-        allSeries: everySeries,
-        any: some,
-        anyLimit: someLimit,
-        anySeries: someSeries,
-        find: detect,
-        findLimit: detectLimit,
-        findSeries: detectSeries,
-        forEach: eachLimit,
-        forEachSeries: eachSeries,
-        forEachLimit: eachLimit$1,
-        forEachOf: eachOf,
-        forEachOfSeries: eachOfSeries,
-        forEachOfLimit: eachOfLimit,
-        inject: reduce,
-        foldl: reduce,
-        foldr: reduceRight,
-        select: filter,
-        selectLimit: filterLimit,
-        selectSeries: filterSeries,
-        wrapSync: asyncify
-      };
-      exports3["default"] = index;
-      exports3.apply = apply;
-      exports3.applyEach = applyEach;
-      exports3.applyEachSeries = applyEachSeries;
-      exports3.asyncify = asyncify;
-      exports3.auto = auto;
-      exports3.autoInject = autoInject;
-      exports3.cargo = cargo;
-      exports3.compose = compose;
-      exports3.concat = concat;
-      exports3.concatLimit = concatLimit;
-      exports3.concatSeries = concatSeries;
-      exports3.constant = constant;
-      exports3.detect = detect;
-      exports3.detectLimit = detectLimit;
-      exports3.detectSeries = detectSeries;
-      exports3.dir = dir;
-      exports3.doDuring = doDuring;
-      exports3.doUntil = doUntil;
-      exports3.doWhilst = doWhilst;
-      exports3.during = during;
-      exports3.each = eachLimit;
-      exports3.eachLimit = eachLimit$1;
-      exports3.eachOf = eachOf;
-      exports3.eachOfLimit = eachOfLimit;
-      exports3.eachOfSeries = eachOfSeries;
-      exports3.eachSeries = eachSeries;
-      exports3.ensureAsync = ensureAsync;
-      exports3.every = every;
-      exports3.everyLimit = everyLimit;
-      exports3.everySeries = everySeries;
-      exports3.filter = filter;
-      exports3.filterLimit = filterLimit;
-      exports3.filterSeries = filterSeries;
-      exports3.forever = forever;
-      exports3.groupBy = groupBy;
-      exports3.groupByLimit = groupByLimit;
-      exports3.groupBySeries = groupBySeries;
-      exports3.log = log;
-      exports3.map = map;
-      exports3.mapLimit = mapLimit;
-      exports3.mapSeries = mapSeries;
-      exports3.mapValues = mapValues;
-      exports3.mapValuesLimit = mapValuesLimit;
-      exports3.mapValuesSeries = mapValuesSeries;
-      exports3.memoize = memoize;
-      exports3.nextTick = nextTick;
-      exports3.parallel = parallelLimit;
-      exports3.parallelLimit = parallelLimit$1;
-      exports3.priorityQueue = priorityQueue;
-      exports3.queue = queue$1;
-      exports3.race = race;
-      exports3.reduce = reduce;
-      exports3.reduceRight = reduceRight;
-      exports3.reflect = reflect;
-      exports3.reflectAll = reflectAll;
-      exports3.reject = reject;
-      exports3.rejectLimit = rejectLimit;
-      exports3.rejectSeries = rejectSeries;
-      exports3.retry = retry;
-      exports3.retryable = retryable;
-      exports3.seq = seq;
-      exports3.series = series;
-      exports3.setImmediate = setImmediate$1;
-      exports3.some = some;
-      exports3.someLimit = someLimit;
-      exports3.someSeries = someSeries;
-      exports3.sortBy = sortBy;
-      exports3.timeout = timeout;
-      exports3.times = times;
-      exports3.timesLimit = timeLimit;
-      exports3.timesSeries = timesSeries;
-      exports3.transform = transform;
-      exports3.tryEach = tryEach;
-      exports3.unmemoize = unmemoize;
-      exports3.until = until;
-      exports3.waterfall = waterfall;
-      exports3.whilst = whilst;
-      exports3.all = every;
-      exports3.allLimit = everyLimit;
-      exports3.allSeries = everySeries;
-      exports3.any = some;
-      exports3.anyLimit = someLimit;
-      exports3.anySeries = someSeries;
-      exports3.find = detect;
-      exports3.findLimit = detectLimit;
-      exports3.findSeries = detectSeries;
-      exports3.forEach = eachLimit;
-      exports3.forEachSeries = eachSeries;
-      exports3.forEachLimit = eachLimit$1;
-      exports3.forEachOf = eachOf;
-      exports3.forEachOfSeries = eachOfSeries;
-      exports3.forEachOfLimit = eachOfLimit;
-      exports3.inject = reduce;
-      exports3.foldl = reduce;
-      exports3.foldr = reduceRight;
-      exports3.select = filter;
-      exports3.selectLimit = filterLimit;
-      exports3.selectSeries = filterSeries;
-      exports3.wrapSync = asyncify;
-      Object.defineProperty(exports3, "__esModule", { value: true });
-    });
-  }
-});
+// max/CoMote/patchers/src/server.js
+var import_portfinder = __toESM(require_portfinder(), 1);
 
-// node_modules/ms/index.js
-var require_ms = __commonJS({
-  "node_modules/ms/index.js"(exports2, module2) {
-    var s = 1e3;
-    var m = s * 60;
-    var h = m * 60;
-    var d = h * 24;
-    var w = d * 7;
-    var y = d * 365.25;
-    module2.exports = function(val, options) {
-      options = options || {};
-      var type = typeof val;
-      if (type === "string" && val.length > 0) {
-        return parse(val);
-      } else if (type === "number" && isFinite(val)) {
-        return options.long ? fmtLong(val) : fmtShort(val);
-      }
-      throw new Error(
-        "val is not a non-empty string or a valid number. val=" + JSON.stringify(val)
-      );
-    };
-    function parse(str) {
-      str = String(str);
-      if (str.length > 100) {
-        return;
-      }
-      var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
-        str
-      );
-      if (!match) {
-        return;
-      }
-      var n = parseFloat(match[1]);
-      var type = (match[2] || "ms").toLowerCase();
-      switch (type) {
-        case "years":
-        case "year":
-        case "yrs":
-        case "yr":
-        case "y":
-          return n * y;
-        case "weeks":
-        case "week":
-        case "w":
-          return n * w;
-        case "days":
-        case "day":
-        case "d":
-          return n * d;
-        case "hours":
-        case "hour":
-        case "hrs":
-        case "hr":
-        case "h":
-          return n * h;
-        case "minutes":
-        case "minute":
-        case "mins":
-        case "min":
-        case "m":
-          return n * m;
-        case "seconds":
-        case "second":
-        case "secs":
-        case "sec":
-        case "s":
-          return n * s;
-        case "milliseconds":
-        case "millisecond":
-        case "msecs":
-        case "msec":
-        case "ms":
-          return n;
-        default:
-          return void 0;
-      }
-    }
-    function fmtShort(ms) {
-      var msAbs = Math.abs(ms);
-      if (msAbs >= d) {
-        return Math.round(ms / d) + "d";
-      }
-      if (msAbs >= h) {
-        return Math.round(ms / h) + "h";
-      }
-      if (msAbs >= m) {
-        return Math.round(ms / m) + "m";
-      }
-      if (msAbs >= s) {
-        return Math.round(ms / s) + "s";
-      }
-      return ms + "ms";
-    }
-    function fmtLong(ms) {
-      var msAbs = Math.abs(ms);
-      if (msAbs >= d) {
-        return plural(ms, msAbs, d, "day");
-      }
-      if (msAbs >= h) {
-        return plural(ms, msAbs, h, "hour");
-      }
-      if (msAbs >= m) {
-        return plural(ms, msAbs, m, "minute");
-      }
-      if (msAbs >= s) {
-        return plural(ms, msAbs, s, "second");
-      }
-      return ms + " ms";
-    }
-    function plural(ms, msAbs, n, name) {
-      var isPlural = msAbs >= n * 1.5;
-      return Math.round(ms / n) + " " + name + (isPlural ? "s" : "");
-    }
+// src/wifi-infos.js
+var import_systeminformation = __toESM(require_lib(), 1);
+async function getWifiInfos() {
+  const wifiConnections = await import_systeminformation.default.wifiConnections();
+  const conn = wifiConnections[0];
+  if (!conn) {
+    return null;
   }
-});
+  const interfaces = await import_systeminformation.default.networkInterfaces();
+  const int = interfaces.find((int2) => int2.iface === conn.iface);
+  return {
+    ssid: conn.ssid,
+    ip: int.ip4
+  };
+}
 
-// node_modules/portfinder/node_modules/debug/src/common.js
-var require_common = __commonJS({
-  "node_modules/portfinder/node_modules/debug/src/common.js"(exports2, module2) {
-    "use strict";
-    function setup(env) {
-      createDebug.debug = createDebug;
-      createDebug.default = createDebug;
-      createDebug.coerce = coerce;
-      createDebug.disable = disable;
-      createDebug.enable = enable;
-      createDebug.enabled = enabled;
-      createDebug.humanize = require_ms();
-      Object.keys(env).forEach(function(key) {
-        createDebug[key] = env[key];
-      });
-      createDebug.instances = [];
-      createDebug.names = [];
-      createDebug.skips = [];
-      createDebug.formatters = {};
-      function selectColor(namespace) {
-        var hash = 0;
-        for (var i = 0; i < namespace.length; i++) {
-          hash = (hash << 5) - hash + namespace.charCodeAt(i);
-          hash |= 0;
-        }
-        return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
-      }
-      createDebug.selectColor = selectColor;
-      function createDebug(namespace) {
-        var prevTime;
-        function debug() {
-          if (!debug.enabled) {
-            return;
-          }
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          var self2 = debug;
-          var curr = Number(/* @__PURE__ */ new Date());
-          var ms = curr - (prevTime || curr);
-          self2.diff = ms;
-          self2.prev = prevTime;
-          self2.curr = curr;
-          prevTime = curr;
-          args[0] = createDebug.coerce(args[0]);
-          if (typeof args[0] !== "string") {
-            args.unshift("%O");
-          }
-          var index = 0;
-          args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
-            if (match === "%%") {
-              return match;
-            }
-            index++;
-            var formatter = createDebug.formatters[format];
-            if (typeof formatter === "function") {
-              var val = args[index];
-              match = formatter.call(self2, val);
-              args.splice(index, 1);
-              index--;
-            }
-            return match;
-          });
-          createDebug.formatArgs.call(self2, args);
-          var logFn = self2.log || createDebug.log;
-          logFn.apply(self2, args);
-        }
-        debug.namespace = namespace;
-        debug.enabled = createDebug.enabled(namespace);
-        debug.useColors = createDebug.useColors();
-        debug.color = selectColor(namespace);
-        debug.destroy = destroy;
-        debug.extend = extend;
-        if (typeof createDebug.init === "function") {
-          createDebug.init(debug);
-        }
-        createDebug.instances.push(debug);
-        return debug;
-      }
-      function destroy() {
-        var index = createDebug.instances.indexOf(this);
-        if (index !== -1) {
-          createDebug.instances.splice(index, 1);
-          return true;
-        }
-        return false;
-      }
-      function extend(namespace, delimiter) {
-        return createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
-      }
-      function enable(namespaces) {
-        createDebug.save(namespaces);
-        createDebug.names = [];
-        createDebug.skips = [];
-        var i;
-        var split = (typeof namespaces === "string" ? namespaces : "").split(/[\s,]+/);
-        var len = split.length;
-        for (i = 0; i < len; i++) {
-          if (!split[i]) {
-            continue;
-          }
-          namespaces = split[i].replace(/\*/g, ".*?");
-          if (namespaces[0] === "-") {
-            createDebug.skips.push(new RegExp("^" + namespaces.substr(1) + "$"));
-          } else {
-            createDebug.names.push(new RegExp("^" + namespaces + "$"));
-          }
-        }
-        for (i = 0; i < createDebug.instances.length; i++) {
-          var instance = createDebug.instances[i];
-          instance.enabled = createDebug.enabled(instance.namespace);
-        }
-      }
-      function disable() {
-        createDebug.enable("");
-      }
-      function enabled(name) {
-        if (name[name.length - 1] === "*") {
-          return true;
-        }
-        var i;
-        var len;
-        for (i = 0, len = createDebug.skips.length; i < len; i++) {
-          if (createDebug.skips[i].test(name)) {
-            return false;
-          }
-        }
-        for (i = 0, len = createDebug.names.length; i < len; i++) {
-          if (createDebug.names[i].test(name)) {
-            return true;
-          }
-        }
-        return false;
-      }
-      function coerce(val) {
-        if (val instanceof Error) {
-          return val.stack || val.message;
-        }
-        return val;
-      }
-      createDebug.enable(createDebug.load());
-      return createDebug;
-    }
-    module2.exports = setup;
+// src/network-infos.js
+var import_systeminformation2 = __toESM(require_lib(), 1);
+async function getNetworkInterfacesInfos({
+  interfaceFilter = (i) => {
+    return i.ip4 && i.ip4 !== "127.0.0.1" && i.ip4 !== "localhost";
   }
-});
-
-// node_modules/portfinder/node_modules/debug/src/browser.js
-var require_browser = __commonJS({
-  "node_modules/portfinder/node_modules/debug/src/browser.js"(exports2, module2) {
-    "use strict";
-    function _typeof(obj) {
-      if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-        _typeof = function _typeof2(obj2) {
-          return typeof obj2;
-        };
-      } else {
-        _typeof = function _typeof2(obj2) {
-          return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-        };
-      }
-      return _typeof(obj);
-    }
-    exports2.log = log;
-    exports2.formatArgs = formatArgs;
-    exports2.save = save;
-    exports2.load = load;
-    exports2.useColors = useColors;
-    exports2.storage = localstorage();
-    exports2.colors = ["#0000CC", "#0000FF", "#0033CC", "#0033FF", "#0066CC", "#0066FF", "#0099CC", "#0099FF", "#00CC00", "#00CC33", "#00CC66", "#00CC99", "#00CCCC", "#00CCFF", "#3300CC", "#3300FF", "#3333CC", "#3333FF", "#3366CC", "#3366FF", "#3399CC", "#3399FF", "#33CC00", "#33CC33", "#33CC66", "#33CC99", "#33CCCC", "#33CCFF", "#6600CC", "#6600FF", "#6633CC", "#6633FF", "#66CC00", "#66CC33", "#9900CC", "#9900FF", "#9933CC", "#9933FF", "#99CC00", "#99CC33", "#CC0000", "#CC0033", "#CC0066", "#CC0099", "#CC00CC", "#CC00FF", "#CC3300", "#CC3333", "#CC3366", "#CC3399", "#CC33CC", "#CC33FF", "#CC6600", "#CC6633", "#CC9900", "#CC9933", "#CCCC00", "#CCCC33", "#FF0000", "#FF0033", "#FF0066", "#FF0099", "#FF00CC", "#FF00FF", "#FF3300", "#FF3333", "#FF3366", "#FF3399", "#FF33CC", "#FF33FF", "#FF6600", "#FF6633", "#FF9900", "#FF9933", "#FFCC00", "#FFCC33"];
-    function useColors() {
-      if (typeof window !== "undefined" && window.process && (window.process.type === "renderer" || window.process.__nwjs)) {
-        return true;
-      }
-      if (typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-        return false;
-      }
-      return typeof document !== "undefined" && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || // Is firebug? http://stackoverflow.com/a/398120/376773
-      typeof window !== "undefined" && window.console && (window.console.firebug || window.console.exception && window.console.table) || // Is firefox >= v31?
-      // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-      typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31 || // Double check webkit in userAgent just in case we are in a worker
-      typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
-    }
-    function formatArgs(args) {
-      args[0] = (this.useColors ? "%c" : "") + this.namespace + (this.useColors ? " %c" : " ") + args[0] + (this.useColors ? "%c " : " ") + "+" + module2.exports.humanize(this.diff);
-      if (!this.useColors) {
-        return;
-      }
-      var c = "color: " + this.color;
-      args.splice(1, 0, c, "color: inherit");
-      var index = 0;
-      var lastC = 0;
-      args[0].replace(/%[a-zA-Z%]/g, function(match) {
-        if (match === "%%") {
-          return;
-        }
-        index++;
-        if (match === "%c") {
-          lastC = index;
-        }
-      });
-      args.splice(lastC, 0, c);
-    }
-    function log() {
-      var _console;
-      return (typeof console === "undefined" ? "undefined" : _typeof(console)) === "object" && console.log && (_console = console).log.apply(_console, arguments);
-    }
-    function save(namespaces) {
-      try {
-        if (namespaces) {
-          exports2.storage.setItem("debug", namespaces);
-        } else {
-          exports2.storage.removeItem("debug");
-        }
-      } catch (error) {
-      }
-    }
-    function load() {
-      var r;
-      try {
-        r = exports2.storage.getItem("debug");
-      } catch (error) {
-      }
-      if (!r && typeof process !== "undefined" && "env" in process) {
-        r = process.env.DEBUG;
-      }
-      return r;
-    }
-    function localstorage() {
-      try {
-        return localStorage;
-      } catch (error) {
-      }
-    }
-    module2.exports = require_common()(exports2);
-    var formatters = module2.exports.formatters;
-    formatters.j = function(v) {
-      try {
-        return JSON.stringify(v);
-      } catch (error) {
-        return "[UnexpectedJSONParseError]: " + error.message;
-      }
-    };
+} = {}) {
+  const interfaces = await import_systeminformation2.default.networkInterfaces();
+  if (!interfaces) {
+    return null;
   }
-});
-
-// node_modules/has-flag/index.js
-var require_has_flag = __commonJS({
-  "node_modules/has-flag/index.js"(exports2, module2) {
-    "use strict";
-    module2.exports = (flag, argv) => {
-      argv = argv || process.argv;
-      const prefix = flag.startsWith("-") ? "" : flag.length === 1 ? "-" : "--";
-      const pos = argv.indexOf(prefix + flag);
-      const terminatorPos = argv.indexOf("--");
-      return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
-    };
+  if (typeof interfaceFilter !== "function") {
+    return interfaces;
   }
-});
+  return interfaces.filter(interfaceFilter);
+}
 
-// node_modules/supports-color/index.js
-var require_supports_color = __commonJS({
-  "node_modules/supports-color/index.js"(exports2, module2) {
-    "use strict";
-    var os = require("os");
-    var hasFlag = require_has_flag();
-    var env = process.env;
-    var forceColor;
-    if (hasFlag("no-color") || hasFlag("no-colors") || hasFlag("color=false")) {
-      forceColor = false;
-    } else if (hasFlag("color") || hasFlag("colors") || hasFlag("color=true") || hasFlag("color=always")) {
-      forceColor = true;
-    }
-    if ("FORCE_COLOR" in env) {
-      forceColor = env.FORCE_COLOR.length === 0 || parseInt(env.FORCE_COLOR, 10) !== 0;
-    }
-    function translateLevel(level) {
-      if (level === 0) {
-        return false;
-      }
-      return {
-        level,
-        hasBasic: true,
-        has256: level >= 2,
-        has16m: level >= 3
-      };
-    }
-    function supportsColor(stream) {
-      if (forceColor === false) {
-        return 0;
-      }
-      if (hasFlag("color=16m") || hasFlag("color=full") || hasFlag("color=truecolor")) {
-        return 3;
-      }
-      if (hasFlag("color=256")) {
-        return 2;
-      }
-      if (stream && !stream.isTTY && forceColor !== true) {
-        return 0;
-      }
-      const min = forceColor ? 1 : 0;
-      if (process.platform === "win32") {
-        const osRelease = os.release().split(".");
-        if (Number(process.versions.node.split(".")[0]) >= 8 && Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
-          return Number(osRelease[2]) >= 14931 ? 3 : 2;
-        }
-        return 1;
-      }
-      if ("CI" in env) {
-        if (["TRAVIS", "CIRCLECI", "APPVEYOR", "GITLAB_CI"].some((sign) => sign in env) || env.CI_NAME === "codeship") {
-          return 1;
-        }
-        return min;
-      }
-      if ("TEAMCITY_VERSION" in env) {
-        return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-      }
-      if (env.COLORTERM === "truecolor") {
-        return 3;
-      }
-      if ("TERM_PROGRAM" in env) {
-        const version = parseInt((env.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
-        switch (env.TERM_PROGRAM) {
-          case "iTerm.app":
-            return version >= 3 ? 3 : 2;
-          case "Apple_Terminal":
-            return 2;
-        }
-      }
-      if (/-256(color)?$/i.test(env.TERM)) {
-        return 2;
-      }
-      if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-        return 1;
-      }
-      if ("COLORTERM" in env) {
-        return 1;
-      }
-      if (env.TERM === "dumb") {
-        return min;
-      }
-      return min;
-    }
-    function getSupportLevel(stream) {
-      const level = supportsColor(stream);
-      return translateLevel(level);
-    }
-    module2.exports = {
-      supportsColor: getSupportLevel,
-      stdout: getSupportLevel(process.stdout),
-      stderr: getSupportLevel(process.stderr)
-    };
-  }
-});
-
-// node_modules/portfinder/node_modules/debug/src/node.js
-var require_node = __commonJS({
-  "node_modules/portfinder/node_modules/debug/src/node.js"(exports2, module2) {
-    "use strict";
-    var tty = require("tty");
-    var util = require("util");
-    exports2.init = init;
-    exports2.log = log;
-    exports2.formatArgs = formatArgs;
-    exports2.save = save;
-    exports2.load = load;
-    exports2.useColors = useColors;
-    exports2.colors = [6, 2, 3, 4, 5, 1];
-    try {
-      supportsColor = require_supports_color();
-      if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
-        exports2.colors = [20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68, 69, 74, 75, 76, 77, 78, 79, 80, 81, 92, 93, 98, 99, 112, 113, 128, 129, 134, 135, 148, 149, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 220, 221];
-      }
-    } catch (error) {
-    }
-    var supportsColor;
-    exports2.inspectOpts = Object.keys(process.env).filter(function(key) {
-      return /^debug_/i.test(key);
-    }).reduce(function(obj, key) {
-      var prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, function(_, k) {
-        return k.toUpperCase();
-      });
-      var val = process.env[key];
-      if (/^(yes|on|true|enabled)$/i.test(val)) {
-        val = true;
-      } else if (/^(no|off|false|disabled)$/i.test(val)) {
-        val = false;
-      } else if (val === "null") {
-        val = null;
-      } else {
-        val = Number(val);
-      }
-      obj[prop] = val;
-      return obj;
-    }, {});
-    function useColors() {
-      return "colors" in exports2.inspectOpts ? Boolean(exports2.inspectOpts.colors) : tty.isatty(process.stderr.fd);
-    }
-    function formatArgs(args) {
-      var name = this.namespace, useColors2 = this.useColors;
-      if (useColors2) {
-        var c = this.color;
-        var colorCode = "\x1B[3" + (c < 8 ? c : "8;5;" + c);
-        var prefix = "  ".concat(colorCode, ";1m").concat(name, " \x1B[0m");
-        args[0] = prefix + args[0].split("\n").join("\n" + prefix);
-        args.push(colorCode + "m+" + module2.exports.humanize(this.diff) + "\x1B[0m");
-      } else {
-        args[0] = getDate() + name + " " + args[0];
-      }
-    }
-    function getDate() {
-      if (exports2.inspectOpts.hideDate) {
-        return "";
-      }
-      return (/* @__PURE__ */ new Date()).toISOString() + " ";
-    }
-    function log() {
-      return process.stderr.write(util.format.apply(util, arguments) + "\n");
-    }
-    function save(namespaces) {
-      if (namespaces) {
-        process.env.DEBUG = namespaces;
-      } else {
-        delete process.env.DEBUG;
-      }
-    }
-    function load() {
-      return process.env.DEBUG;
-    }
-    function init(debug) {
-      debug.inspectOpts = {};
-      var keys = Object.keys(exports2.inspectOpts);
-      for (var i = 0; i < keys.length; i++) {
-        debug.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
-      }
-    }
-    module2.exports = require_common()(exports2);
-    var formatters = module2.exports.formatters;
-    formatters.o = function(v) {
-      this.inspectOpts.colors = this.useColors;
-      return util.inspect(v, this.inspectOpts).split("\n").map(function(str) {
-        return str.trim();
-      }).join(" ");
-    };
-    formatters.O = function(v) {
-      this.inspectOpts.colors = this.useColors;
-      return util.inspect(v, this.inspectOpts);
-    };
-  }
-});
-
-// node_modules/portfinder/node_modules/debug/src/index.js
-var require_src = __commonJS({
-  "node_modules/portfinder/node_modules/debug/src/index.js"(exports2, module2) {
-    "use strict";
-    if (typeof process === "undefined" || process.type === "renderer" || process.browser === true || process.__nwjs) {
-      module2.exports = require_browser();
-    } else {
-      module2.exports = require_node();
-    }
-  }
-});
-
-// node_modules/mkdirp/index.js
-var require_mkdirp = __commonJS({
-  "node_modules/mkdirp/index.js"(exports2, module2) {
-    var path2 = require("path");
-    var fs2 = require("fs");
-    var _0777 = parseInt("0777", 8);
-    module2.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
-    function mkdirP(p, opts, f, made) {
-      if (typeof opts === "function") {
-        f = opts;
-        opts = {};
-      } else if (!opts || typeof opts !== "object") {
-        opts = { mode: opts };
-      }
-      var mode = opts.mode;
-      var xfs = opts.fs || fs2;
-      if (mode === void 0) {
-        mode = _0777;
-      }
-      if (!made)
-        made = null;
-      var cb = f || /* istanbul ignore next */
-      function() {
-      };
-      p = path2.resolve(p);
-      xfs.mkdir(p, mode, function(er) {
-        if (!er) {
-          made = made || p;
-          return cb(null, made);
-        }
-        switch (er.code) {
-          case "ENOENT":
-            if (path2.dirname(p) === p)
-              return cb(er);
-            mkdirP(path2.dirname(p), opts, function(er2, made2) {
-              if (er2)
-                cb(er2, made2);
-              else
-                mkdirP(p, opts, cb, made2);
-            });
-            break;
-          default:
-            xfs.stat(p, function(er2, stat) {
-              if (er2 || !stat.isDirectory())
-                cb(er, made);
-              else
-                cb(null, made);
-            });
-            break;
-        }
-      });
-    }
-    mkdirP.sync = function sync(p, opts, made) {
-      if (!opts || typeof opts !== "object") {
-        opts = { mode: opts };
-      }
-      var mode = opts.mode;
-      var xfs = opts.fs || fs2;
-      if (mode === void 0) {
-        mode = _0777;
-      }
-      if (!made)
-        made = null;
-      p = path2.resolve(p);
-      try {
-        xfs.mkdirSync(p, mode);
-        made = made || p;
-      } catch (err0) {
-        switch (err0.code) {
-          case "ENOENT":
-            made = sync(path2.dirname(p), opts, made);
-            sync(p, opts, made);
-            break;
-          default:
-            var stat;
-            try {
-              stat = xfs.statSync(p);
-            } catch (err1) {
-              throw err0;
-            }
-            if (!stat.isDirectory())
-              throw err0;
-            break;
-        }
-      }
-      return made;
-    };
-  }
-});
-
-// node_modules/portfinder/lib/portfinder.js
-var require_portfinder = __commonJS({
-  "node_modules/portfinder/lib/portfinder.js"(exports2) {
-    "use strict";
-    var fs2 = require("fs");
-    var os = require("os");
-    var net = require("net");
-    var path2 = require("path");
-    var _async = require_async();
-    var debug = require_src();
-    var mkdirp = require_mkdirp().mkdirp;
-    var debugTestPort = debug("portfinder:testPort");
-    var debugGetPort = debug("portfinder:getPort");
-    var debugDefaultHosts = debug("portfinder:defaultHosts");
-    var internals = {};
-    internals.testPort = function(options, callback) {
-      if (!callback) {
-        callback = options;
-        options = {};
-      }
-      options.server = options.server || net.createServer(function() {
-      });
-      debugTestPort("entered testPort(): trying", options.host, "port", options.port);
-      function onListen() {
-        debugTestPort("done w/ testPort(): OK", options.host, "port", options.port);
-        options.server.removeListener("error", onError);
-        options.server.close();
-        callback(null, options.port);
-      }
-      function onError(err) {
-        debugTestPort("done w/ testPort(): failed", options.host, "w/ port", options.port, "with error", err.code);
-        options.server.removeListener("listening", onListen);
-        if (!(err.code == "EADDRINUSE" || err.code == "EACCES")) {
-          return callback(err);
-        }
-        var nextPort = exports2.nextPort(options.port);
-        if (nextPort > exports2.highestPort) {
-          return callback(new Error("No open ports available"));
-        }
-        internals.testPort({
-          port: nextPort,
-          host: options.host,
-          server: options.server
-        }, callback);
-      }
-      options.server.once("error", onError);
-      options.server.once("listening", onListen);
-      if (options.host) {
-        options.server.listen(options.port, options.host);
-      } else {
-        options.server.listen(options.port);
-      }
-    };
-    exports2.basePort = 8e3;
-    exports2.setBasePort = function(port) {
-      exports2.basePort = port;
-    };
-    exports2.highestPort = 65535;
-    exports2.setHighestPort = function(port) {
-      exports2.highestPort = port;
-    };
-    exports2.basePath = "/tmp/portfinder";
-    exports2.getPort = function(options, callback) {
-      if (!callback) {
-        callback = options;
-        options = {};
-      }
-      options.port = Number(options.port) || Number(exports2.basePort);
-      options.host = options.host || null;
-      options.stopPort = Number(options.stopPort) || Number(exports2.highestPort);
-      if (!options.startPort) {
-        options.startPort = Number(options.port);
-        if (options.startPort < 0) {
-          throw Error("Provided options.startPort(" + options.startPort + ") is less than 0, which are cannot be bound.");
-        }
-        if (options.stopPort < options.startPort) {
-          throw Error("Provided options.stopPort(" + options.stopPort + "is less than options.startPort (" + options.startPort + ")");
-        }
-      }
-      if (options.host) {
-        if (exports2._defaultHosts.indexOf(options.host) !== -1) {
-          exports2._defaultHosts.push(options.host);
-        }
-      }
-      var openPorts = [], currentHost;
-      return _async.eachSeries(exports2._defaultHosts, function(host, next) {
-        debugGetPort("in eachSeries() iteration callback: host is", host);
-        return internals.testPort({ host, port: options.port }, function(err, port) {
-          if (err) {
-            debugGetPort("in eachSeries() iteration callback testPort() callback", "with an err:", err.code);
-            currentHost = host;
-            return next(err);
-          } else {
-            debugGetPort(
-              "in eachSeries() iteration callback testPort() callback",
-              "with a success for port",
-              port
-            );
-            openPorts.push(port);
-            return next();
-          }
-        });
-      }, function(err) {
-        if (err) {
-          debugGetPort("in eachSeries() result callback: err is", err);
-          if (err.code === "EADDRNOTAVAIL" || err.code === "EINVAL") {
-            if (options.host === currentHost) {
-              var msg = "Provided host " + options.host + " could NOT be bound. Please provide a different host address or hostname";
-              return callback(Error(msg));
-            } else {
-              var idx = exports2._defaultHosts.indexOf(currentHost);
-              exports2._defaultHosts.splice(idx, 1);
-              return exports2.getPort(options, callback);
-            }
-          } else {
-            return callback(err);
-          }
-        }
-        openPorts.sort(function(a, b) {
-          return a - b;
-        });
-        debugGetPort("in eachSeries() result callback: openPorts is", openPorts);
-        if (openPorts[0] === openPorts[openPorts.length - 1]) {
-          if (openPorts[0] <= options.stopPort) {
-            return callback(null, openPorts[0]);
-          } else {
-            var msg = "No open ports found in between " + options.startPort + " and " + options.stopPort;
-            return callback(Error(msg));
-          }
-        } else {
-          return exports2.getPort({ port: openPorts.pop(), host: options.host, startPort: options.startPort, stopPort: options.stopPort }, callback);
-        }
-      });
-    };
-    exports2.getPortPromise = function(options) {
-      if (typeof Promise !== "function") {
-        throw Error("Native promise support is not available in this version of node.Please install a polyfill and assign Promise to global.Promise before calling this method");
-      }
-      if (!options) {
-        options = {};
-      }
-      return new Promise(function(resolve, reject) {
-        exports2.getPort(options, function(err, port) {
-          if (err) {
-            return reject(err);
-          }
-          resolve(port);
-        });
-      });
-    };
-    exports2.getPorts = function(count, options, callback) {
-      if (!callback) {
-        callback = options;
-        options = {};
-      }
-      var lastPort = null;
-      _async.timesSeries(count, function(index, asyncCallback) {
-        if (lastPort) {
-          options.port = exports2.nextPort(lastPort);
-        }
-        exports2.getPort(options, function(err, port) {
-          if (err) {
-            asyncCallback(err);
-          } else {
-            lastPort = port;
-            asyncCallback(null, port);
-          }
-        });
-      }, callback);
-    };
-    exports2.getSocket = function(options, callback) {
-      if (!callback) {
-        callback = options;
-        options = {};
-      }
-      options.mod = options.mod || parseInt(755, 8);
-      options.path = options.path || exports2.basePath + ".sock";
-      function testSocket() {
-        fs2.stat(options.path, function(err) {
-          if (err) {
-            if (err.code == "ENOENT") {
-              callback(null, options.path);
-            } else {
-              callback(err);
-            }
-          } else {
-            options.path = exports2.nextSocket(options.path);
-            exports2.getSocket(options, callback);
-          }
-        });
-      }
-      function createAndTestSocket(dir) {
-        mkdirp(dir, options.mod, function(err) {
-          if (err) {
-            return callback(err);
-          }
-          options.exists = true;
-          testSocket();
-        });
-      }
-      function checkAndTestSocket() {
-        var dir = path2.dirname(options.path);
-        fs2.stat(dir, function(err, stats) {
-          if (err || !stats.isDirectory()) {
-            return createAndTestSocket(dir);
-          }
-          options.exists = true;
-          testSocket();
-        });
-      }
-      return options.exists ? testSocket() : checkAndTestSocket();
-    };
-    exports2.nextPort = function(port) {
-      return port + 1;
-    };
-    exports2.nextSocket = function(socketPath) {
-      var dir = path2.dirname(socketPath), name = path2.basename(socketPath, ".sock"), match = name.match(/^([a-zA-z]+)(\d*)$/i), index = parseInt(match[2]), base = match[1];
-      if (isNaN(index)) {
-        index = 0;
-      }
-      index += 1;
-      return path2.join(dir, base + index + ".sock");
-    };
-    exports2._defaultHosts = function() {
-      var interfaces = {};
-      try {
-        interfaces = os.networkInterfaces();
-      } catch (e) {
-        if (e.syscall === "uv_interface_addresses") {
-        } else {
-          throw e;
-        }
-      }
-      var interfaceNames = Object.keys(interfaces), hiddenButImportantHost = "0.0.0.0", results = [hiddenButImportantHost];
-      for (var i = 0; i < interfaceNames.length; i++) {
-        var _interface = interfaces[interfaceNames[i]];
-        for (var j = 0; j < _interface.length; j++) {
-          var curr = _interface[j];
-          results.push(curr.address);
-        }
-      }
-      results.push(null);
-      debugDefaultHosts("exports._defaultHosts is: %o", results);
-      return results;
-    }();
-  }
-});
-
-// server.js
-var Max = require("max-api");
-var http = require("http");
-var fs = require("fs");
-var url = require("url");
-var path = require("path");
-var { WebSocketServer } = require_ws();
-var { getWifiInfos } = require_wifi_infos();
-var { getNetworkInterfacesInfos } = require_network_infos();
-var portfinder = require_portfinder();
+// max/CoMote/patchers/src/server.js
 var comoteConfig = {
   id: 0,
   interval: 16,
@@ -21823,10 +21628,10 @@ var comoteConfig = {
     autostart: true
   }
 };
-var server = http.createServer((req, res) => {
-  const parsedUrl = url.parse(req.url);
+var server = import_node_http.default.createServer((req, res) => {
+  const parsedUrl = import_node_url.default.parse(req.url);
   let pathname = `./comote-connect-public${parsedUrl.pathname}`;
-  const ext = path.parse(pathname).ext || ".html";
+  const ext = import_node_path.default.parse(pathname).ext || ".html";
   const map = {
     ".ico": "image/x-icon",
     ".html": "text/html",
@@ -21834,16 +21639,16 @@ var server = http.createServer((req, res) => {
     ".json": "application/json",
     ".css": "text/css"
   };
-  fs.exists(pathname, (exist) => {
+  import_node_fs.default.exists(pathname, (exist) => {
     if (!exist) {
       res.statusCode = 404;
       res.end(`File ${pathname} not found!`);
       return;
     }
-    if (fs.statSync(pathname).isDirectory()) {
+    if (import_node_fs.default.statSync(pathname).isDirectory()) {
       pathname += "index.html";
     }
-    fs.readFile(pathname, (err, data) => {
+    import_node_fs.default.readFile(pathname, (err, data) => {
       if (err) {
         res.statusCode = 500;
         res.end(`Error getting the file: ${err}.`);
@@ -21855,7 +21660,7 @@ var server = http.createServer((req, res) => {
   });
 });
 console.log("server started");
-var wss = new WebSocketServer({ server });
+var wss = new import_websocket_server.default({ server });
 var sockets = /* @__PURE__ */ new Set();
 wss.on("connection", async function connection(ws) {
   const wifiInfos = await getWifiInfos();
@@ -21925,12 +21730,12 @@ var handlers = {
     });
   }
 };
-Max.addHandlers(handlers);
-portfinder.basePort = 8888;
-portfinder.getPort((err, port) => {
+import_max_api.default.addHandlers(handlers);
+import_portfinder.default.basePort = 8888;
+import_portfinder.default.getPort((err, port) => {
   server.listen(port, () => {
     const url2 = `http://127.0.0.1:${port}`;
     console.log(`server listening on ${url2}`);
-    Max.outlet("url", url2);
+    import_max_api.default.outlet("url", url2);
   });
 });

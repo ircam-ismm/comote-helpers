@@ -1,12 +1,14 @@
-const Max = require('max-api');
-const http = require('http');
-const fs = require('fs');
-const url = require('url');
-const path = require('path');
-const { WebSocketServer } = require('ws');
-const { getWifiInfos } = require('@ircam/comote-helpers/wifi-infos.js');
-const { getNetworkInterfacesInfos } = require('@ircam/comote-helpers/network-infos.js');
-const portfinder = require('portfinder');
+import http from 'node:http';
+import fs from 'node:fs';
+import url from 'node:url';
+import path from 'node:path';
+
+import Max from 'max-api';
+import { WebSocketServer } from 'ws';
+import portfinder from 'portfinder';
+
+import { getWifiInfos } from '../../../../src/wifi-infos.js';
+import { getNetworkInterfacesInfos } from '../../../../src/network-infos.js';
 
 const comoteConfig = {
   id: 0,
