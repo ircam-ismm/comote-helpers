@@ -41,6 +41,9 @@ const comoteConfig = {
     autostart: true,
   },
   osc: null,
+  webview: `http://${wifiInfos.ip}:${config.env.port}/webview`,
+  // test raw HTML
+  // webview: `<button style="width: 500px; height: 300px;" comote-key="coucou-1" comote-touchstart="1" comote-touchend="0">Coucou</button>`
 };
 
 const comoteServer = new CoMoteServer(comoteConfig, { verbose: false });

@@ -11,4 +11,8 @@ export default {
     type: 'any',
     default: {},
   },
+  webviewPage: {
+    type: 'string',
+    default: '1',
+  },
 };

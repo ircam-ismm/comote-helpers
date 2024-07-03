@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
-          (cd max && zip -r - CoMo.te) > CoMo.te.zip
+          (cd max && zip -r - CoMote) > CoMote.zip
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -40,6 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./CoMo.te.zip
-          asset_name: CoMo.te.zip
+          asset_path: ./CoMote.zip
+          asset_name: CoMote.zip
           asset_content_type: application/zip

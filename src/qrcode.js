@@ -57,6 +57,10 @@ function formatConfigToLink(config) {
     }
   }
 
+  if (config.webview) {
+    query.push(`webview=${encodeURIComponent(config.webview)}`);
+  }
+
   link += query.join('&');
 
   return link;
@@ -78,7 +82,7 @@ export function rawLink(config) {
  */
 export async function terminal(config) {
   const link = formatConfigToLink(config);
-  return await QRCode.toString(link, { type: 'terminal' });
+  return await QRCode.toString(link, { type: 'terminal', small: true });
 }
 
 
