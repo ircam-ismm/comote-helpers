@@ -50,7 +50,7 @@ const comoteServer = new CoMoteServer(comoteConfig, { verbose: false });
 await comoteServer.start();
 
 // -----------------------------------------------------------
-console.log('+ CoMo.te link:', CoMoteQRCode.rawLink(comoteConfig));
+console.log('+ CoMote link:', CoMoteQRCode.rawLink(comoteConfig));
 console.log('');
 console.log(await CoMoteQRCode.terminal(comoteConfig));
 

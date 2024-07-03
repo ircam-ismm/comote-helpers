@@ -58,7 +58,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 1228.0, 783.0, 329.0, 22.0 ],
-					"text" : "/comote/0/control/my-second-slider 0.25"
+					"text" : "/comote/0/control/my-slider 0.529"
 				}
 
 			}

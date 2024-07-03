@@ -4,7 +4,7 @@
 <c74object name="comote-connect">
 
 	<digest>
-		Create QRCodes for simple connection with the CoMo.te applications.
+		Create QRCodes for simple connection with the CoMote applications.
 	</digest>
 	
 	<description>
@@ -15,14 +15,14 @@
 		<metadata name="author">Benjamin Matuszewski</metadata>
 		<metadata name="tag">OSC</metadata>
 		<metadata name="tag">WebSockets</metadata>
-		<metadata name="tag">CoMo.te</metadata>
+		<metadata name="tag">CoMote</metadata>
 		<metadata name="tag">IRCAM</metadata>
 	</metadatalist>
 	
 	<!--INLETS-->
 	<inletlist>
 		<!-- <inlet id="0" type="dictionary">
-			<digest>Create QRCodes for simple connection with the CoMo.te applications.</digest>
+			<digest>Create QRCodes for simple connection with the CoMote applications.</digest>
 		</inlet> -->
 	</inletlist>
 
