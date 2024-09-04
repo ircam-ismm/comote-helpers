@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 106.0, 1586.0, 954.0 ],
+		"rect" : [ 109.0, 171.0, 1586.0, 972.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,12 +40,49 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"bubble" : 1,
+					"fontsize" : 14.0,
+					"id" : "obj-107",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 391.833333333333485, 868.0, 321.0, 26.0 ],
+					"text" : "webview URL"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-27",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 228.5, 868.0, 148.0, 22.0 ],
+					"presentation_linecount" : 4,
+					"text" : "webview_url http://ircam.fr"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-102",
+					"maxclass" : "button",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 1540.5, 806.0, 24.0, 24.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-112",
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1112.833333333333485, 783.0, 110.0, 20.0 ],
-					"presentation_linecount" : 2,
 					"text" : "WebView controls"
 				}
 
@@ -57,8 +94,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1228.0, 783.0, 329.0, 22.0 ],
-					"text" : "/comote/0/control/my-slider 0.529"
+					"patching_rect" : [ 1209.5, 806.0, 329.0, 22.0 ],
+					"text" : "/comote/0/control/klav/key/4 0"
 				}
 
 			}
@@ -293,7 +330,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 228.5, 882.0, 92.0, 22.0 ],
+					"patching_rect" : [ 228.5, 921.0, 92.0, 22.0 ],
 					"text" : "s parameters"
 				}
 
@@ -724,7 +761,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 414.0, 864.0, 378.0, 22.0 ],
+					"patching_rect" : [ 414.0, 903.0, 378.0, 22.0 ],
 					"text" : "Android: sampling period can be anything > 16 ms (approx)"
 				}
 
@@ -737,7 +774,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 414.0, 883.0, 378.0, 22.0 ],
+					"patching_rect" : [ 414.0, 922.0, 378.0, 22.0 ],
 					"text" : "iOS: the actual sampling period is a multiple of 16.67 ms"
 				}
 
@@ -1162,7 +1199,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"offset" : [ 0.0, 0.0 ],
-					"patching_rect" : [ 228.5, 193.325925925925958, 318.0, 425.0 ],
+					"patching_rect" : [ 228.5, 193.325925925925958, 318.0, 500.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -1345,11 +1382,11 @@
 					"color" : [ 0.843137254901961, 0.584313725490196, 0.129411764705882, 1.0 ],
 					"id" : "obj-11",
 					"maxclass" : "newobj",
-					"numinlets" : 5,
-					"numoutlets" : 5,
-					"outlettype" : [ "", "", "", "", "" ],
-					"patching_rect" : [ 867.5, 455.325925925925958, 582.0, 22.0 ],
-					"text" : "route /comote/0/devicemotion /comote/0/magnetometer /comote/0/control/buttonA /comote/0/control/buttonB"
+					"numinlets" : 6,
+					"numoutlets" : 6,
+					"outlettype" : [ "", "", "", "", "", "" ],
+					"patching_rect" : [ 867.5, 455.325925925925958, 684.0, 22.0 ],
+					"text" : "route /comote/0/devicemotion /comote/0/magnetometer /comote/0/control/buttonA /comote/0/control/buttonB /comote/0/heading"
 				}
 
 			}
@@ -1591,16 +1628,26 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-102", 0 ],
+					"midpoints" : [ 1542.0, 791.162962962962979, 1550.0, 791.162962962962979 ],
+					"order" : 0,
+					"source" : [ "obj-11", 5 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-109", 1 ],
-					"midpoints" : [ 1440.0, 500.662962962962979, 1547.5, 500.662962962962979 ],
-					"source" : [ "obj-11", 4 ]
+					"midpoints" : [ 1542.0, 793.162962962962979, 1529.0, 793.162962962962979 ],
+					"order" : 1,
+					"source" : [ "obj-11", 5 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-110", 0 ],
-					"midpoints" : [ 1017.75, 519.325925925925958, 1276.0, 519.325925925925958 ],
+					"midpoints" : [ 1010.0, 519.325925925925958, 1276.0, 519.325925925925958 ],
 					"source" : [ "obj-11", 1 ]
 				}
 
@@ -1683,6 +1730,13 @@
 				"patchline" : 				{
 					"destination" : [ "obj-5", 0 ],
 					"source" : [ "obj-25", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-103", 0 ],
+					"source" : [ "obj-27", 0 ]
 				}
 
 			}

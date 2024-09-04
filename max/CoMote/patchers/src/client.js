@@ -22,6 +22,7 @@ socket.onmessage = async (event) => {
       break;
     case "comoteConfig":
       comoteConfig = payload;
+      console.log(comoteConfig);
       qrCode = await CoMoteQRCode.dataURL(comoteConfig);
       break;
     case "networkInfos":
@@ -44,11 +45,18 @@ function selectNetworkInterface(networkInterface) {
   socket.send(msg);
 }
 
+function updateWebviewURL(url) {
+  comoteConfig.webview = url;
+  const msg = JSON.stringify({ type: "comoteConfig", payload: comoteConfig });
+  console.log(typeof msg, "msg = ", msg);
+  socket.send(msg);
+}
+
 function renderApp() {
   if (!qrCode) {
     render(html`
       <p style="margin-left: 30px">loading...</p>
-  `, document.body);
+    `, document.body);
   } else {
     render(html`
       <div style="margin-left: 30px">
@@ -73,6 +81,13 @@ function renderApp() {
         <div>OSC IP: ${comoteConfig.osc.hostname}</div>
         <div>OSC Port: ${comoteConfig.osc.port}</div>
         <div>OSC autostart: ${comoteConfig.osc.autostart ? 1 : 0}</div>
+        <div>Webview:
+          <input
+            type="text"
+            value="${comoteConfig.webview}"
+            @change=${e => updateWebviewURL(e.target.value)}
+          />
+        </div>
       </div>
       <div>
         <img

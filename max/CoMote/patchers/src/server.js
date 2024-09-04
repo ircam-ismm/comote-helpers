@@ -19,6 +19,7 @@ const comoteConfig = {
     hostname: '',
     autostart: true,
   },
+  webview: '',
 };
 
 const server = http.createServer((req, res) => {
@@ -34,14 +35,7 @@ const server = http.createServer((req, res) => {
     '.css': 'text/css',
   };
 
-  fs.exists(pathname, (exist) => {
-    if (!exist) {
-      // if the file is not found, return 404
-      res.statusCode = 404;
-      res.end(`File ${pathname} not found!`);
-      return;
-    }
-
+  if (fs.existsSync(pathname)) {
     // if is a directory search for index file matching the extension
     if (fs.statSync(pathname).isDirectory()) {
       pathname += 'index.html';
@@ -58,9 +52,11 @@ const server = http.createServer((req, res) => {
         res.end(data);
       }
     });
-  });
-
-
+  } else {
+    // file is not found, return 404
+    res.statusCode = 404;
+    res.end(`File ${pathname} not found!`);
+  }
 });;
 
 console.log('server started');
@@ -131,30 +127,42 @@ const handlers = {
     sockets.forEach(ws => {
       ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
     });
+    Max.outlet('id', id);
   },
   interval: interval => {
     comoteConfig.interval = interval;
     sockets.forEach(ws => {
       ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
     });
+    Max.outlet('interval', interval);
   },
   osc_hostname: hostname => {
     comoteConfig.osc.hostname = hostname;
     sockets.forEach(ws => {
       ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
     });
+    Max.outlet('osc_hostname', hostname);
   },
   osc_port: port => {
     comoteConfig.osc.port = port;
     sockets.forEach(ws => {
       ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
     });
+    Max.outlet('osc_port', port);
   },
   osc_autostart: autostart => {
     comoteConfig.osc.autostart = !!autostart;
     sockets.forEach(ws => {
       ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
     });
+    Max.outlet('osc_autostart', autostart);
+  },
+  webview_url: url => {
+    comoteConfig.webview = url;
+    sockets.forEach(ws => {
+      ws.send(JSON.stringify({ type: 'comoteConfig', payload: comoteConfig }));
+    });
+    Max.outlet('webview_url', url);
   },
 };
 

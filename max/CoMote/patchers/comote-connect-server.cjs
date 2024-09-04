@@ -21626,7 +21626,8 @@ var comoteConfig = {
     port: 8902,
     hostname: "",
     autostart: true
-  }
+  },
+  webview: ""
 };
 var server = import_node_http.default.createServer((req, res) => {
   const parsedUrl = import_node_url.default.parse(req.url);
@@ -21639,12 +21640,7 @@ var server = import_node_http.default.createServer((req, res) => {
     ".json": "application/json",
     ".css": "text/css"
   };
-  import_node_fs.default.exists(pathname, (exist) => {
-    if (!exist) {
-      res.statusCode = 404;
-      res.end(`File ${pathname} not found!`);
-      return;
-    }
+  if (import_node_fs.default.existsSync(pathname)) {
     if (import_node_fs.default.statSync(pathname).isDirectory()) {
       pathname += "index.html";
     }
@@ -21657,7 +21653,10 @@ var server = import_node_http.default.createServer((req, res) => {
         res.end(data);
       }
     });
-  });
+  } else {
+    res.statusCode = 404;
+    res.end(`File ${pathname} not found!`);
+  }
 });
 console.log("server started");
 var wss = new import_websocket_server.default({ server });
@@ -21704,30 +21703,42 @@ var handlers = {
     sockets.forEach((ws) => {
       ws.send(JSON.stringify({ type: "comoteConfig", payload: comoteConfig }));
     });
+    import_max_api.default.outlet("id", id);
   },
   interval: (interval) => {
     comoteConfig.interval = interval;
     sockets.forEach((ws) => {
       ws.send(JSON.stringify({ type: "comoteConfig", payload: comoteConfig }));
     });
+    import_max_api.default.outlet("interval", interval);
   },
   osc_hostname: (hostname) => {
     comoteConfig.osc.hostname = hostname;
     sockets.forEach((ws) => {
       ws.send(JSON.stringify({ type: "comoteConfig", payload: comoteConfig }));
     });
+    import_max_api.default.outlet("osc_hostname", hostname);
   },
   osc_port: (port) => {
     comoteConfig.osc.port = port;
     sockets.forEach((ws) => {
       ws.send(JSON.stringify({ type: "comoteConfig", payload: comoteConfig }));
     });
+    import_max_api.default.outlet("osc_port", port);
   },
   osc_autostart: (autostart) => {
     comoteConfig.osc.autostart = !!autostart;
     sockets.forEach((ws) => {
       ws.send(JSON.stringify({ type: "comoteConfig", payload: comoteConfig }));
     });
+    import_max_api.default.outlet("osc_autostart", autostart);
+  },
+  webview_url: (url2) => {
+    comoteConfig.webview = url2;
+    sockets.forEach((ws) => {
+      ws.send(JSON.stringify({ type: "comoteConfig", payload: comoteConfig }));
+    });
+    import_max_api.default.outlet("webview_url", url2);
   }
 };
 import_max_api.default.addHandlers(handlers);

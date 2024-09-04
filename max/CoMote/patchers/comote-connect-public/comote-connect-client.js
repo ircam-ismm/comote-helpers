@@ -2752,6 +2752,7 @@
         break;
       case "comoteConfig":
         comoteConfig = payload;
+        console.log(comoteConfig);
         qrCode = await dataURL(comoteConfig);
         break;
       case "networkInfos":
@@ -2771,11 +2772,17 @@
     console.log(typeof msg, "msg = ", msg);
     socket.send(msg);
   }
+  function updateWebviewURL(url) {
+    comoteConfig.webview = url;
+    const msg = JSON.stringify({ type: "comoteConfig", payload: comoteConfig });
+    console.log(typeof msg, "msg = ", msg);
+    socket.send(msg);
+  }
   function renderApp() {
     if (!qrCode) {
       j(x`
       <p style="margin-left: 30px">loading...</p>
-  `, document.body);
+    `, document.body);
     } else {
       j(x`
       <div style="margin-left: 30px">
@@ -2797,6 +2804,13 @@
         <div>OSC IP: ${comoteConfig.osc.hostname}</div>
         <div>OSC Port: ${comoteConfig.osc.port}</div>
         <div>OSC autostart: ${comoteConfig.osc.autostart ? 1 : 0}</div>
+        <div>Webview:
+          <input
+            type="text"
+            value="${comoteConfig.webview}"
+            @change=${(e4) => updateWebviewURL(e4.target.value)}
+          />
+        </div>
       </div>
       <div>
         <img
