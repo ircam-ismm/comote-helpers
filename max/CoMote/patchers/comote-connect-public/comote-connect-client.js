@@ -2807,7 +2807,7 @@
         <div>Webview:
           <input
             type="text"
-            value="${comoteConfig.webview}"
+            .value="${comoteConfig.webview}"
             @change=${(e4) => updateWebviewURL(e4.target.value)}
           />
         </div>

@@ -410,7 +410,7 @@
 						"defer" : 0,
 						"node_bin_path" : "",
 						"npm_bin_path" : "",
-						"watch" : 0
+						"watch" : 1
 					}
 ,
 					"text" : "node.script comote-connect-server.cjs"

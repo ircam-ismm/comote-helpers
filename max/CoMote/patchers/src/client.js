@@ -84,7 +84,7 @@ function renderApp() {
         <div>Webview:
           <input
             type="text"
-            value="${comoteConfig.webview}"
+            .value="${comoteConfig.webview}"
             @change=${e => updateWebviewURL(e.target.value)}
           />
         </div>

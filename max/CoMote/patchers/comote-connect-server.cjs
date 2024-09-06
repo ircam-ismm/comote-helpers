@@ -21687,6 +21687,12 @@ wss.on("connection", async function connection(ws) {
       case "comoteConfig":
         Object.assign(comoteConfig, payload);
         ws.send(JSON.stringify({ type: "comoteConfig", payload: comoteConfig }));
+        await import_max_api.default.outlet("id", comoteConfig.id);
+        await import_max_api.default.outlet("interval", comoteConfig.interval);
+        await import_max_api.default.outlet("osc_hostname", comoteConfig.osc.hostname);
+        await import_max_api.default.outlet("osc_port", comoteConfig.osc.port);
+        await import_max_api.default.outlet("osc_autostart", comoteConfig.osc.autostart);
+        await import_max_api.default.outlet("webview_url", comoteConfig.webview);
         break;
       default:
         console.warn("received unknown message", { type, payload });
