@@ -171,6 +171,14 @@ const handlers = {
     });
     Max.outlet('webview_url', url);
   },
+  bang: async () => {
+    await Max.outlet('id', comoteConfig.id);
+    await Max.outlet('interval', comoteConfig.interval);
+    await Max.outlet('osc_hostname', comoteConfig.osc.hostname);
+    await Max.outlet('osc_port', comoteConfig.osc.port);
+    await Max.outlet('osc_autostart', comoteConfig.osc.autostart);
+    await Max.outlet('webview_url', comoteConfig.webview);
+  }
 };
 
 Max.addHandlers(handlers);
