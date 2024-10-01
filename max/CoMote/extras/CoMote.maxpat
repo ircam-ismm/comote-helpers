@@ -84,6 +84,7 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"assistshowspatchername" : 0,
+						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-116",
@@ -119,10 +120,10 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 463.0, 132.0, 191.0, 22.0 ],
+									"patching_rect" : [ 463.0, 132.0, 152.0, 22.0 ],
 									"presentation" : 1,
 									"presentation_rect" : [ 1298.0, 425.0, 191.0, 22.0 ],
-									"text" : "sprintf /comote/%s/control/buttonB"
+									"text" : "sprintf /comote/%s/buttonB"
 								}
 
 							}
@@ -133,10 +134,10 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 319.5, 101.5, 191.0, 22.0 ],
+									"patching_rect" : [ 319.5, 101.5, 152.0, 22.0 ],
 									"presentation" : 1,
 									"presentation_rect" : [ 1154.5, 394.5, 191.0, 22.0 ],
-									"text" : "sprintf /comote/%s/control/buttonA"
+									"text" : "sprintf /comote/%s/buttonA"
 								}
 
 							}
@@ -1616,8 +1617,8 @@
 					"numinlets" : 6,
 					"numoutlets" : 6,
 					"outlettype" : [ "", "", "", "", "", "" ],
-					"patching_rect" : [ 875.0, 414.0, 684.0, 22.0 ],
-					"text" : "route /comote/0/devicemotion /comote/0/magnetometer /comote/0/control/buttonA /comote/0/control/buttonB /comote/0/heading"
+					"patching_rect" : [ 875.0, 414.0, 683.999999999999773, 22.0 ],
+					"text" : "route /comote/0/devicemotion /comote/0/magnetometer /comote/0/buttonA /comote/0/buttonB /comote/0/heading"
 				}
 
 			}
@@ -1859,7 +1860,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-102", 0 ],
-					"midpoints" : [ 1549.5, 750.162962962962979, 1557.5, 750.162962962962979 ],
+					"midpoints" : [ 1549.499999999999773, 750.162962962962979, 1557.5, 750.162962962962979 ],
 					"order" : 0,
 					"source" : [ "obj-11", 5 ]
 				}
@@ -1868,7 +1869,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-109", 1 ],
-					"midpoints" : [ 1549.5, 752.162962962962979, 1536.5, 752.162962962962979 ],
+					"midpoints" : [ 1549.499999999999773, 752.162962962962979, 1536.5, 752.162962962962979 ],
 					"order" : 1,
 					"source" : [ "obj-11", 5 ]
 				}
@@ -1928,7 +1929,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-11", 5 ],
-					"midpoints" : [ 1104.5, 402.5, 1549.5, 402.5 ],
+					"midpoints" : [ 1104.5, 402.5, 1549.499999999999773, 402.5 ],
 					"source" : [ "obj-123", 4 ]
 				}
 
@@ -1936,7 +1937,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-11", 4 ],
-					"midpoints" : [ 1082.75, 402.5, 1416.5, 402.5 ],
+					"midpoints" : [ 1082.75, 402.5, 1416.499999999999773, 402.5 ],
 					"source" : [ "obj-123", 3 ]
 				}
 
