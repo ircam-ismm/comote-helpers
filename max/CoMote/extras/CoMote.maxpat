@@ -3,14 +3,14 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 8,
-			"minor" : 5,
-			"revision" : 7,
+			"minor" : 6,
+			"revision" : 5,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 156.0, 191.0, 1776.0, 954.0 ],
+		"rect" : [ 34.0, 87.0, 919.0, 779.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,14 +40,175 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-101",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 4,
+					"outlettype" : [ "int", "float", "float", "float" ],
+					"patching_rect" : [ 1519.0, 531.0, 201.666666666666742, 22.0 ],
+					"text" : "unpack i f f f"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-113",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1701.0, 614.0, 57.500000000000227, 20.0 ],
+					"text" : "deg"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-114",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1638.0, 614.0, 57.500000000000227, 20.0 ],
+					"text" : "deg"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-115",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1570.0, 614.0, 57.500000000000227, 20.0 ],
+					"text" : "deg"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-116",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1701.0, 592.0, 79.0, 20.0 ],
+					"text" : "head.true"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-117",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1638.0, 592.0, 63.0, 20.0 ],
+					"text" : "head.mag"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-118",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1570.0, 592.0, 69.0, 20.0 ],
+					"text" : "head.accur"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-119",
+					"maxclass" : "multislider",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 1701.0, 644.0, 50.0, 117.0 ],
+					"setminmax" : [ 0.0, 360.0 ],
+					"setstyle" : 1,
+					"signed" : 1
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-120",
+					"maxclass" : "multislider",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 1638.0, 644.0, 50.0, 117.0 ],
+					"setminmax" : [ 0.0, 360.0 ],
+					"setstyle" : 1,
+					"signed" : 1
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-121",
+					"maxclass" : "multislider",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 1570.0, 644.0, 50.0, 117.0 ],
+					"setminmax" : [ 0.0, 180.0 ],
+					"setstyle" : 1,
+					"signed" : 1
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"format" : 6,
-					"id" : "obj-31",
+					"id" : "obj-122",
 					"maxclass" : "flonum",
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1579.0, 564.0, 50.0, 22.0 ]
+					"patching_rect" : [ 1701.0, 564.0, 50.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"format" : 6,
+					"id" : "obj-124",
+					"maxclass" : "flonum",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 1638.0, 564.0, 50.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"format" : 6,
+					"id" : "obj-125",
+					"maxclass" : "flonum",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 1570.0, 564.0, 50.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-32",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 4,
+					"outlettype" : [ "int", "float", "float", "float" ],
+					"patching_rect" : [ 1082.0, 183.0, 201.666666666666742, 22.0 ],
+					"text" : "unpack i f f f"
 				}
 
 			}
@@ -62,8 +223,8 @@
 						"fileversion" : 1,
 						"appversion" : 						{
 							"major" : 8,
-							"minor" : 5,
-							"revision" : 7,
+							"minor" : 6,
+							"revision" : 5,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -469,7 +630,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1128.0, 787.0, 110.0, 20.0 ],
+					"patching_rect" : [ 1224.5, 786.0, 110.0, 20.0 ],
 					"text" : "WebView controls"
 				}
 
@@ -538,7 +699,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1456.0, 592.0, 79.0, 20.0 ],
-					"text" : "magr.gamma"
+					"text" : "mag.gamma"
 				}
 
 			}
@@ -549,7 +710,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1394.0, 592.0, 63.0, 20.0 ],
-					"text" : "magr.beta"
+					"text" : "mag.beta"
 				}
 
 			}
@@ -1533,8 +1694,9 @@
 					"maxclass" : "bpatcher",
 					"name" : "comote-connect.maxpat",
 					"numinlets" : 1,
-					"numoutlets" : 0,
+					"numoutlets" : 1,
 					"offset" : [ 0.0, 0.0 ],
+					"outlettype" : [ "" ],
 					"patching_rect" : [ 228.5, 193.325925925925958, 318.0, 500.0 ],
 					"viewvisibility" : 1
 				}
@@ -1926,6 +2088,27 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-122", 0 ],
+					"source" : [ "obj-101", 3 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-124", 0 ],
+					"source" : [ "obj-101", 2 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-125", 0 ],
+					"source" : [ "obj-101", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-43", 0 ],
 					"order" : 1,
 					"source" : [ "obj-104", 0 ]
@@ -1964,6 +2147,13 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-101", 0 ],
+					"source" : [ "obj-11", 6 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-102", 0 ],
 					"midpoints" : [ 1544.5, 750.162962962962979, 1565.5, 750.162962962962979 ],
 					"order" : 0,
@@ -1985,13 +2175,6 @@
 					"destination" : [ "obj-110", 0 ],
 					"midpoints" : [ 978.785714285714334, 518.325925925925958, 1283.5, 518.325925925925958 ],
 					"source" : [ "obj-11", 1 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-31", 0 ],
-					"source" : [ "obj-11", 6 ]
 				}
 
 			}
@@ -2054,6 +2237,14 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-119", 0 ],
+					"hidden" : 1,
+					"source" : [ "obj-122", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-11", 7 ],
 					"source" : [ "obj-123", 6 ]
 				}
@@ -2098,6 +2289,22 @@
 				"patchline" : 				{
 					"destination" : [ "obj-11", 1 ],
 					"source" : [ "obj-123", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-120", 0 ],
+					"hidden" : 1,
+					"source" : [ "obj-124", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-121", 0 ],
+					"hidden" : 1,
+					"source" : [ "obj-125", 0 ]
 				}
 
 			}
@@ -2302,30 +2509,23 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-resize.js",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/Documents/src/ircam-forge/koral/Live/M4L",
+				"patcherrelativepath" : "../../../../../ircam-forge/koral/Live/M4L",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect-server.cjs",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/Documents/src/ircam-forge/koral/Live/M4L",
+				"patcherrelativepath" : "../../../../../ircam-forge/koral/Live/M4L",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect.maxpat",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
-				"patcherrelativepath" : "../patchers",
+				"bootpath" : "~/Documents/src/ircam-forge/koral/Live/M4L",
+				"patcherrelativepath" : "../../../../../ircam-forge/koral/Live/M4L",
 				"type" : "JSON",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "comote-screenshot-3.png",
-				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
-				"patcherrelativepath" : "../patchers",
-				"type" : "PNG",
 				"implicit" : 1
 			}
 , 			{
