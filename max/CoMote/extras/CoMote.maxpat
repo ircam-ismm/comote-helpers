@@ -3,14 +3,14 @@
 		"fileversion" : 1,
 		"appversion" : 		{
 			"major" : 8,
-			"minor" : 6,
-			"revision" : 4,
+			"minor" : 5,
+			"revision" : 7,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 60.0, 62.0, 1586.0, 954.0 ],
+		"rect" : [ 156.0, 191.0, 1776.0, 954.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,6 +40,19 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"format" : 6,
+					"id" : "obj-31",
+					"maxclass" : "flonum",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 1579.0, 564.0, 50.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-123",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
@@ -49,14 +62,14 @@
 						"fileversion" : 1,
 						"appversion" : 						{
 							"major" : 8,
-							"minor" : 6,
-							"revision" : 4,
+							"minor" : 5,
+							"revision" : 7,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 83.0, -548.0, 1134.0, 314.0 ],
+						"rect" : [ 83.0, 106.0, 1134.0, 314.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -490,8 +503,8 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1456.0, 614.0, 73.0, 20.0 ],
-					"text" : "Gauss"
+					"patching_rect" : [ 1456.0, 614.0, 57.500000000000227, 20.0 ],
+					"text" : "µT"
 				}
 
 			}
@@ -502,7 +515,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1394.0, 614.0, 57.500000000000227, 20.0 ],
-					"text" : "Gauss"
+					"text" : "µT"
 				}
 
 			}
@@ -513,7 +526,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1333.0, 614.0, 57.500000000000227, 20.0 ],
-					"text" : "Gauss"
+					"text" : "µT"
 				}
 
 			}
@@ -559,8 +572,9 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1456.0, 644.0, 50.0, 117.0 ],
-					"setminmax" : [ -2000.0, 2000.0 ],
-					"setstyle" : 1
+					"setminmax" : [ -50.0, 50.0 ],
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -573,8 +587,9 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1394.0, 644.0, 50.0, 117.0 ],
-					"setminmax" : [ -2000.0, 2000.0 ],
-					"setstyle" : 1
+					"setminmax" : [ -50.0, 50.0 ],
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -587,8 +602,9 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1333.0, 644.0, 50.0, 117.0 ],
-					"setminmax" : [ -2000.0, 2000.0 ],
-					"setstyle" : 1
+					"setminmax" : [ -50.0, 50.0 ],
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -1273,7 +1289,8 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1243.0, 644.0, 50.0, 117.0 ],
 					"setminmax" : [ -2000.0, 2000.0 ],
-					"setstyle" : 1
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -1287,7 +1304,8 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1181.0, 644.0, 50.0, 117.0 ],
 					"setminmax" : [ -2000.0, 2000.0 ],
-					"setstyle" : 1
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -1301,7 +1319,8 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1120.0, 644.0, 50.0, 117.0 ],
 					"setminmax" : [ -2000.0, 2000.0 ],
-					"setstyle" : 1
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -1315,7 +1334,8 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1059.0, 644.0, 50.0, 117.0 ],
 					"setminmax" : [ -30.0, 30.0 ],
-					"setstyle" : 1
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -1329,7 +1349,8 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 997.0, 644.0, 50.0, 117.0 ],
 					"setminmax" : [ -30.0, 30.0 ],
-					"setstyle" : 1
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -1343,7 +1364,8 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 936.0, 644.0, 50.0, 117.0 ],
 					"setminmax" : [ -30.0, 30.0 ],
-					"setstyle" : 1
+					"setstyle" : 1,
+					"signed" : 1
 				}
 
 			}
@@ -1510,9 +1532,8 @@
 					"maxclass" : "bpatcher",
 					"name" : "comote-connect.maxpat",
 					"numinlets" : 1,
-					"numoutlets" : 1,
+					"numoutlets" : 0,
 					"offset" : [ 0.0, 0.0 ],
-					"outlettype" : [ "" ],
 					"patching_rect" : [ 228.5, 193.325925925925958, 318.0, 500.0 ],
 					"viewvisibility" : 1
 				}
@@ -1968,6 +1989,13 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-31", 0 ],
+					"source" : [ "obj-11", 6 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-4", 0 ],
 					"source" : [ "obj-11", 5 ]
 				}
@@ -2273,28 +2301,28 @@
  ],
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-resize.js",
-				"bootpath" : "~/Documents/Koral/koral/Live/M4L",
-				"patcherrelativepath" : "../../../../../koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect-server.cjs",
-				"bootpath" : "~/Documents/Koral/koral/Live/M4L",
-				"patcherrelativepath" : "../../../../../koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect.maxpat",
-				"bootpath" : "~/Documents/Koral/koral/Live/M4L",
-				"patcherrelativepath" : "../../../../../koral/Live/M4L",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
+				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-screenshot-3.png",
-				"bootpath" : "~/Documents/Koral/Comote/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "PNG",
 				"implicit" : 1
