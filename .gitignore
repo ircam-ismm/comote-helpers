@@ -6,3 +6,4 @@ node_modules
 /server.js
 /qrcode.js
 /wifi-infos.js
+example/.vendors
