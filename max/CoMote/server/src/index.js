@@ -3,7 +3,9 @@ import '@ircam/sc-components';
 
 render(html`
   <div class="screen">
+
     <h1> Basic CoMote Webview </h1>
+
     <div class="interface">
       <sc-slider
         min="0"
@@ -24,9 +26,11 @@ render(html`
         >2</sc-button>
       </div>
     </div>
+
     <div class="footer">
-    <p>Built with <br><a href="https://ircam-ismm.github.io/sc-components/">sc-components</a></p>
+    <p>Built with <br><a target="_blank" href="https://ircam-ismm.github.io/sc-components/">sc-components</a></p>
     <sc-button @press=${e => toggleModal()}>fullscreen</sc-button>
-</div>
+    </div>
+    
   </div>
 `, document.body);
