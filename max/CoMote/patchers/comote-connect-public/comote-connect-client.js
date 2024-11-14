@@ -171,8 +171,8 @@
           return (this.buffer[bufIndex] >>> 7 - index % 8 & 1) === 1;
         },
         put: function(num, length) {
-          for (let i4 = 0; i4 < length; i4++) {
-            this.putBit((num >>> length - i4 - 1 & 1) === 1);
+          for (let i5 = 0; i5 < length; i5++) {
+            this.putBit((num >>> length - i5 - 1 & 1) === 1);
           }
         },
         getLengthInBits: function() {
@@ -232,8 +232,8 @@
         const size = getSymbolSize(version);
         const intervals = size === 145 ? 26 : Math.ceil((size - 13) / (2 * posCount - 2)) * 2;
         const positions = [size - 7];
-        for (let i4 = 1; i4 < posCount - 1; i4++) {
-          positions[i4] = positions[i4 - 1] - intervals;
+        for (let i5 = 1; i5 < posCount - 1; i5++) {
+          positions[i5] = positions[i5 - 1] - intervals;
         }
         positions.push(6);
         return positions.reverse();
@@ -242,14 +242,14 @@
         const coords = [];
         const pos = exports.getRowColCoords(version);
         const posLength = pos.length;
-        for (let i4 = 0; i4 < posLength; i4++) {
+        for (let i5 = 0; i5 < posLength; i5++) {
           for (let j2 = 0; j2 < posLength; j2++) {
-            if (i4 === 0 && j2 === 0 || // top-left
-            i4 === 0 && j2 === posLength - 1 || // bottom-left
-            i4 === posLength - 1 && j2 === 0) {
+            if (i5 === 0 && j2 === 0 || // top-left
+            i5 === 0 && j2 === posLength - 1 || // bottom-left
+            i5 === posLength - 1 && j2 === 0) {
               continue;
             }
-            coords.push([pos[i4], pos[j2]]);
+            coords.push([pos[i5], pos[j2]]);
           }
         }
         return coords;
@@ -364,28 +364,28 @@
       exports.getPenaltyN4 = function getPenaltyN4(data) {
         let darkCount = 0;
         const modulesCount = data.data.length;
-        for (let i4 = 0; i4 < modulesCount; i4++) darkCount += data.data[i4];
+        for (let i5 = 0; i5 < modulesCount; i5++) darkCount += data.data[i5];
         const k2 = Math.abs(Math.ceil(darkCount * 100 / modulesCount / 5) - 10);
         return k2 * PenaltyScores.N4;
       };
-      function getMaskAt(maskPattern, i4, j2) {
+      function getMaskAt(maskPattern, i5, j2) {
         switch (maskPattern) {
           case exports.Patterns.PATTERN000:
-            return (i4 + j2) % 2 === 0;
+            return (i5 + j2) % 2 === 0;
           case exports.Patterns.PATTERN001:
-            return i4 % 2 === 0;
+            return i5 % 2 === 0;
           case exports.Patterns.PATTERN010:
             return j2 % 3 === 0;
           case exports.Patterns.PATTERN011:
-            return (i4 + j2) % 3 === 0;
+            return (i5 + j2) % 3 === 0;
           case exports.Patterns.PATTERN100:
-            return (Math.floor(i4 / 2) + Math.floor(j2 / 3)) % 2 === 0;
+            return (Math.floor(i5 / 2) + Math.floor(j2 / 3)) % 2 === 0;
           case exports.Patterns.PATTERN101:
-            return i4 * j2 % 2 + i4 * j2 % 3 === 0;
+            return i5 * j2 % 2 + i5 * j2 % 3 === 0;
           case exports.Patterns.PATTERN110:
-            return (i4 * j2 % 2 + i4 * j2 % 3) % 2 === 0;
+            return (i5 * j2 % 2 + i5 * j2 % 3) % 2 === 0;
           case exports.Patterns.PATTERN111:
-            return (i4 * j2 % 3 + (i4 + j2) % 2) % 2 === 0;
+            return (i5 * j2 % 3 + (i5 + j2) % 2) % 2 === 0;
           default:
             throw new Error("bad maskPattern:" + maskPattern);
         }
@@ -786,16 +786,16 @@
       var LOG_TABLE = new Uint8Array(256);
       (function initTables() {
         let x2 = 1;
-        for (let i4 = 0; i4 < 255; i4++) {
-          EXP_TABLE[i4] = x2;
-          LOG_TABLE[x2] = i4;
+        for (let i5 = 0; i5 < 255; i5++) {
+          EXP_TABLE[i5] = x2;
+          LOG_TABLE[x2] = i5;
           x2 <<= 1;
           if (x2 & 256) {
             x2 ^= 285;
           }
         }
-        for (let i4 = 255; i4 < 512; i4++) {
-          EXP_TABLE[i4] = EXP_TABLE[i4 - 255];
+        for (let i5 = 255; i5 < 512; i5++) {
+          EXP_TABLE[i5] = EXP_TABLE[i5 - 255];
         }
       })();
       exports.log = function log(n4) {
@@ -818,9 +818,9 @@
       var GF = require_galois_field();
       exports.mul = function mul(p1, p22) {
         const coeff = new Uint8Array(p1.length + p22.length - 1);
-        for (let i4 = 0; i4 < p1.length; i4++) {
+        for (let i5 = 0; i5 < p1.length; i5++) {
           for (let j2 = 0; j2 < p22.length; j2++) {
-            coeff[i4 + j2] ^= GF.mul(p1[i4], p22[j2]);
+            coeff[i5 + j2] ^= GF.mul(p1[i5], p22[j2]);
           }
         }
         return coeff;
@@ -829,8 +829,8 @@
         let result = new Uint8Array(divident);
         while (result.length - divisor.length >= 0) {
           const coeff = result[0];
-          for (let i4 = 0; i4 < divisor.length; i4++) {
-            result[i4] ^= GF.mul(divisor[i4], coeff);
+          for (let i5 = 0; i5 < divisor.length; i5++) {
+            result[i5] ^= GF.mul(divisor[i5], coeff);
           }
           let offset = 0;
           while (offset < result.length && result[offset] === 0) offset++;
@@ -840,8 +840,8 @@
       };
       exports.generateECPolynomial = function generateECPolynomial(degree) {
         let poly = new Uint8Array([1]);
-        for (let i4 = 0; i4 < degree; i4++) {
-          poly = exports.mul(poly, new Uint8Array([1, GF.exp(i4)]));
+        for (let i5 = 0; i5 < degree; i5++) {
+          poly = exports.mul(poly, new Uint8Array([1, GF.exp(i5)]));
         }
         return poly;
       };
@@ -1129,15 +1129,15 @@
         return NumericData.getBitsLength(this.data.length);
       };
       NumericData.prototype.write = function write(bitBuffer) {
-        let i4, group, value;
-        for (i4 = 0; i4 + 3 <= this.data.length; i4 += 3) {
-          group = this.data.substr(i4, 3);
+        let i5, group, value;
+        for (i5 = 0; i5 + 3 <= this.data.length; i5 += 3) {
+          group = this.data.substr(i5, 3);
           value = parseInt(group, 10);
           bitBuffer.put(value, 10);
         }
-        const remainingNum = this.data.length - i4;
+        const remainingNum = this.data.length - i5;
         if (remainingNum > 0) {
-          group = this.data.substr(i4);
+          group = this.data.substr(i5);
           value = parseInt(group, 10);
           bitBuffer.put(value, remainingNum * 3 + 1);
         }
@@ -1211,76 +1211,31 @@
         return AlphanumericData.getBitsLength(this.data.length);
       };
       AlphanumericData.prototype.write = function write(bitBuffer) {
-        let i4;
-        for (i4 = 0; i4 + 2 <= this.data.length; i4 += 2) {
-          let value = ALPHA_NUM_CHARS.indexOf(this.data[i4]) * 45;
-          value += ALPHA_NUM_CHARS.indexOf(this.data[i4 + 1]);
+        let i5;
+        for (i5 = 0; i5 + 2 <= this.data.length; i5 += 2) {
+          let value = ALPHA_NUM_CHARS.indexOf(this.data[i5]) * 45;
+          value += ALPHA_NUM_CHARS.indexOf(this.data[i5 + 1]);
           bitBuffer.put(value, 11);
         }
         if (this.data.length % 2) {
-          bitBuffer.put(ALPHA_NUM_CHARS.indexOf(this.data[i4]), 6);
+          bitBuffer.put(ALPHA_NUM_CHARS.indexOf(this.data[i5]), 6);
         }
       };
       module.exports = AlphanumericData;
     }
   });
 
-  // node_modules/encode-utf8/index.js
-  var require_encode_utf8 = __commonJS({
-    "node_modules/encode-utf8/index.js"(exports, module) {
-      "use strict";
-      module.exports = function encodeUtf8(input) {
-        var result = [];
-        var size = input.length;
-        for (var index = 0; index < size; index++) {
-          var point = input.charCodeAt(index);
-          if (point >= 55296 && point <= 56319 && size > index + 1) {
-            var second = input.charCodeAt(index + 1);
-            if (second >= 56320 && second <= 57343) {
-              point = (point - 55296) * 1024 + second - 56320 + 65536;
-              index += 1;
-            }
-          }
-          if (point < 128) {
-            result.push(point);
-            continue;
-          }
-          if (point < 2048) {
-            result.push(point >> 6 | 192);
-            result.push(point & 63 | 128);
-            continue;
-          }
-          if (point < 55296 || point >= 57344 && point < 65536) {
-            result.push(point >> 12 | 224);
-            result.push(point >> 6 & 63 | 128);
-            result.push(point & 63 | 128);
-            continue;
-          }
-          if (point >= 65536 && point <= 1114111) {
-            result.push(point >> 18 | 240);
-            result.push(point >> 12 & 63 | 128);
-            result.push(point >> 6 & 63 | 128);
-            result.push(point & 63 | 128);
-            continue;
-          }
-          result.push(239, 191, 189);
-        }
-        return new Uint8Array(result).buffer;
-      };
-    }
-  });
-
   // node_modules/qrcode/lib/core/byte-data.js
   var require_byte_data = __commonJS({
     "node_modules/qrcode/lib/core/byte-data.js"(exports, module) {
-      var encodeUtf8 = require_encode_utf8();
       var Mode = require_mode();
       function ByteData(data) {
         this.mode = Mode.BYTE;
         if (typeof data === "string") {
-          data = encodeUtf8(data);
+          this.data = new TextEncoder().encode(data);
+        } else {
+          this.data = new Uint8Array(data);
         }
-        this.data = new Uint8Array(data);
       }
       ByteData.getBitsLength = function getBitsLength(length) {
         return length * 8;
@@ -1292,8 +1247,8 @@
         return ByteData.getBitsLength(this.data.length);
       };
       ByteData.prototype.write = function(bitBuffer) {
-        for (let i4 = 0, l3 = this.data.length; i4 < l3; i4++) {
-          bitBuffer.put(this.data[i4], 8);
+        for (let i5 = 0, l3 = this.data.length; i5 < l3; i5++) {
+          bitBuffer.put(this.data[i5], 8);
         }
       };
       module.exports = ByteData;
@@ -1319,16 +1274,16 @@
         return KanjiData.getBitsLength(this.data.length);
       };
       KanjiData.prototype.write = function(bitBuffer) {
-        let i4;
-        for (i4 = 0; i4 < this.data.length; i4++) {
-          let value = Utils.toSJIS(this.data[i4]);
+        let i5;
+        for (i5 = 0; i5 < this.data.length; i5++) {
+          let value = Utils.toSJIS(this.data[i5]);
           if (value >= 33088 && value <= 40956) {
             value -= 33088;
           } else if (value >= 57408 && value <= 60351) {
             value -= 49472;
           } else {
             throw new Error(
-              "Invalid SJIS character: " + this.data[i4] + "\nMake sure your charset is UTF-8"
+              "Invalid SJIS character: " + this.data[i5] + "\nMake sure your charset is UTF-8"
             );
           }
           value = (value >>> 8 & 255) * 192 + (value & 255);
@@ -1344,12 +1299,12 @@
     "node_modules/dijkstrajs/dijkstra.js"(exports, module) {
       "use strict";
       var dijkstra = {
-        single_source_shortest_paths: function(graph, s4, d3) {
+        single_source_shortest_paths: function(graph, s3, d3) {
           var predecessors = {};
           var costs = {};
-          costs[s4] = 0;
+          costs[s3] = 0;
           var open = dijkstra.PriorityQueue.make();
-          open.push(s4, 0);
+          open.push(s3, 0);
           var closest, u3, v2, cost_of_s_to_u, adjacent_nodes, cost_of_e, cost_of_s_to_u_plus_cost_of_e, cost_of_s_to_v, first_visit;
           while (!open.empty()) {
             closest = open.pop();
@@ -1371,7 +1326,7 @@
             }
           }
           if (typeof d3 !== "undefined" && typeof costs[d3] === "undefined") {
-            var msg = ["Could not find a path from ", s4, " to ", d3, "."].join("");
+            var msg = ["Could not find a path from ", s3, " to ", d3, "."].join("");
             throw new Error(msg);
           }
           return predecessors;
@@ -1388,8 +1343,8 @@
           nodes.reverse();
           return nodes;
         },
-        find_path: function(graph, s4, d3) {
-          var predecessors = dijkstra.single_source_shortest_paths(graph, s4, d3);
+        find_path: function(graph, s3, d3) {
+          var predecessors = dijkstra.single_source_shortest_paths(graph, s3, d3);
           return dijkstra.extract_shortest_path_from_predecessor_list(
             predecessors,
             d3
@@ -1515,8 +1470,8 @@
       }
       function buildNodes(segs) {
         const nodes = [];
-        for (let i4 = 0; i4 < segs.length; i4++) {
-          const seg = segs[i4];
+        for (let i5 = 0; i5 < segs.length; i5++) {
+          const seg = segs[i5];
           switch (seg.mode) {
             case Mode.NUMERIC:
               nodes.push([
@@ -1549,12 +1504,12 @@
         const table = {};
         const graph = { start: {} };
         let prevNodeIds = ["start"];
-        for (let i4 = 0; i4 < nodes.length; i4++) {
-          const nodeGroup = nodes[i4];
+        for (let i5 = 0; i5 < nodes.length; i5++) {
+          const nodeGroup = nodes[i5];
           const currentNodeIds = [];
           for (let j2 = 0; j2 < nodeGroup.length; j2++) {
             const node = nodeGroup[j2];
-            const key = "" + i4 + j2;
+            const key = "" + i5 + j2;
             currentNodeIds.push(key);
             table[key] = { node, lastCount: 0 };
             graph[key] = {};
@@ -1613,8 +1568,8 @@
         const graph = buildGraph(nodes, version);
         const path = dijkstra.find_path(graph.map, "start", "end");
         const optimizedSegs = [];
-        for (let i4 = 1; i4 < path.length - 1; i4++) {
-          optimizedSegs.push(graph.table[path[i4]].node);
+        for (let i5 = 1; i5 < path.length - 1; i5++) {
+          optimizedSegs.push(graph.table[path[i5]].node);
         }
         return exports.fromArray(mergeSegments(optimizedSegs));
       };
@@ -1645,9 +1600,9 @@
       function setupFinderPattern(matrix, version) {
         const size = matrix.size;
         const pos = FinderPattern.getPositions(version);
-        for (let i4 = 0; i4 < pos.length; i4++) {
-          const row = pos[i4][0];
-          const col = pos[i4][1];
+        for (let i5 = 0; i5 < pos.length; i5++) {
+          const row = pos[i5][0];
+          const col = pos[i5][1];
           for (let r5 = -1; r5 <= 7; r5++) {
             if (row + r5 <= -1 || size <= row + r5) continue;
             for (let c4 = -1; c4 <= 7; c4++) {
@@ -1671,9 +1626,9 @@
       }
       function setupAlignmentPattern(matrix, version) {
         const pos = AlignmentPattern.getPositions(version);
-        for (let i4 = 0; i4 < pos.length; i4++) {
-          const row = pos[i4][0];
-          const col = pos[i4][1];
+        for (let i5 = 0; i5 < pos.length; i5++) {
+          const row = pos[i5][0];
+          const col = pos[i5][1];
           for (let r5 = -2; r5 <= 2; r5++) {
             for (let c4 = -2; c4 <= 2; c4++) {
               if (r5 === -2 || r5 === 2 || c4 === -2 || c4 === 2 || r5 === 0 && c4 === 0) {
@@ -1689,10 +1644,10 @@
         const size = matrix.size;
         const bits = Version.getEncodedBits(version);
         let row, col, mod;
-        for (let i4 = 0; i4 < 18; i4++) {
-          row = Math.floor(i4 / 3);
-          col = i4 % 3 + size - 8 - 3;
-          mod = (bits >> i4 & 1) === 1;
+        for (let i5 = 0; i5 < 18; i5++) {
+          row = Math.floor(i5 / 3);
+          col = i5 % 3 + size - 8 - 3;
+          mod = (bits >> i5 & 1) === 1;
           matrix.set(row, col, mod, true);
           matrix.set(col, row, mod, true);
         }
@@ -1700,22 +1655,22 @@
       function setupFormatInfo(matrix, errorCorrectionLevel, maskPattern) {
         const size = matrix.size;
         const bits = FormatInfo.getEncodedBits(errorCorrectionLevel, maskPattern);
-        let i4, mod;
-        for (i4 = 0; i4 < 15; i4++) {
-          mod = (bits >> i4 & 1) === 1;
-          if (i4 < 6) {
-            matrix.set(i4, 8, mod, true);
-          } else if (i4 < 8) {
-            matrix.set(i4 + 1, 8, mod, true);
+        let i5, mod;
+        for (i5 = 0; i5 < 15; i5++) {
+          mod = (bits >> i5 & 1) === 1;
+          if (i5 < 6) {
+            matrix.set(i5, 8, mod, true);
+          } else if (i5 < 8) {
+            matrix.set(i5 + 1, 8, mod, true);
           } else {
-            matrix.set(size - 15 + i4, 8, mod, true);
+            matrix.set(size - 15 + i5, 8, mod, true);
           }
-          if (i4 < 8) {
-            matrix.set(8, size - i4 - 1, mod, true);
-          } else if (i4 < 9) {
-            matrix.set(8, 15 - i4 - 1 + 1, mod, true);
+          if (i5 < 8) {
+            matrix.set(8, size - i5 - 1, mod, true);
+          } else if (i5 < 9) {
+            matrix.set(8, 15 - i5 - 1 + 1, mod, true);
           } else {
-            matrix.set(8, 15 - i4 - 1, mod, true);
+            matrix.set(8, 15 - i5 - 1, mod, true);
           }
         }
         matrix.set(size - 8, 8, 1, true);
@@ -1769,8 +1724,8 @@
           buffer.putBit(0);
         }
         const remainingByte = (dataTotalCodewordsBits - buffer.getLengthInBits()) / 8;
-        for (let i4 = 0; i4 < remainingByte; i4++) {
-          buffer.put(i4 % 2 ? 17 : 236, 8);
+        for (let i5 = 0; i5 < remainingByte; i5++) {
+          buffer.put(i5 % 2 ? 17 : 236, 8);
         }
         return createCodewords(buffer, version, errorCorrectionLevel);
       }
@@ -1800,17 +1755,17 @@
         }
         const data = new Uint8Array(totalCodewords);
         let index = 0;
-        let i4, r5;
-        for (i4 = 0; i4 < maxDataSize; i4++) {
+        let i5, r5;
+        for (i5 = 0; i5 < maxDataSize; i5++) {
           for (r5 = 0; r5 < ecTotalBlocks; r5++) {
-            if (i4 < dcData[r5].length) {
-              data[index++] = dcData[r5][i4];
+            if (i5 < dcData[r5].length) {
+              data[index++] = dcData[r5][i5];
             }
           }
         }
-        for (i4 = 0; i4 < ecCount; i4++) {
+        for (i5 = 0; i5 < ecCount; i5++) {
           for (r5 = 0; r5 < ecTotalBlocks; r5++) {
-            data[index++] = ecData[r5][i4];
+            data[index++] = ecData[r5][i5];
           }
         }
         return data;
@@ -1948,12 +1903,12 @@
         const symbolSize = Math.floor((size + opts.margin * 2) * scale);
         const scaledMargin = opts.margin * scale;
         const palette = [opts.color.light, opts.color.dark];
-        for (let i4 = 0; i4 < symbolSize; i4++) {
+        for (let i5 = 0; i5 < symbolSize; i5++) {
           for (let j2 = 0; j2 < symbolSize; j2++) {
-            let posDst = (i4 * symbolSize + j2) * 4;
+            let posDst = (i5 * symbolSize + j2) * 4;
             let pxColor = opts.color.light;
-            if (i4 >= scaledMargin && j2 >= scaledMargin && i4 < symbolSize - scaledMargin && j2 < symbolSize - scaledMargin) {
-              const iSrc = Math.floor((i4 - scaledMargin) / scale);
+            if (i5 >= scaledMargin && j2 >= scaledMargin && i5 < symbolSize - scaledMargin && j2 < symbolSize - scaledMargin) {
+              const iSrc = Math.floor((i5 - scaledMargin) / scale);
               const jSrc = Math.floor((j2 - scaledMargin) / scale);
               pxColor = palette[data[iSrc * size + jSrc] ? 1 : 0];
             }
@@ -2039,18 +1994,18 @@
         let moveBy = 0;
         let newRow = false;
         let lineLength = 0;
-        for (let i4 = 0; i4 < data.length; i4++) {
-          const col = Math.floor(i4 % size);
-          const row = Math.floor(i4 / size);
+        for (let i5 = 0; i5 < data.length; i5++) {
+          const col = Math.floor(i5 % size);
+          const row = Math.floor(i5 / size);
           if (!col && !newRow) newRow = true;
-          if (data[i4]) {
+          if (data[i5]) {
             lineLength++;
-            if (!(i4 > 0 && col > 0 && data[i4 - 1])) {
+            if (!(i5 > 0 && col > 0 && data[i5 - 1])) {
               path += newRow ? svgCmd("M", col + margin, 0.5 + row + margin) : svgCmd("m", moveBy, 0);
               moveBy = 0;
               newRow = false;
             }
-            if (!(col + 1 < size && data[i4 + 1])) {
+            if (!(col + 1 < size && data[i5 + 1])) {
               path += svgCmd("h", lineLength);
               lineLength = 0;
             }
@@ -2160,10 +2115,10 @@
     }
     get styleSheet() {
       let t3 = this.o;
-      const s4 = this.t;
+      const s3 = this.t;
       if (e && void 0 === t3) {
-        const e4 = void 0 !== s4 && 1 === s4.length;
-        e4 && (t3 = o.get(s4)), void 0 === t3 && ((this.o = t3 = new CSSStyleSheet()).replaceSync(this.cssText), e4 && o.set(s4, t3));
+        const e4 = void 0 !== s3 && 1 === s3.length;
+        e4 && (t3 = o.get(s3)), void 0 === t3 && ((this.o = t3 = new CSSStyleSheet()).replaceSync(this.cssText), e4 && o.set(s3, t3));
       }
       return t3;
     }
@@ -2172,16 +2127,16 @@
     }
   };
   var r = (t3) => new n("string" == typeof t3 ? t3 : t3 + "", void 0, s);
-  var S = (s4, o4) => {
-    if (e) s4.adoptedStyleSheets = o4.map((t3) => t3 instanceof CSSStyleSheet ? t3 : t3.styleSheet);
+  var S = (s3, o4) => {
+    if (e) s3.adoptedStyleSheets = o4.map((t3) => t3 instanceof CSSStyleSheet ? t3 : t3.styleSheet);
     else for (const e4 of o4) {
       const o5 = document.createElement("style"), n4 = t.litNonce;
-      void 0 !== n4 && o5.setAttribute("nonce", n4), o5.textContent = e4.cssText, s4.appendChild(o5);
+      void 0 !== n4 && o5.setAttribute("nonce", n4), o5.textContent = e4.cssText, s3.appendChild(o5);
     }
   };
   var c = e ? (t3) => t3 : (t3) => t3 instanceof CSSStyleSheet ? ((t4) => {
     let e4 = "";
-    for (const s4 of t4.cssRules) e4 += s4.cssText;
+    for (const s3 of t4.cssRules) e4 += s3.cssText;
     return r(e4);
   })(t3) : t3;
 
@@ -2191,9 +2146,9 @@
   var c2 = a.trustedTypes;
   var l = c2 ? c2.emptyScript : "";
   var p = a.reactiveElementPolyfillSupport;
-  var d = (t3, s4) => t3;
-  var u = { toAttribute(t3, s4) {
-    switch (s4) {
+  var d = (t3, s3) => t3;
+  var u = { toAttribute(t3, s3) {
+    switch (s3) {
       case Boolean:
         t3 = t3 ? l : null;
         break;
@@ -2202,26 +2157,26 @@
         t3 = null == t3 ? t3 : JSON.stringify(t3);
     }
     return t3;
-  }, fromAttribute(t3, s4) {
-    let i4 = t3;
-    switch (s4) {
+  }, fromAttribute(t3, s3) {
+    let i5 = t3;
+    switch (s3) {
       case Boolean:
-        i4 = null !== t3;
+        i5 = null !== t3;
         break;
       case Number:
-        i4 = null === t3 ? null : Number(t3);
+        i5 = null === t3 ? null : Number(t3);
         break;
       case Object:
       case Array:
         try {
-          i4 = JSON.parse(t3);
+          i5 = JSON.parse(t3);
         } catch (t4) {
-          i4 = null;
+          i5 = null;
         }
     }
-    return i4;
+    return i5;
   } };
-  var f = (t3, s4) => !i2(t3, s4);
+  var f = (t3, s3) => !i2(t3, s3);
   var y = { attribute: true, type: String, converter: u, reflect: false, hasChanged: f };
   Symbol.metadata ??= Symbol("metadata"), a.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
   var b = class extends HTMLElement {
@@ -2231,23 +2186,23 @@
     static get observedAttributes() {
       return this.finalize(), this._$Eh && [...this._$Eh.keys()];
     }
-    static createProperty(t3, s4 = y) {
-      if (s4.state && (s4.attribute = false), this._$Ei(), this.elementProperties.set(t3, s4), !s4.noAccessor) {
-        const i4 = Symbol(), r5 = this.getPropertyDescriptor(t3, i4, s4);
+    static createProperty(t3, s3 = y) {
+      if (s3.state && (s3.attribute = false), this._$Ei(), this.elementProperties.set(t3, s3), !s3.noAccessor) {
+        const i5 = Symbol(), r5 = this.getPropertyDescriptor(t3, i5, s3);
         void 0 !== r5 && e2(this.prototype, t3, r5);
       }
     }
-    static getPropertyDescriptor(t3, s4, i4) {
+    static getPropertyDescriptor(t3, s3, i5) {
       const { get: e4, set: h3 } = r2(this.prototype, t3) ?? { get() {
-        return this[s4];
+        return this[s3];
       }, set(t4) {
-        this[s4] = t4;
+        this[s3] = t4;
       } };
       return { get() {
         return e4?.call(this);
-      }, set(s5) {
+      }, set(s4) {
         const r5 = e4?.call(this);
-        h3.call(this, s5), this.requestUpdate(t3, r5, i4);
+        h3.call(this, s4), this.requestUpdate(t3, r5, i5);
       }, configurable: true, enumerable: true };
     }
     static getPropertyOptions(t3) {
@@ -2261,32 +2216,32 @@
     static finalize() {
       if (this.hasOwnProperty(d("finalized"))) return;
       if (this.finalized = true, this._$Ei(), this.hasOwnProperty(d("properties"))) {
-        const t4 = this.properties, s4 = [...h(t4), ...o2(t4)];
-        for (const i4 of s4) this.createProperty(i4, t4[i4]);
+        const t4 = this.properties, s3 = [...h(t4), ...o2(t4)];
+        for (const i5 of s3) this.createProperty(i5, t4[i5]);
       }
       const t3 = this[Symbol.metadata];
       if (null !== t3) {
-        const s4 = litPropertyMetadata.get(t3);
-        if (void 0 !== s4) for (const [t4, i4] of s4) this.elementProperties.set(t4, i4);
+        const s3 = litPropertyMetadata.get(t3);
+        if (void 0 !== s3) for (const [t4, i5] of s3) this.elementProperties.set(t4, i5);
       }
       this._$Eh = /* @__PURE__ */ new Map();
-      for (const [t4, s4] of this.elementProperties) {
-        const i4 = this._$Eu(t4, s4);
-        void 0 !== i4 && this._$Eh.set(i4, t4);
+      for (const [t4, s3] of this.elementProperties) {
+        const i5 = this._$Eu(t4, s3);
+        void 0 !== i5 && this._$Eh.set(i5, t4);
       }
       this.elementStyles = this.finalizeStyles(this.styles);
     }
-    static finalizeStyles(s4) {
-      const i4 = [];
-      if (Array.isArray(s4)) {
-        const e4 = new Set(s4.flat(1 / 0).reverse());
-        for (const s5 of e4) i4.unshift(c(s5));
-      } else void 0 !== s4 && i4.push(c(s4));
-      return i4;
+    static finalizeStyles(s3) {
+      const i5 = [];
+      if (Array.isArray(s3)) {
+        const e4 = new Set(s3.flat(1 / 0).reverse());
+        for (const s4 of e4) i5.unshift(c(s4));
+      } else void 0 !== s3 && i5.push(c(s3));
+      return i5;
     }
-    static _$Eu(t3, s4) {
-      const i4 = s4.attribute;
-      return false === i4 ? void 0 : "string" == typeof i4 ? i4 : "string" == typeof t3 ? t3.toLowerCase() : void 0;
+    static _$Eu(t3, s3) {
+      const i5 = s3.attribute;
+      return false === i5 ? void 0 : "string" == typeof i5 ? i5 : "string" == typeof t3 ? t3.toLowerCase() : void 0;
     }
     constructor() {
       super(), this._$Ep = void 0, this.isUpdatePending = false, this.hasUpdated = false, this._$Em = null, this._$Ev();
@@ -2301,8 +2256,8 @@
       this._$EO?.delete(t3);
     }
     _$E_() {
-      const t3 = /* @__PURE__ */ new Map(), s4 = this.constructor.elementProperties;
-      for (const i4 of s4.keys()) this.hasOwnProperty(i4) && (t3.set(i4, this[i4]), delete this[i4]);
+      const t3 = /* @__PURE__ */ new Map(), s3 = this.constructor.elementProperties;
+      for (const i5 of s3.keys()) this.hasOwnProperty(i5) && (t3.set(i5, this[i5]), delete this[i5]);
       t3.size > 0 && (this._$Ep = t3);
     }
     createRenderRoot() {
@@ -2317,32 +2272,32 @@
     disconnectedCallback() {
       this._$EO?.forEach((t3) => t3.hostDisconnected?.());
     }
-    attributeChangedCallback(t3, s4, i4) {
-      this._$AK(t3, i4);
+    attributeChangedCallback(t3, s3, i5) {
+      this._$AK(t3, i5);
     }
-    _$EC(t3, s4) {
-      const i4 = this.constructor.elementProperties.get(t3), e4 = this.constructor._$Eu(t3, i4);
-      if (void 0 !== e4 && true === i4.reflect) {
-        const r5 = (void 0 !== i4.converter?.toAttribute ? i4.converter : u).toAttribute(s4, i4.type);
+    _$EC(t3, s3) {
+      const i5 = this.constructor.elementProperties.get(t3), e4 = this.constructor._$Eu(t3, i5);
+      if (void 0 !== e4 && true === i5.reflect) {
+        const r5 = (void 0 !== i5.converter?.toAttribute ? i5.converter : u).toAttribute(s3, i5.type);
         this._$Em = t3, null == r5 ? this.removeAttribute(e4) : this.setAttribute(e4, r5), this._$Em = null;
       }
     }
-    _$AK(t3, s4) {
-      const i4 = this.constructor, e4 = i4._$Eh.get(t3);
+    _$AK(t3, s3) {
+      const i5 = this.constructor, e4 = i5._$Eh.get(t3);
       if (void 0 !== e4 && this._$Em !== e4) {
-        const t4 = i4.getPropertyOptions(e4), r5 = "function" == typeof t4.converter ? { fromAttribute: t4.converter } : void 0 !== t4.converter?.fromAttribute ? t4.converter : u;
-        this._$Em = e4, this[e4] = r5.fromAttribute(s4, t4.type), this._$Em = null;
+        const t4 = i5.getPropertyOptions(e4), r5 = "function" == typeof t4.converter ? { fromAttribute: t4.converter } : void 0 !== t4.converter?.fromAttribute ? t4.converter : u;
+        this._$Em = e4, this[e4] = r5.fromAttribute(s3, t4.type), this._$Em = null;
       }
     }
-    requestUpdate(t3, s4, i4) {
+    requestUpdate(t3, s3, i5) {
       if (void 0 !== t3) {
-        if (i4 ??= this.constructor.getPropertyOptions(t3), !(i4.hasChanged ?? f)(this[t3], s4)) return;
-        this.P(t3, s4, i4);
+        if (i5 ??= this.constructor.getPropertyOptions(t3), !(i5.hasChanged ?? f)(this[t3], s3)) return;
+        this.P(t3, s3, i5);
       }
       false === this.isUpdatePending && (this._$ES = this._$ET());
     }
-    P(t3, s4, i4) {
-      this._$AL.has(t3) || this._$AL.set(t3, s4), true === i4.reflect && this._$Em !== t3 && (this._$Ej ??= /* @__PURE__ */ new Set()).add(t3);
+    P(t3, s3, i5) {
+      this._$AL.has(t3) || this._$AL.set(t3, s3), true === i5.reflect && this._$Em !== t3 && (this._$Ej ??= /* @__PURE__ */ new Set()).add(t3);
     }
     async _$ET() {
       this.isUpdatePending = true;
@@ -2361,20 +2316,20 @@
       if (!this.isUpdatePending) return;
       if (!this.hasUpdated) {
         if (this.renderRoot ??= this.createRenderRoot(), this._$Ep) {
-          for (const [t5, s5] of this._$Ep) this[t5] = s5;
+          for (const [t5, s4] of this._$Ep) this[t5] = s4;
           this._$Ep = void 0;
         }
         const t4 = this.constructor.elementProperties;
-        if (t4.size > 0) for (const [s5, i4] of t4) true !== i4.wrapped || this._$AL.has(s5) || void 0 === this[s5] || this.P(s5, this[s5], i4);
+        if (t4.size > 0) for (const [s4, i5] of t4) true !== i5.wrapped || this._$AL.has(s4) || void 0 === this[s4] || this.P(s4, this[s4], i5);
       }
       let t3 = false;
-      const s4 = this._$AL;
+      const s3 = this._$AL;
       try {
-        t3 = this.shouldUpdate(s4), t3 ? (this.willUpdate(s4), this._$EO?.forEach((t4) => t4.hostUpdate?.()), this.update(s4)) : this._$EU();
-      } catch (s5) {
-        throw t3 = false, this._$EU(), s5;
+        t3 = this.shouldUpdate(s3), t3 ? (this.willUpdate(s3), this._$EO?.forEach((t4) => t4.hostUpdate?.()), this.update(s3)) : this._$EU();
+      } catch (s4) {
+        throw t3 = false, this._$EU(), s4;
       }
-      t3 && this._$AE(s4);
+      t3 && this._$AE(s3);
     }
     willUpdate(t3) {
     }
@@ -2425,51 +2380,52 @@
   var p2 = /'/g;
   var g = /"/g;
   var $ = /^(?:script|style|textarea|title)$/i;
-  var y2 = (t3) => (i4, ...s4) => ({ _$litType$: t3, strings: i4, values: s4 });
+  var y2 = (t3) => (i5, ...s3) => ({ _$litType$: t3, strings: i5, values: s3 });
   var x = y2(1);
   var b2 = y2(2);
-  var w = Symbol.for("lit-noChange");
-  var T = Symbol.for("lit-nothing");
+  var w = y2(3);
+  var T = Symbol.for("lit-noChange");
+  var E = Symbol.for("lit-nothing");
   var A = /* @__PURE__ */ new WeakMap();
-  var E = r3.createTreeWalker(r3, 129);
-  function C(t3, i4) {
-    if (!Array.isArray(t3) || !t3.hasOwnProperty("raw")) throw Error("invalid template strings array");
-    return void 0 !== s2 ? s2.createHTML(i4) : i4;
+  var C = r3.createTreeWalker(r3, 129);
+  function P(t3, i5) {
+    if (!a2(t3) || !t3.hasOwnProperty("raw")) throw Error("invalid template strings array");
+    return void 0 !== s2 ? s2.createHTML(i5) : i5;
   }
-  var P = (t3, i4) => {
-    const s4 = t3.length - 1, o4 = [];
-    let r5, l3 = 2 === i4 ? "<svg>" : "", c4 = f2;
-    for (let i5 = 0; i5 < s4; i5++) {
-      const s5 = t3[i5];
+  var V = (t3, i5) => {
+    const s3 = t3.length - 1, o4 = [];
+    let r5, l3 = 2 === i5 ? "<svg>" : 3 === i5 ? "<math>" : "", c4 = f2;
+    for (let i6 = 0; i6 < s3; i6++) {
+      const s4 = t3[i6];
       let a3, u3, d3 = -1, y3 = 0;
-      for (; y3 < s5.length && (c4.lastIndex = y3, u3 = c4.exec(s5), null !== u3); ) y3 = c4.lastIndex, c4 === f2 ? "!--" === u3[1] ? c4 = v : void 0 !== u3[1] ? c4 = _ : void 0 !== u3[2] ? ($.test(u3[2]) && (r5 = RegExp("</" + u3[2], "g")), c4 = m) : void 0 !== u3[3] && (c4 = m) : c4 === m ? ">" === u3[0] ? (c4 = r5 ?? f2, d3 = -1) : void 0 === u3[1] ? d3 = -2 : (d3 = c4.lastIndex - u3[2].length, a3 = u3[1], c4 = void 0 === u3[3] ? m : '"' === u3[3] ? g : p2) : c4 === g || c4 === p2 ? c4 = m : c4 === v || c4 === _ ? c4 = f2 : (c4 = m, r5 = void 0);
-      const x2 = c4 === m && t3[i5 + 1].startsWith("/>") ? " " : "";
-      l3 += c4 === f2 ? s5 + n3 : d3 >= 0 ? (o4.push(a3), s5.slice(0, d3) + e3 + s5.slice(d3) + h2 + x2) : s5 + h2 + (-2 === d3 ? i5 : x2);
+      for (; y3 < s4.length && (c4.lastIndex = y3, u3 = c4.exec(s4), null !== u3); ) y3 = c4.lastIndex, c4 === f2 ? "!--" === u3[1] ? c4 = v : void 0 !== u3[1] ? c4 = _ : void 0 !== u3[2] ? ($.test(u3[2]) && (r5 = RegExp("</" + u3[2], "g")), c4 = m) : void 0 !== u3[3] && (c4 = m) : c4 === m ? ">" === u3[0] ? (c4 = r5 ?? f2, d3 = -1) : void 0 === u3[1] ? d3 = -2 : (d3 = c4.lastIndex - u3[2].length, a3 = u3[1], c4 = void 0 === u3[3] ? m : '"' === u3[3] ? g : p2) : c4 === g || c4 === p2 ? c4 = m : c4 === v || c4 === _ ? c4 = f2 : (c4 = m, r5 = void 0);
+      const x2 = c4 === m && t3[i6 + 1].startsWith("/>") ? " " : "";
+      l3 += c4 === f2 ? s4 + n3 : d3 >= 0 ? (o4.push(a3), s4.slice(0, d3) + e3 + s4.slice(d3) + h2 + x2) : s4 + h2 + (-2 === d3 ? i6 : x2);
     }
-    return [C(t3, l3 + (t3[s4] || "<?>") + (2 === i4 ? "</svg>" : "")), o4];
+    return [P(t3, l3 + (t3[s3] || "<?>") + (2 === i5 ? "</svg>" : 3 === i5 ? "</math>" : "")), o4];
   };
-  var V = class _V {
-    constructor({ strings: t3, _$litType$: s4 }, n4) {
+  var N = class _N {
+    constructor({ strings: t3, _$litType$: s3 }, n4) {
       let r5;
       this.parts = [];
       let c4 = 0, a3 = 0;
-      const u3 = t3.length - 1, d3 = this.parts, [f3, v2] = P(t3, s4);
-      if (this.el = _V.createElement(f3, n4), E.currentNode = this.el.content, 2 === s4) {
+      const u3 = t3.length - 1, d3 = this.parts, [f3, v2] = V(t3, s3);
+      if (this.el = _N.createElement(f3, n4), C.currentNode = this.el.content, 2 === s3 || 3 === s3) {
         const t4 = this.el.content.firstChild;
         t4.replaceWith(...t4.childNodes);
       }
-      for (; null !== (r5 = E.nextNode()) && d3.length < u3; ) {
+      for (; null !== (r5 = C.nextNode()) && d3.length < u3; ) {
         if (1 === r5.nodeType) {
           if (r5.hasAttributes()) for (const t4 of r5.getAttributeNames()) if (t4.endsWith(e3)) {
-            const i4 = v2[a3++], s5 = r5.getAttribute(t4).split(h2), e4 = /([.?@])?(.*)/.exec(i4);
-            d3.push({ type: 1, index: c4, name: e4[2], strings: s5, ctor: "." === e4[1] ? k : "?" === e4[1] ? H : "@" === e4[1] ? I : R }), r5.removeAttribute(t4);
+            const i5 = v2[a3++], s4 = r5.getAttribute(t4).split(h2), e4 = /([.?@])?(.*)/.exec(i5);
+            d3.push({ type: 1, index: c4, name: e4[2], strings: s4, ctor: "." === e4[1] ? H : "?" === e4[1] ? I : "@" === e4[1] ? L : k }), r5.removeAttribute(t4);
           } else t4.startsWith(h2) && (d3.push({ type: 6, index: c4 }), r5.removeAttribute(t4));
           if ($.test(r5.tagName)) {
-            const t4 = r5.textContent.split(h2), s5 = t4.length - 1;
-            if (s5 > 0) {
+            const t4 = r5.textContent.split(h2), s4 = t4.length - 1;
+            if (s4 > 0) {
               r5.textContent = i3 ? i3.emptyScript : "";
-              for (let i4 = 0; i4 < s5; i4++) r5.append(t4[i4], l2()), E.nextNode(), d3.push({ type: 2, index: ++c4 });
-              r5.append(t4[s5], l2());
+              for (let i5 = 0; i5 < s4; i5++) r5.append(t4[i5], l2()), C.nextNode(), d3.push({ type: 2, index: ++c4 });
+              r5.append(t4[s4], l2());
             }
           }
         } else if (8 === r5.nodeType) if (r5.data === o3) d3.push({ type: 2, index: c4 });
@@ -2480,20 +2436,20 @@
         c4++;
       }
     }
-    static createElement(t3, i4) {
-      const s4 = r3.createElement("template");
-      return s4.innerHTML = t3, s4;
+    static createElement(t3, i5) {
+      const s3 = r3.createElement("template");
+      return s3.innerHTML = t3, s3;
     }
   };
-  function N(t3, i4, s4 = t3, e4) {
-    if (i4 === w) return i4;
-    let h3 = void 0 !== e4 ? s4._$Co?.[e4] : s4._$Cl;
-    const o4 = c3(i4) ? void 0 : i4._$litDirective$;
-    return h3?.constructor !== o4 && (h3?._$AO?.(false), void 0 === o4 ? h3 = void 0 : (h3 = new o4(t3), h3._$AT(t3, s4, e4)), void 0 !== e4 ? (s4._$Co ??= [])[e4] = h3 : s4._$Cl = h3), void 0 !== h3 && (i4 = N(t3, h3._$AS(t3, i4.values), h3, e4)), i4;
+  function S2(t3, i5, s3 = t3, e4) {
+    if (i5 === T) return i5;
+    let h3 = void 0 !== e4 ? s3._$Co?.[e4] : s3._$Cl;
+    const o4 = c3(i5) ? void 0 : i5._$litDirective$;
+    return h3?.constructor !== o4 && (h3?._$AO?.(false), void 0 === o4 ? h3 = void 0 : (h3 = new o4(t3), h3._$AT(t3, s3, e4)), void 0 !== e4 ? (s3._$Co ??= [])[e4] = h3 : s3._$Cl = h3), void 0 !== h3 && (i5 = S2(t3, h3._$AS(t3, i5.values), h3, e4)), i5;
   }
-  var S2 = class {
-    constructor(t3, i4) {
-      this._$AV = [], this._$AN = void 0, this._$AD = t3, this._$AM = i4;
+  var M = class {
+    constructor(t3, i5) {
+      this._$AV = [], this._$AN = void 0, this._$AD = t3, this._$AM = i5;
     }
     get parentNode() {
       return this._$AM.parentNode;
@@ -2502,34 +2458,34 @@
       return this._$AM._$AU;
     }
     u(t3) {
-      const { el: { content: i4 }, parts: s4 } = this._$AD, e4 = (t3?.creationScope ?? r3).importNode(i4, true);
-      E.currentNode = e4;
-      let h3 = E.nextNode(), o4 = 0, n4 = 0, l3 = s4[0];
+      const { el: { content: i5 }, parts: s3 } = this._$AD, e4 = (t3?.creationScope ?? r3).importNode(i5, true);
+      C.currentNode = e4;
+      let h3 = C.nextNode(), o4 = 0, n4 = 0, l3 = s3[0];
       for (; void 0 !== l3; ) {
         if (o4 === l3.index) {
-          let i5;
-          2 === l3.type ? i5 = new M(h3, h3.nextSibling, this, t3) : 1 === l3.type ? i5 = new l3.ctor(h3, l3.name, l3.strings, this, t3) : 6 === l3.type && (i5 = new L(h3, this, t3)), this._$AV.push(i5), l3 = s4[++n4];
+          let i6;
+          2 === l3.type ? i6 = new R(h3, h3.nextSibling, this, t3) : 1 === l3.type ? i6 = new l3.ctor(h3, l3.name, l3.strings, this, t3) : 6 === l3.type && (i6 = new z(h3, this, t3)), this._$AV.push(i6), l3 = s3[++n4];
         }
-        o4 !== l3?.index && (h3 = E.nextNode(), o4++);
+        o4 !== l3?.index && (h3 = C.nextNode(), o4++);
       }
-      return E.currentNode = r3, e4;
+      return C.currentNode = r3, e4;
     }
     p(t3) {
-      let i4 = 0;
-      for (const s4 of this._$AV) void 0 !== s4 && (void 0 !== s4.strings ? (s4._$AI(t3, s4, i4), i4 += s4.strings.length - 2) : s4._$AI(t3[i4])), i4++;
+      let i5 = 0;
+      for (const s3 of this._$AV) void 0 !== s3 && (void 0 !== s3.strings ? (s3._$AI(t3, s3, i5), i5 += s3.strings.length - 2) : s3._$AI(t3[i5])), i5++;
     }
   };
-  var M = class _M {
+  var R = class _R {
     get _$AU() {
       return this._$AM?._$AU ?? this._$Cv;
     }
-    constructor(t3, i4, s4, e4) {
-      this.type = 2, this._$AH = T, this._$AN = void 0, this._$AA = t3, this._$AB = i4, this._$AM = s4, this.options = e4, this._$Cv = e4?.isConnected ?? true;
+    constructor(t3, i5, s3, e4) {
+      this.type = 2, this._$AH = E, this._$AN = void 0, this._$AA = t3, this._$AB = i5, this._$AM = s3, this.options = e4, this._$Cv = e4?.isConnected ?? true;
     }
     get parentNode() {
       let t3 = this._$AA.parentNode;
-      const i4 = this._$AM;
-      return void 0 !== i4 && 11 === t3?.nodeType && (t3 = i4.parentNode), t3;
+      const i5 = this._$AM;
+      return void 0 !== i5 && 11 === t3?.nodeType && (t3 = i5.parentNode), t3;
     }
     get startNode() {
       return this._$AA;
@@ -2537,126 +2493,126 @@
     get endNode() {
       return this._$AB;
     }
-    _$AI(t3, i4 = this) {
-      t3 = N(this, t3, i4), c3(t3) ? t3 === T || null == t3 || "" === t3 ? (this._$AH !== T && this._$AR(), this._$AH = T) : t3 !== this._$AH && t3 !== w && this._(t3) : void 0 !== t3._$litType$ ? this.$(t3) : void 0 !== t3.nodeType ? this.T(t3) : u2(t3) ? this.k(t3) : this._(t3);
+    _$AI(t3, i5 = this) {
+      t3 = S2(this, t3, i5), c3(t3) ? t3 === E || null == t3 || "" === t3 ? (this._$AH !== E && this._$AR(), this._$AH = E) : t3 !== this._$AH && t3 !== T && this._(t3) : void 0 !== t3._$litType$ ? this.$(t3) : void 0 !== t3.nodeType ? this.T(t3) : u2(t3) ? this.k(t3) : this._(t3);
     }
-    S(t3) {
+    O(t3) {
       return this._$AA.parentNode.insertBefore(t3, this._$AB);
     }
     T(t3) {
-      this._$AH !== t3 && (this._$AR(), this._$AH = this.S(t3));
+      this._$AH !== t3 && (this._$AR(), this._$AH = this.O(t3));
     }
     _(t3) {
-      this._$AH !== T && c3(this._$AH) ? this._$AA.nextSibling.data = t3 : this.T(r3.createTextNode(t3)), this._$AH = t3;
+      this._$AH !== E && c3(this._$AH) ? this._$AA.nextSibling.data = t3 : this.T(r3.createTextNode(t3)), this._$AH = t3;
     }
     $(t3) {
-      const { values: i4, _$litType$: s4 } = t3, e4 = "number" == typeof s4 ? this._$AC(t3) : (void 0 === s4.el && (s4.el = V.createElement(C(s4.h, s4.h[0]), this.options)), s4);
-      if (this._$AH?._$AD === e4) this._$AH.p(i4);
+      const { values: i5, _$litType$: s3 } = t3, e4 = "number" == typeof s3 ? this._$AC(t3) : (void 0 === s3.el && (s3.el = N.createElement(P(s3.h, s3.h[0]), this.options)), s3);
+      if (this._$AH?._$AD === e4) this._$AH.p(i5);
       else {
-        const t4 = new S2(e4, this), s5 = t4.u(this.options);
-        t4.p(i4), this.T(s5), this._$AH = t4;
+        const t4 = new M(e4, this), s4 = t4.u(this.options);
+        t4.p(i5), this.T(s4), this._$AH = t4;
       }
     }
     _$AC(t3) {
-      let i4 = A.get(t3.strings);
-      return void 0 === i4 && A.set(t3.strings, i4 = new V(t3)), i4;
+      let i5 = A.get(t3.strings);
+      return void 0 === i5 && A.set(t3.strings, i5 = new N(t3)), i5;
     }
     k(t3) {
       a2(this._$AH) || (this._$AH = [], this._$AR());
-      const i4 = this._$AH;
-      let s4, e4 = 0;
-      for (const h3 of t3) e4 === i4.length ? i4.push(s4 = new _M(this.S(l2()), this.S(l2()), this, this.options)) : s4 = i4[e4], s4._$AI(h3), e4++;
-      e4 < i4.length && (this._$AR(s4 && s4._$AB.nextSibling, e4), i4.length = e4);
+      const i5 = this._$AH;
+      let s3, e4 = 0;
+      for (const h3 of t3) e4 === i5.length ? i5.push(s3 = new _R(this.O(l2()), this.O(l2()), this, this.options)) : s3 = i5[e4], s3._$AI(h3), e4++;
+      e4 < i5.length && (this._$AR(s3 && s3._$AB.nextSibling, e4), i5.length = e4);
     }
-    _$AR(t3 = this._$AA.nextSibling, i4) {
-      for (this._$AP?.(false, true, i4); t3 && t3 !== this._$AB; ) {
-        const i5 = t3.nextSibling;
-        t3.remove(), t3 = i5;
+    _$AR(t3 = this._$AA.nextSibling, i5) {
+      for (this._$AP?.(false, true, i5); t3 && t3 !== this._$AB; ) {
+        const i6 = t3.nextSibling;
+        t3.remove(), t3 = i6;
       }
     }
     setConnected(t3) {
       void 0 === this._$AM && (this._$Cv = t3, this._$AP?.(t3));
     }
   };
-  var R = class {
+  var k = class {
     get tagName() {
       return this.element.tagName;
     }
     get _$AU() {
       return this._$AM._$AU;
     }
-    constructor(t3, i4, s4, e4, h3) {
-      this.type = 1, this._$AH = T, this._$AN = void 0, this.element = t3, this.name = i4, this._$AM = e4, this.options = h3, s4.length > 2 || "" !== s4[0] || "" !== s4[1] ? (this._$AH = Array(s4.length - 1).fill(new String()), this.strings = s4) : this._$AH = T;
+    constructor(t3, i5, s3, e4, h3) {
+      this.type = 1, this._$AH = E, this._$AN = void 0, this.element = t3, this.name = i5, this._$AM = e4, this.options = h3, s3.length > 2 || "" !== s3[0] || "" !== s3[1] ? (this._$AH = Array(s3.length - 1).fill(new String()), this.strings = s3) : this._$AH = E;
     }
-    _$AI(t3, i4 = this, s4, e4) {
+    _$AI(t3, i5 = this, s3, e4) {
       const h3 = this.strings;
       let o4 = false;
-      if (void 0 === h3) t3 = N(this, t3, i4, 0), o4 = !c3(t3) || t3 !== this._$AH && t3 !== w, o4 && (this._$AH = t3);
+      if (void 0 === h3) t3 = S2(this, t3, i5, 0), o4 = !c3(t3) || t3 !== this._$AH && t3 !== T, o4 && (this._$AH = t3);
       else {
         const e5 = t3;
         let n4, r5;
-        for (t3 = h3[0], n4 = 0; n4 < h3.length - 1; n4++) r5 = N(this, e5[s4 + n4], i4, n4), r5 === w && (r5 = this._$AH[n4]), o4 ||= !c3(r5) || r5 !== this._$AH[n4], r5 === T ? t3 = T : t3 !== T && (t3 += (r5 ?? "") + h3[n4 + 1]), this._$AH[n4] = r5;
+        for (t3 = h3[0], n4 = 0; n4 < h3.length - 1; n4++) r5 = S2(this, e5[s3 + n4], i5, n4), r5 === T && (r5 = this._$AH[n4]), o4 ||= !c3(r5) || r5 !== this._$AH[n4], r5 === E ? t3 = E : t3 !== E && (t3 += (r5 ?? "") + h3[n4 + 1]), this._$AH[n4] = r5;
       }
       o4 && !e4 && this.j(t3);
     }
     j(t3) {
-      t3 === T ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t3 ?? "");
+      t3 === E ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t3 ?? "");
     }
   };
-  var k = class extends R {
+  var H = class extends k {
     constructor() {
       super(...arguments), this.type = 3;
     }
     j(t3) {
-      this.element[this.name] = t3 === T ? void 0 : t3;
+      this.element[this.name] = t3 === E ? void 0 : t3;
     }
   };
-  var H = class extends R {
+  var I = class extends k {
     constructor() {
       super(...arguments), this.type = 4;
     }
     j(t3) {
-      this.element.toggleAttribute(this.name, !!t3 && t3 !== T);
+      this.element.toggleAttribute(this.name, !!t3 && t3 !== E);
     }
   };
-  var I = class extends R {
-    constructor(t3, i4, s4, e4, h3) {
-      super(t3, i4, s4, e4, h3), this.type = 5;
+  var L = class extends k {
+    constructor(t3, i5, s3, e4, h3) {
+      super(t3, i5, s3, e4, h3), this.type = 5;
     }
-    _$AI(t3, i4 = this) {
-      if ((t3 = N(this, t3, i4, 0) ?? T) === w) return;
-      const s4 = this._$AH, e4 = t3 === T && s4 !== T || t3.capture !== s4.capture || t3.once !== s4.once || t3.passive !== s4.passive, h3 = t3 !== T && (s4 === T || e4);
-      e4 && this.element.removeEventListener(this.name, this, s4), h3 && this.element.addEventListener(this.name, this, t3), this._$AH = t3;
+    _$AI(t3, i5 = this) {
+      if ((t3 = S2(this, t3, i5, 0) ?? E) === T) return;
+      const s3 = this._$AH, e4 = t3 === E && s3 !== E || t3.capture !== s3.capture || t3.once !== s3.once || t3.passive !== s3.passive, h3 = t3 !== E && (s3 === E || e4);
+      e4 && this.element.removeEventListener(this.name, this, s3), h3 && this.element.addEventListener(this.name, this, t3), this._$AH = t3;
     }
     handleEvent(t3) {
       "function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t3) : this._$AH.handleEvent(t3);
     }
   };
-  var L = class {
-    constructor(t3, i4, s4) {
-      this.element = t3, this.type = 6, this._$AN = void 0, this._$AM = i4, this.options = s4;
+  var z = class {
+    constructor(t3, i5, s3) {
+      this.element = t3, this.type = 6, this._$AN = void 0, this._$AM = i5, this.options = s3;
     }
     get _$AU() {
       return this._$AM._$AU;
     }
     _$AI(t3) {
-      N(this, t3);
+      S2(this, t3);
     }
   };
-  var Z = t2.litHtmlPolyfillSupport;
-  Z?.(V, M), (t2.litHtmlVersions ??= []).push("3.1.4");
-  var j = (t3, i4, s4) => {
-    const e4 = s4?.renderBefore ?? i4;
+  var j = t2.litHtmlPolyfillSupport;
+  j?.(N, R), (t2.litHtmlVersions ??= []).push("3.2.1");
+  var B = (t3, i5, s3) => {
+    const e4 = s3?.renderBefore ?? i5;
     let h3 = e4._$litPart$;
     if (void 0 === h3) {
-      const t4 = s4?.renderBefore ?? null;
-      e4._$litPart$ = h3 = new M(i4.insertBefore(l2(), t4), t4, void 0, s4 ?? {});
+      const t4 = s3?.renderBefore ?? null;
+      e4._$litPart$ = h3 = new R(i5.insertBefore(l2(), t4), t4, void 0, s3 ?? {});
     }
     return h3._$AI(t3), h3;
   };
 
   // node_modules/lit-element/lit-element.js
-  var s3 = class extends b {
+  var r4 = class extends b {
     constructor() {
       super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
     }
@@ -2665,8 +2621,8 @@
       return this.renderOptions.renderBefore ??= t3.firstChild, t3;
     }
     update(t3) {
-      const i4 = this.render();
-      this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t3), this._$Do = j(i4, this.renderRoot, this.renderOptions);
+      const s3 = this.render();
+      this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t3), this._$Do = B(s3, this.renderRoot, this.renderOptions);
     }
     connectedCallback() {
       super.connectedCallback(), this._$Do?.setConnected(true);
@@ -2675,13 +2631,13 @@
       super.disconnectedCallback(), this._$Do?.setConnected(false);
     }
     render() {
-      return w;
+      return T;
     }
   };
-  s3._$litElement$ = true, s3["finalized", "finalized"] = true, globalThis.litElementHydrateSupport?.({ LitElement: s3 });
-  var r4 = globalThis.litElementPolyfillSupport;
-  r4?.({ LitElement: s3 });
-  (globalThis.litElementVersions ??= []).push("4.0.6");
+  r4._$litElement$ = true, r4["finalized"] = true, globalThis.litElementHydrateSupport?.({ LitElement: r4 });
+  var i4 = globalThis.litElementPolyfillSupport;
+  i4?.({ LitElement: r4 });
+  (globalThis.litElementVersions ??= []).push("4.1.1");
 
   // src/qrcode.js
   var import_qrcode = __toESM(require_browser(), 1);
@@ -2734,7 +2690,7 @@
     return await await import_qrcode.default.toDataURL(link);
   }
 
-  // max/CoMote/patchers/src/client.js
+  // max/CoMote/patchers/comote-connect/client.js
   var wifiInfos = null;
   var networkInfos = null;
   var comoteConfig = null;
@@ -2780,11 +2736,11 @@
   }
   function renderApp() {
     if (!qrCode) {
-      j(x`
+      B(x`
       <p style="margin-left: 30px">loading...</p>
     `, document.body);
     } else {
-      j(x`
+      B(x`
       <div style="margin-left: 30px">
         <div>Id: ${comoteConfig.id}</div>
         <div>Sensors sample period: ${comoteConfig.interval} ms</div>
@@ -2800,7 +2756,7 @@
           `)}
         </select>
 
-        ${wifiInfos && wifiInfos.ip === comoteConfig.osc.hostname ? x`<div>WiFi SSID: ${wifiInfos.ssid}</div>` : T}
+        ${wifiInfos && wifiInfos.ip === comoteConfig.osc.hostname ? x`<div>WiFi SSID: ${wifiInfos.ssid}</div>` : E}
         <div>OSC IP: ${comoteConfig.osc.hostname}</div>
         <div>OSC Port: ${comoteConfig.osc.port}</div>
         <div>OSC autostart: ${comoteConfig.osc.autostart ? 1 : 0}</div>

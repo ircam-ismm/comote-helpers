@@ -28,9 +28,8 @@ render(html`
     </div>
 
     <div class="footer">
-    <p>Built with <br><a target="_blank" href="https://ircam-ismm.github.io/sc-components/">sc-components</a></p>
-    <sc-button @press=${e => toggleModal()}>fullscreen</sc-button>
+      <p>Built with <br><a target="_blank" href="https://ircam-ismm.github.io/sc-components/">sc-components</a></p>
+      <sc-button @press=${e => toggleModal()}>fullscreen</sc-button>
     </div>
-    
   </div>
 `, document.body);
