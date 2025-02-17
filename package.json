@@ -23,13 +23,14 @@
     "build": "npm run clean && babel src --out-dir .",
     "clean": "rm -f server.js qrcode.js",
     "doc": "npm run api && npm run toc",
-    "max:build-server": "esbuild ./max/CoMote/patchers/src/server.js  --bundle --format=cjs --platform=node --external:max-api --outfile=max/CoMote/patchers/comote-connect-server.cjs",
+    "max:build-server": "esbuild ./max/CoMote/patchers/src/server.js  --bundle --format=cjs --platform=node --external:max-api --outfile=max/CoMote/patchers/comote-connect-server.js",
     "max:build-client": "esbuild ./max/CoMote/patchers/src/client.js  --bundle --outfile=max/CoMote/patchers/comote-connect-public/comote-connect-client.js",
     "max:build": "npm run max:build-server && npm run max:build-client",
     "prepublishOnly": "npm run build",
     "toc": "markdown-toc -i README.md  --maxdepth 3"
   },
   "dependencies": {
+    "@ircam/comote-helpers": "^0.3.3",
     "assign-deep": "^1.0.1",
     "clone-deep": "^4.0.1",
     "debug": "^4.3.1",

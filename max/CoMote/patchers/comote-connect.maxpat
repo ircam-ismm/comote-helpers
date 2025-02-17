@@ -413,7 +413,7 @@
 						"watch" : 1
 					}
 ,
-					"text" : "node.script comote-connect-server.cjs"
+					"text" : "node.script comote-connect-server.js"
 				}
 
 			}
@@ -703,7 +703,7 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "comote-connect-server.cjs",
+				"name" : "comote-connect-server.js",
 				"bootpath" : "~/work/dev/libs/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : ".",
 				"type" : "TEXT",
