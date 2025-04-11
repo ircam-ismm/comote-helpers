@@ -4,9 +4,9 @@ import { loadConfig } from '@soundworks/helpers/node.js';
 
 import '../utils/catch-unhandled-errors.js';
 
-import { Server as CoMoteServer } from '../../../src/server.js';
-import * as CoMoteQRCode from '../../../src/qrcode.js';
-import { getWifiInfos } from '../../../src/wifi-infos.js';
+import { Server as CoMoteServer } from '@ircam/comote-helpers/server.js';
+import * as CoMoteQRCode from '@ircam/comote-helpers/qrcode.js';
+import { getWifiInfos } from '@ircam/comote-helpers/wifi-infos.js';
 
 import globalSchema from './schemas/global.js';
 

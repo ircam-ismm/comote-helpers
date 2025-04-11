@@ -16,8 +16,12 @@
     "access": "public"
   },
   "exports": {
-    ".": "./src"
+    "./*.js": "./src/*.js"
   },
+  "workspaces": [
+    ".",
+    "example"
+  ],
   "scripts": {
     "api": "jsdoc-to-readme --src src/server.js src/qrcode.js --heading-depth 4",
     "build": "npm run clean && babel src --out-dir .",

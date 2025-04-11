@@ -4,7 +4,7 @@ import { loadConfig, launcher } from '@soundworks/helpers/browser.js';
 import { html, render } from 'lit';
 
 import '../components/sw-credits.js';
-import * as CoMoteQRCode from '../../../../src/qrcode.js';
+import * as CoMoteQRCode from '@ircam/comote-helpers/qrcode.js';
 
 import '@ircam/sc-components/sc-text.js';
 import '@ircam/sc-components/sc-toggle.js';
@@ -29,7 +29,7 @@ async function main($container) {
   const global = await client.stateManager.attach('global');
 
   let qrCode;
-  let devicemotion = {};
+  let data = {};
   let buttonA = false;
   let buttonB = false;
   let control = {};
@@ -40,9 +40,7 @@ async function main($container) {
     }
 
     if ('data' in updates) {
-      if ('devicemotion' in updates.data) {
-        devicemotion = updates.data.devicemotion;
-      }
+      ({data} = updates);
 
       if ('control' in updates.data) {
         control = updates.data.control;
@@ -81,7 +79,7 @@ async function main($container) {
         </div>
 
         <div style="display: inline-block; vertical-align: top; margin-right: 12px">
-          <sc-text style="width: 300px; height: 350px">${JSON.stringify(devicemotion, null, 2)}</sc-text>
+          <sc-text style="width: 300px; height: 350px">${JSON.stringify(data, null, 2)}</sc-text>
         </div>
 
         <div style="display: inline-block; vertical-align: top; margin-right: 12px">
