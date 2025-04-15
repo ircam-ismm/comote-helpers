@@ -1,0 +1,26 @@
+{
+  "name": "@ircam/comote-example-simple-webview",
+  "description": "CoMote simple WebView example",
+  "authors": [],
+  "license": "BSD-3-Clause",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run build:client -- --watch\" \"npm run build:server -- --watch\" \"npm run run -- --watch\"",
+    "run": "node ./build/comote-simple-webview-server.js",
+    "build": "concurrently \"npm run build:client\" \"npm run build:server\"",
+    "build:client": "esbuild ./src/client.js --bundle --minify --format=esm --outfile=./public/index.mjs",
+    "build:server": "esbuild ./src/server.js --bundle --minify --format=cjs --platform=node --outfile=./build/comote-simple-webview-server.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "esbuild": "^0.21.5",
+    "serve": "^14.2.3"
+  },
+  "dependencies": {
+    "@ircam/sc-components": "^3.0.0-alpha.61",
+    "lit": "^3.1.4",
+    "serve-handler": "^6.1.6"
+  }
+}

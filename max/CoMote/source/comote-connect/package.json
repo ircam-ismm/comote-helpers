@@ -1,0 +1,19 @@
+{
+  "name": "@ircam/comote-max-connect",
+  "description": "CoMote connect helper for Max",
+  "authors": [],
+  "license": "BSD-3-Clause",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "max:build-server": "esbuild ./server.js --bundle --format=cjs --platform=node --external:max-api --outfile=../../patchers/comote-connect/comote-connect-server.js",
+    "max:build-client": "esbuild ./client.js --bundle --format=esm --outfile=../../patchers/comote-connect/comote-connect-public/comote-connect-client.mjs",
+    "max:build": "npm run max:build-server && npm run max:build-client"
+  },
+  "dependencies": {
+    "@ircam/comote-helpers": "^0.3.3",
+    "lit": "^3.3.0",
+    "ws": "^8.18.1"
+  }
+}
