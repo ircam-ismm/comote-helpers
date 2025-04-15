@@ -16,18 +16,6 @@
 		"devicewidth" : 319.0,
 		"boxes" : [ 			{
 				"box" : 				{
-					"color" : [ 0.784314, 0.145098, 0.023529, 1.0 ],
-					"id" : "obj-25",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 976.0, -93.0, 135.0, 22.0 ],
-					"text" : "print to-comote-connect"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-40",
 					"maxclass" : "newobj",
 					"numinlets" : 2,
@@ -559,8 +547,6 @@
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
-						"node_bin_path" : "",
-						"npm_bin_path" : "",
 						"watch" : 0
 					}
 ,
@@ -600,23 +586,14 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 0.0, 0.0, 319.130841135978699, 440.607476592063904 ],
 					"rendermode" : 2,
-					"url" : "http://127.0.0.1:8889"
+					"url" : "http://127.0.0.1:8888"
 				}
 
 			}
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
-					"destination" : [ "obj-25", 0 ],
-					"order" : 0,
-					"source" : [ "obj-1", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-3", 0 ],
-					"order" : 1,
 					"source" : [ "obj-1", 0 ]
 				}
 
@@ -1035,7 +1012,7 @@
 
 			}
  ],
-		"originid" : "pat-4388",
+		"originid" : "pat-4664",
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-server.js",
 				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers/comote-connect",
