@@ -1,5 +1,5 @@
 const handler = require('serve-handler');
-const http = require('http');
+const http = require('node:http');
 const path = require('node:path');
 
 const port = 8001;

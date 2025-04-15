@@ -4,13 +4,13 @@
 		"appversion" : 		{
 			"major" : 9,
 			"minor" : 0,
-			"revision" : 4,
+			"revision" : 5,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 286.0, 172.0, 503.0, 500.0 ],
+		"rect" : [ 153.0, 179.0, 503.0, 500.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"boxes" : [ 			{
 				"box" : 				{
@@ -68,7 +68,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 34.0, 161.0, 115.0, 22.0 ],
+					"patching_rect" : [ 34.0, 161.0, 247.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
@@ -77,9 +77,9 @@
 						"watch" : 0
 					}
 ,
-					"text" : "node.script server.js",
+					"text" : "node.script comote-simple-webview-server.js",
 					"textfile" : 					{
-						"filename" : "server.js",
+						"filename" : "comote-simple-webview-server.js",
 						"flags" : 0,
 						"embed" : 0,
 						"autowatch" : 1
@@ -153,8 +153,15 @@
 
 			}
  ],
-		"originid" : "pat-4",
+		"originid" : "pat-6",
 		"dependency_cache" : [ 			{
+				"name" : "comote-simple-webview-server.js",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/examples/simple-webview/build",
+				"patcherrelativepath" : "./build",
+				"type" : "TEXT",
+				"implicit" : 1
+			}
+, 			{
 				"name" : "fit_jweb_to_bounds.js",
 				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
 				"type" : "TEXT",
@@ -169,13 +176,6 @@
 , 			{
 				"name" : "resize_n4m_monitor_patcher.js",
 				"bootpath" : "C74:/packages/Node for Max/patchers/debug-monitor",
-				"type" : "TEXT",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "server.js",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers/comote-connect",
-				"patcherrelativepath" : "./comote-connect",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
