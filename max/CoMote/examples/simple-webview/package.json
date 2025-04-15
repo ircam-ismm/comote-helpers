@@ -7,8 +7,8 @@
   "type": "commonjs",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run build:client -- --watch\" \"npm run build:server -- --watch\" \"npm run run -- --watch\"",
-    "run": "node ./build/comote-simple-webview-server.js",
+    "dev": "concurrently \"npm run build:client -- --watch\" \"npm run build:server -- --watch\" \"npm run serve -- --watch\"",
+    "serve": "node ./build/comote-simple-webview-server.js",
     "build": "concurrently \"npm run build:client\" \"npm run build:server\"",
     "build:client": "esbuild ./src/client.js --bundle --minify --format=esm --outfile=./public/index.mjs",
     "build:server": "esbuild ./src/server.js --bundle --minify --format=cjs --platform=node --outfile=./build/comote-simple-webview-server.js"
