@@ -1,6 +1,6 @@
 {
-  "name": "@ircam/comote-example",
-  "description": "soundworks application",
+  "name": "@ircam/comote-example-soundworks",
+  "description": "comote soundworks example application",
   "authors": [],
   "license": "BSD-3-Clause",
   "version": "0.0.0",
