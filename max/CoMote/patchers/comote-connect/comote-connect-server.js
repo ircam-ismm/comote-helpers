@@ -24632,7 +24632,7 @@ var comoteConfig = {
   // period in ms
   ws: null,
   osc: {
-    port: 8902,
+    port: 8001,
     hostname: "",
     autostart: true
   },
