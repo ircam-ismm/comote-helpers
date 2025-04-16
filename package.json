@@ -25,5 +25,14 @@
     ".",
     "examples/*",
     "max/CoMote/sources/*"
-  ]
+  ],
+  "dependencies": {
+    "assign-deep": "^1.0.1",
+    "clone-deep": "^4.0.1",
+    "node-osc": "^9.1.4",
+    "qrcode": "^1.5.4",
+    "systeminformation": "^5.25.11",
+    "utf-8-validate": "^6.0.5",
+    "ws": "^8.18.1"
+  }
 }
