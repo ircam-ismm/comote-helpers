@@ -10,10 +10,27 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ -271.0, -1584.0, 1484.0, 1144.0 ],
+		"rect" : [ -562.0, -1605.0, 1484.0, 1144.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"style" : "default",
 		"boxes" : [ 			{
+				"box" : 				{
+					"bubble" : 1,
+					"bubbleside" : 2,
+					"fontname" : "Arial",
+					"fontsize" : 16.0,
+					"id" : "obj-1",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 159.0, 129.0, 183.5, 61.0 ],
+					"presentation_linecount" : 2,
+					"text" : "Choose the correct IP address in the list"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"color" : [ 0.011765, 0.396078, 0.752941, 1.0 ],
 					"id" : "obj-18",
@@ -36,16 +53,30 @@
 						"gridsize" : [ 15.0, 15.0 ],
 						"boxes" : [ 							{
 								"box" : 								{
+									"color" : [ 0.960784, 0.827451, 0.156863, 1.0 ],
+									"hidden" : 1,
+									"id" : "obj-2",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 1,
+									"outlettype" : [ "" ],
+									"patching_rect" : [ 333.0, 172.0, 77.0, 22.0 ],
+									"text" : "loadmess 20"
+								}
+
+							}
+, 							{
+								"box" : 								{
 									"bubble" : 1,
 									"bubbleside" : 3,
 									"fontname" : "Arial",
-									"fontsize" : 16.0,
+									"fontsize" : 15.0,
 									"id" : "obj-1",
-									"linecount" : 3,
+									"linecount" : 2,
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 50.0, 401.0, 267.0, 64.0 ],
+									"patching_rect" : [ 55.0, 411.000000000000114, 273.0, 44.0 ],
 									"text" : "use comote-simple-webview-server example"
 								}
 
@@ -86,7 +117,7 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 334.0, 100.0, 70.0, 22.0 ],
+									"patching_rect" : [ 331.0, 64.0, 70.0, 22.0 ],
 									"text" : "loadmess 0"
 								}
 
@@ -179,7 +210,7 @@
 									"numoutlets" : 2,
 									"outlettype" : [ "", "bang" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 334.0, 134.0, 50.0, 22.0 ]
+									"patching_rect" : [ 331.0, 98.0, 50.0, 22.0 ]
 								}
 
 							}
@@ -190,7 +221,7 @@
 									"numinlets" : 2,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 334.0, 162.0, 35.0, 22.0 ],
+									"patching_rect" : [ 331.0, 126.0, 35.0, 22.0 ],
 									"text" : "id $1"
 								}
 
@@ -226,13 +257,13 @@
 									"bubble" : 1,
 									"bubbleside" : 3,
 									"fontname" : "Arial",
-									"fontsize" : 16.0,
+									"fontsize" : 15.0,
 									"id" : "obj-86",
 									"linecount" : 2,
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 90.0, 308.0, 227.0, 46.0 ],
+									"patching_rect" : [ 106.0, 303.5, 215.0, 44.0 ],
 									"text" : "Enable custom interfaces throught the webviewer"
 								}
 
@@ -437,7 +468,7 @@
 
 											}
  ],
-										"originid" : "pat-674"
+										"originid" : "pat-2106"
 									}
 ,
 									"patching_rect" : [ 283.688892300150997, 479.0, 72.0, 22.0 ],
@@ -474,12 +505,12 @@
 								"box" : 								{
 									"bubble" : 1,
 									"bubbleside" : 3,
-									"fontsize" : 14.0,
+									"fontsize" : 15.0,
 									"id" : "obj-60",
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 65.0, 160.0, 252.0, 26.0 ],
+									"patching_rect" : [ 65.0, 124.0, 269.0, 27.0 ],
 									"text" : "device id (to route OSC messages)"
 								}
 
@@ -487,12 +518,12 @@
 , 							{
 								"box" : 								{
 									"bubble" : 1,
-									"fontsize" : 14.0,
+									"fontsize" : 15.0,
 									"id" : "obj-56",
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 573.0, 160.0, 321.0, 26.0 ],
+									"patching_rect" : [ 573.0, 160.0, 343.0, 27.0 ],
 									"text" : "target port for OSC messages"
 								}
 
@@ -500,12 +531,12 @@
 , 							{
 								"box" : 								{
 									"bubble" : 1,
-									"fontsize" : 14.0,
+									"fontsize" : 15.0,
 									"id" : "obj-53",
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 601.0, 273.0, 321.0, 26.0 ],
+									"patching_rect" : [ 601.0, 273.0, 342.0, 27.0 ],
 									"text" : "target ip address for OSC messages"
 								}
 
@@ -513,12 +544,12 @@
 , 							{
 								"box" : 								{
 									"bubble" : 1,
-									"fontsize" : 14.0,
+									"fontsize" : 15.0,
 									"id" : "obj-52",
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 601.0, 377.0, 321.0, 26.0 ],
+									"patching_rect" : [ 601.0, 377.0, 342.0, 27.0 ],
 									"text" : "automatically on after scanning ther QR code"
 								}
 
@@ -527,12 +558,12 @@
 								"box" : 								{
 									"bubble" : 1,
 									"bubbleside" : 3,
-									"fontsize" : 14.0,
+									"fontsize" : 15.0,
 									"id" : "obj-68",
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 148.0, 243.0, 169.0, 26.0 ],
+									"patching_rect" : [ 148.0, 243.0, 180.0, 27.0 ],
 									"text" : "sampling period (ms)"
 								}
 
@@ -641,6 +672,13 @@
 								"patchline" : 								{
 									"destination" : [ "obj-137", 0 ],
 									"source" : [ "obj-16", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-55", 0 ],
+									"source" : [ "obj-2", 0 ]
 								}
 
 							}
@@ -762,23 +800,11 @@
 
 							}
  ],
-						"originid" : "pat-672"
+						"originid" : "pat-2104"
 					}
 ,
-					"patching_rect" : [ 46.0, 781.0, 147.0, 22.0 ],
+					"patching_rect" : [ 46.0, 845.0, 147.0, 22.0 ],
 					"text" : "p comote-connect-options"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-15",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 46.0, 707.0, 61.0, 21.0 ],
-					"style" : "rnbohighcontrast",
-					"text" : "Optional:"
 				}
 
 			}
@@ -998,7 +1024,7 @@
 					"outlettype" : [ "", "int", "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1184.0, 751.0, 100.0, 50.0 ],
-					"text" : "slider 0.45"
+					"text" : "buttonB 0"
 				}
 
 			}
@@ -1259,7 +1285,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 126.0, 149.0, 89.0, 22.0 ],
+					"patching_rect" : [ 46.0, 136.412962962962979, 89.0, 22.0 ],
 					"text" : "r parameters"
 				}
 
@@ -1284,7 +1310,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 46.0, 821.0, 92.0, 22.0 ],
+					"patching_rect" : [ 46.0, 885.0, 92.0, 22.0 ],
 					"text" : "s parameters"
 				}
 
@@ -1292,13 +1318,13 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-95",
-					"linecount" : 3,
+					"linecount" : 9,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 112.0, 707.0, 269.0, 50.0 ],
+					"patching_rect" : [ 66.0, 686.0, 261.5, 137.0 ],
 					"style" : "rnbohighcontrast",
-					"text" : "you can manually change the settings below\nthe QR is regenerated using these messages\nDO RESCAN after changes"
+					"text" : "Optional: \n\nYou can manually change the settings below.\n\nThe QR code is regenerated using these messages.\n\nDo not forget to RESCAN after changes."
 				}
 
 			}
@@ -1329,7 +1355,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 369.0, 295.0, 173.0, 61.0 ],
+					"patching_rect" : [ 371.5, 326.0, 173.0, 61.0 ],
 					"text" : "Scan the QR Code using the CoMote app"
 				}
 
@@ -1466,33 +1492,6 @@
 			}
 , 			{
 				"box" : 				{
-					"bubble" : 1,
-					"fontname" : "Arial",
-					"fontsize" : 16.0,
-					"id" : "obj-26",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 76.0, 119.0, 557.0, 28.0 ],
-					"text" : "Initialize/reset: The QR code and choose the correct IP address in the list"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"bgcolor" : [ 0.843137254901961, 0.584313725490196, 0.129411764705882, 1.0 ],
-					"id" : "obj-25",
-					"maxclass" : "button",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"parameter_enable" : 0,
-					"patching_rect" : [ 46.0, 121.0, 24.0, 24.0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-44",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
@@ -1543,7 +1542,7 @@
 					"numoutlets" : 1,
 					"offset" : [ 0.0, 0.0 ],
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 46.0, 192.0, 321.0, 446.0 ],
+					"patching_rect" : [ 46.0, 192.0, 321.0, 473.0 ],
 					"viewvisibility" : 1
 				}
 
@@ -1563,7 +1562,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "", "", "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 686.872469886998601, 559.587037037037021, 25.25506022600274, 22.825925925925958 ],
+					"patching_rect" : [ 688.0, 554.0, 35.0, 34.0 ],
 					"rounded" : 60.0,
 					"text" : "3",
 					"textcolor" : [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1585,7 +1584,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "", "", "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 417.0, 268.0, 25.25506022600274, 22.825925925925958 ],
+					"patching_rect" : [ 437.0, 287.0, 35.0, 34.0 ],
 					"rounded" : 60.0,
 					"text" : "2",
 					"textcolor" : [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1607,7 +1606,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "", "", "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 12.0, 82.0, 25.25506022600274, 22.825925925925958 ],
+					"patching_rect" : [ 348.0, 135.0, 35.0, 34.0 ],
 					"rounded" : 60.0,
 					"text" : "1",
 					"textcolor" : [ 0.34902, 0.34902, 0.34902, 1.0 ]
@@ -1753,13 +1752,6 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-5", 0 ],
-					"source" : [ "obj-25", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-180", 0 ],
 					"source" : [ "obj-32", 0 ]
 				}
@@ -1860,7 +1852,7 @@
 
 			}
  ],
-		"originid" : "pat-600",
+		"originid" : "pat-2102",
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-server.js",
 				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers/comote-connect",
