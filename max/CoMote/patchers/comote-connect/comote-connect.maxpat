@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"openrect" : [ -547.0, -1605.0, 319.0, 468.0 ],
+		"openrect" : [ -547.0, -1605.0, 319.0, 487.0 ],
 		"openinpresentation" : 1,
 		"gridsize" : [ 15.0, 15.0 ],
 		"devicewidth" : 319.0,
@@ -547,6 +547,8 @@
 					"saved_object_attributes" : 					{
 						"autostart" : 0,
 						"defer" : 0,
+						"node_bin_path" : "",
+						"npm_bin_path" : "",
 						"watch" : 0
 					}
 ,
@@ -582,11 +584,11 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 115.0, 524.0, 335.0, 447.0 ],
+					"patching_rect" : [ 115.0, 524.0, 337.0, 479.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 0.0, 0.0, 319.130841135978699, 440.607476592063904 ],
+					"presentation_rect" : [ 0.0, 0.0, 319.0, 468.0 ],
 					"rendermode" : 2,
-					"url" : "http://127.0.0.1:8888"
+					"url" : "http://127.0.0.1:8889"
 				}
 
 			}
@@ -1012,7 +1014,7 @@
 
 			}
  ],
-		"originid" : "pat-4664",
+		"originid" : "pat-704",
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-server.js",
 				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers/comote-connect",
