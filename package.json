@@ -18,6 +18,9 @@
   "exports": {
     "./*.js": "./src/*.js"
   },
+  "files": [
+    "src"
+  ],
   "workspaces": [
     ".",
     "examples/*",
