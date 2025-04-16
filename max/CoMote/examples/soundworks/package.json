@@ -17,7 +17,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@ircam/comote-helpers": "^0.3.3",
+    "@ircam/comote-helpers": "^1.0.0",
     "@ircam/sc-components": "^3.0.0-alpha.60",
     "@soundworks/core": "^4.0.0-alpha.21",
     "@soundworks/helpers": "^1.0.0-alpha.12",

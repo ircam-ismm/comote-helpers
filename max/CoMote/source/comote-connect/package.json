@@ -12,7 +12,7 @@
     "max:build": "npm run max:build-server && npm run max:build-client"
   },
   "dependencies": {
-    "@ircam/comote-helpers": "^0.3.3",
+    "@ircam/comote-helpers": "^1.0.0",
     "lit": "^3.3.0",
     "ws": "^8.18.1"
   }
