@@ -19,7 +19,7 @@
     "./*.js": "./src/*.js"
   },
   "files": [
-    "src"
+    "./src/**/*.js"
   ],
   "workspaces": [
     ".",
