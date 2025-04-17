@@ -10,9 +10,46 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 59.0, 106.0, 1230.0, 669.0 ],
+		"rect" : [ -517.0, -1605.0, 1230.0, 669.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-5",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 457.0, 60.0, 270.0, 20.0 ],
+					"presentation_linecount" : 15,
+					"text" : "use qball to reschedule data to low-priority queue"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-36",
+					"items" : [ "direct", ",", "qball" ],
+					"maxclass" : "umenu",
+					"numinlets" : 1,
+					"numoutlets" : 3,
+					"outlettype" : [ "int", "", "" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 352.0, 59.0, 100.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-35",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 352.0, 92.0, 108.0, 22.0 ],
+					"text" : "prepend scheduler"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"color" : [ 0.960784, 0.827451, 0.156863, 1.0 ],
 					"id" : "obj-19",
@@ -106,8 +143,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 161.0, 144.0, 119.0, 22.0 ],
-					"text" : "comote_osc_receive"
+					"patching_rect" : [ 161.0, 144.0, 320.0, 22.0 ],
+					"text" : "comote_osc_receive @id 0 @port 8902 @scheduler direct"
 				}
 
 			}
@@ -244,7 +281,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 30.0, 390.0, 29.0, 20.0 ],
+					"patching_rect" : [ 70.0, 390.0, 29.0, 20.0 ],
 					"text" : "freq"
 				}
 
@@ -257,8 +294,8 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 24.0, 448.0, 50.0, 103.0 ],
-					"setminmax" : [ 0.0, 200.0 ],
+					"patching_rect" : [ 64.0, 448.0, 50.0, 103.0 ],
+					"setminmax" : [ 0.0, 300.0 ],
 					"setstyle" : 3,
 					"signed" : 1
 				}
@@ -273,7 +310,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 24.0, 412.0, 50.0, 22.0 ]
+					"patching_rect" : [ 64.0, 412.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -284,7 +321,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "float" ],
-					"patching_rect" : [ 15.0, 358.0, 49.0, 22.0 ],
+					"patching_rect" : [ 55.0, 358.0, 49.0, 22.0 ],
 					"text" : "!/ 1000."
 				}
 
@@ -297,7 +334,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 94.0, 448.0, 50.0, 103.0 ],
+					"patching_rect" : [ 134.0, 448.0, 50.0, 103.0 ],
 					"setminmax" : [ 0.0, 30.0 ],
 					"setstyle" : 3,
 					"signed" : 1
@@ -310,7 +347,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 94.0, 390.0, 47.0, 20.0 ],
+					"patching_rect" : [ 134.0, 390.0, 47.0, 20.0 ],
 					"text" : "interval"
 				}
 
@@ -324,7 +361,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 94.0, 412.0, 50.0, 22.0 ]
+					"patching_rect" : [ 134.0, 412.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -335,7 +372,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "float", "float" ],
-					"patching_rect" : [ 84.0, 319.0, 29.5, 22.0 ],
+					"patching_rect" : [ 124.0, 319.0, 29.5, 22.0 ],
 					"text" : "t f f"
 				}
 
@@ -347,7 +384,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "float" ],
-					"patching_rect" : [ 84.0, 353.0, 29.5, 22.0 ],
+					"patching_rect" : [ 124.0, 353.0, 29.5, 22.0 ],
 					"text" : "- 0."
 				}
 
@@ -384,7 +421,7 @@
 					"outlettype" : [ "", "int", "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 914.0, 457.0, 100.0, 50.0 ],
-					"text" : "buttonB 0"
+					"text" : "key 0. 0."
 				}
 
 			}
@@ -475,7 +512,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 89.0, 263.0, 64.0, 20.0 ],
+					"patching_rect" : [ 129.0, 263.0, 64.0, 20.0 ],
 					"text" : "timestamp"
 				}
 
@@ -529,7 +566,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 84.0, 285.0, 70.0, 22.0 ]
+					"patching_rect" : [ 124.0, 285.0, 70.0, 22.0 ]
 				}
 
 			}
@@ -884,6 +921,20 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-32", 0 ],
+					"source" : [ "obj-35", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-35", 0 ],
+					"source" : [ "obj-36", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-32", 0 ],
 					"source" : [ "obj-4", 0 ]
 				}
 
@@ -896,7 +947,7 @@
 
 			}
  ],
-		"originid" : "pat-4716",
+		"originid" : "pat-4033",
 		"dependency_cache" : [ 			{
 				"name" : "comote_format_from_comote_v2.maxpat",
 				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
@@ -934,6 +985,13 @@
 			}
 , 			{
 				"name" : "comote_osc_to_list.maxpat",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
+				"patcherrelativepath" : "../patchers",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "comote_reschedule.maxpat",
 				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
