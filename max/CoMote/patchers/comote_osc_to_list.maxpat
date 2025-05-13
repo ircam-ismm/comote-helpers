@@ -4,13 +4,13 @@
 		"appversion" : 		{
 			"major" : 9,
 			"minor" : 0,
-			"revision" : 5,
+			"revision" : 6,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ -154.0, -1389.0, 865.0, 746.0 ],
+		"rect" : [ 134.0, 120.0, 865.0, 746.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"toolbars_unpinned_last_save" : 2,
 		"boxes" : [ 			{
@@ -52,8 +52,8 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 110.5, 642.0, 273.0, 20.0 ],
-					"text" : "/control: keep OSC sub-address as a single string"
+					"patching_rect" : [ 126.0, 660.0, 281.0, 20.0 ],
+					"text" : "/control: keep OSC sub-address as a single symbol"
 				}
 
 			}
@@ -111,8 +111,8 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 20.0, 283.0, 139.0, 20.0 ],
-					"text" : "first occurence of control"
+					"patching_rect" : [ 16.0, 283.0, 146.0, 20.0 ],
+					"text" : "first occurence of /control/"
 				}
 
 			}
@@ -185,8 +185,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 5,
 					"outlettype" : [ "", "", "", "", "" ],
-					"patching_rect" : [ 164.0, 282.0, 123.0, 22.0 ],
-					"text" : "regexp (.*?)control(.*)"
+					"patching_rect" : [ 164.0, 282.0, 130.0, 22.0 ],
+					"text" : "regexp (.*?)/control(/.*)"
 				}
 
 			}
@@ -379,8 +379,7 @@
 				}
 
 			}
- ],
-		"originid" : "pat-76"
+ ]
 	}
 
 }
