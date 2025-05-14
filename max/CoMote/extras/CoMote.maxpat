@@ -4,29 +4,16 @@
 		"appversion" : 		{
 			"major" : 9,
 			"minor" : 0,
-			"revision" : 4,
+			"revision" : 6,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 100.0, 1660.0, 983.0 ],
+		"rect" : [ 803.0, -1012.0, 1309.0, 779.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"style" : "default",
 		"boxes" : [ 			{
-				"box" : 				{
-					"color" : [ 0.92549, 0.364706, 0.341176, 1.0 ],
-					"id" : "obj-6",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 507.0, 504.0, 142.0, 22.0 ],
-					"text" : "comote_osc_receive"
-				}
-
-			}
-, 			{
 				"box" : 				{
 					"id" : "obj-40",
 					"maxclass" : "comment",
@@ -175,7 +162,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1414.0, 607.0, 45.0, 20.0 ],
+					"patching_rect" : [ 1340.0, 611.0, 45.0, 20.0 ],
 					"text" : "other"
 				}
 
@@ -211,19 +198,20 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 1398.0, 770.0, 70.0, 22.0 ],
-					"text" : "blabla 1"
+					"text" : "buttonB 0"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-20",
+					"linecount" : 2,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1392.0, 581.0, 99.0, 22.0 ],
-					"text" : "battery 3.924743"
+					"patching_rect" : [ 1318.0, 585.0, 99.0, 35.0 ],
+					"text" : "/control /buttonB 0"
 				}
 
 			}
@@ -334,7 +322,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1392.0, 548.0, 47.0, 22.0 ],
+					"patching_rect" : [ 1318.0, 552.0, 47.0, 22.0 ],
 					"text" : "qlim 40"
 				}
 
@@ -369,7 +357,7 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 4,
+							"revision" : 6,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -522,8 +510,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 503.0, 345.0, 24.0, 24.0 ],
-									"svg" : ""
+									"patching_rect" : [ 503.0, 345.0, 24.0, 24.0 ]
 								}
 
 							}
@@ -603,8 +590,7 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"parameter_enable" : 0,
-									"patching_rect" : [ 336.688892300150997, 418.18889230015111, 29.622215399698007, 29.622215399698007 ],
-									"svg" : ""
+									"patching_rect" : [ 336.688892300150997, 418.18889230015111, 29.622215399698007, 29.622215399698007 ]
 								}
 
 							}
@@ -621,7 +607,7 @@
 										"appversion" : 										{
 											"major" : 9,
 											"minor" : 0,
-											"revision" : 4,
+											"revision" : 6,
 											"architecture" : "x64",
 											"modernui" : 1
 										}
@@ -795,15 +781,10 @@
 												}
 
 											}
- ],
-										"originid" : "pat-12999"
+ ]
 									}
 ,
 									"patching_rect" : [ 283.688892300150997, 479.0, 72.0, 22.0 ],
-									"saved_object_attributes" : 									{
-										"globalpatchername" : ""
-									}
-,
 									"text" : "p webiew-ip"
 								}
 
@@ -1131,15 +1112,10 @@
 								}
 
 							}
- ],
-						"originid" : "pat-12997"
+ ]
 					}
 ,
 					"patching_rect" : [ 46.0, 845.0, 296.5, 35.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p comote-connect-options"
 				}
 
@@ -1165,8 +1141,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1131.0, 795.0, 48.0, 48.0 ],
-					"svg" : ""
+					"patching_rect" : [ 1131.0, 795.0, 48.0, 48.0 ]
 				}
 
 			}
@@ -1178,8 +1153,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1131.0, 740.0, 48.0, 48.0 ],
-					"svg" : ""
+					"patching_rect" : [ 1131.0, 740.0, 48.0, 48.0 ]
 				}
 
 			}
@@ -1225,8 +1199,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1334.0, 793.0, 48.0, 48.0 ],
-					"svg" : ""
+					"patching_rect" : [ 1334.0, 793.0, 48.0, 48.0 ]
 				}
 
 			}
@@ -1238,8 +1211,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1334.0, 738.0, 48.0, 48.0 ],
-					"svg" : ""
+					"patching_rect" : [ 1334.0, 738.0, 48.0, 48.0 ]
 				}
 
 			}
@@ -2131,101 +2103,93 @@
 
 			}
  ],
-		"originid" : "pat-12995",
 		"dependency_cache" : [ 			{
 				"name" : "comote-connect-server.js",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers/comote-connect",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers/comote-connect",
 				"patcherrelativepath" : "../patchers/comote-connect",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-connect.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers/comote-connect",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers/comote-connect",
 				"patcherrelativepath" : "../patchers/comote-connect",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-screenshot.png",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/media",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/media",
 				"patcherrelativepath" : "../media",
 				"type" : "PNG",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-simple-webview-server.js",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/examples/simple-webview/build",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/examples/simple-webview/build",
 				"patcherrelativepath" : "../examples/simple-webview/build",
 				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote-simple-webview-server.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/examples/simple-webview",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/examples/simple-webview",
 				"patcherrelativepath" : "../examples/simple-webview",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_format_from_comote_v2.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_format_from_riot.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_format_from_v3.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_format_gyro_v2_to_v3.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_format_heading_v2_to_v3.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
-				"patcherrelativepath" : "../patchers",
-				"type" : "JSON",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "comote_osc_receive.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_osc_to_list.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_reschedule.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1
 			}
 , 			{
 				"name" : "comote_riot_osc_receive.maxpat",
-				"bootpath" : "~/Repositories/comote-helpers/max/CoMote/patchers",
+				"bootpath" : "~/Documents/src/ircam-ismm/comote-helpers/max/CoMote/patchers",
 				"patcherrelativepath" : "../patchers",
 				"type" : "JSON",
 				"implicit" : 1

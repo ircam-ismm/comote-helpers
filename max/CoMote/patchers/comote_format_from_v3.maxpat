@@ -4,15 +4,27 @@
 		"appversion" : 		{
 			"major" : 9,
 			"minor" : 0,
-			"revision" : 4,
+			"revision" : 6,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 441.0, 120.0, 1320.0, 833.0 ],
+		"rect" : [ 34.0, 87.0, 1309.0, 779.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-29",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"patching_rect" : [ 1175.0, 274.0, 55.0, 22.0 ],
+					"text" : "zl ecils 1"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-31",
 					"maxclass" : "newobj",
@@ -24,7 +36,7 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 4,
+							"revision" : 6,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -170,15 +182,10 @@
 								}
 
 							}
- ],
-						"originid" : "pat-691"
+ ]
 					}
 ,
 					"patching_rect" : [ 385.0, 629.0, 70.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p interval"
 				}
 
@@ -485,7 +492,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 990.0, 191.0, 143.0, 20.0 ],
+					"patching_rect" : [ 1004.0, 123.0, 143.0, 20.0 ],
 					"text" : "pass unknown messages"
 				}
 
@@ -672,11 +679,11 @@
 				"box" : 				{
 					"id" : "obj-6",
 					"maxclass" : "newobj",
-					"numinlets" : 10,
-					"numoutlets" : 10,
-					"outlettype" : [ "", "", "", "", "", "", "", "", "", "" ],
-					"patching_rect" : [ 286.0, 189.0, 698.499999999999773, 22.0 ],
-					"text" : "routepass accelerometer gyroscope gravity magnetometer heading absoluteorientation barometer temperature control"
+					"numinlets" : 11,
+					"numoutlets" : 11,
+					"outlettype" : [ "", "", "", "", "", "", "", "", "", "", "" ],
+					"patching_rect" : [ 286.0, 189.0, 1002.0, 22.0 ],
+					"text" : "routepass accelerometer gyroscope gravity magnetometer heading absoluteorientation barometer temperature control /control"
 				}
 
 			}
@@ -1027,6 +1034,13 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-166", 0 ],
+					"source" : [ "obj-29", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-12", 0 ],
 					"source" : [ "obj-3", 1 ]
 				}
@@ -1091,7 +1105,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-166", 0 ],
-					"source" : [ "obj-6", 9 ]
+					"source" : [ "obj-6", 10 ]
 				}
 
 			}
@@ -1146,6 +1160,13 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-29", 0 ],
+					"source" : [ "obj-6", 9 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-4", 0 ],
 					"source" : [ "obj-7", 0 ]
 				}
@@ -1158,8 +1179,7 @@
 				}
 
 			}
- ],
-		"originid" : "pat-464"
+ ]
 	}
 
 }

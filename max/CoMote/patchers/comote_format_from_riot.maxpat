@@ -4,13 +4,13 @@
 		"appversion" : 		{
 			"major" : 9,
 			"minor" : 0,
-			"revision" : 4,
+			"revision" : 6,
 			"architecture" : "x64",
 			"modernui" : 1
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 592.0, 100.0, 1560.0, 911.0 ],
+		"rect" : [ 34.0, 87.0, 1309.0, 779.0 ],
 		"gridsize" : [ 15.0, 15.0 ],
 		"boxes" : [ 			{
 				"box" : 				{
@@ -141,7 +141,7 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 4,
+							"revision" : 6,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -214,15 +214,10 @@
 								}
 
 							}
- ],
-						"originid" : "pat-424"
+ ]
 					}
 ,
 					"patching_rect" : [ 1030.681808352470398, 648.0, 99.999999046325684, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p heading unit"
 				}
 
@@ -240,7 +235,7 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 4,
+							"revision" : 6,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -430,15 +425,10 @@
 								}
 
 							}
- ],
-						"originid" : "pat-426"
+ ]
 					}
 ,
 					"patching_rect" : [ 647.681808352470398, 632.0, 93.0, 35.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p magneto to devicemotion"
 				}
 
@@ -456,7 +446,7 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 4,
+							"revision" : 6,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -627,15 +617,10 @@
 								}
 
 							}
- ],
-						"originid" : "pat-428"
+ ]
 					}
 ,
 					"patching_rect" : [ 527.681808352470398, 632.0, 80.0, 35.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p gyro to devicemotion"
 				}
 
@@ -653,7 +638,7 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 4,
+							"revision" : 6,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
@@ -824,15 +809,10 @@
 								}
 
 							}
- ],
-						"originid" : "pat-430"
+ ]
 					}
 ,
 					"patching_rect" : [ 389.681808352470398, 628.0, 80.0, 35.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p accel to devicemotion"
 				}
 
@@ -953,15 +933,14 @@
 						"appversion" : 						{
 							"major" : 9,
 							"minor" : 0,
-							"revision" : 4,
+							"revision" : 6,
 							"architecture" : "x64",
 							"modernui" : 1
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 121.0, 172.0, 1489.0, 631.0 ],
+						"rect" : [ 34.0, 172.0, 1309.0, 631.0 ],
 						"gridsize" : [ 15.0, 15.0 ],
-						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"fontsize" : 12.0,
@@ -1000,15 +979,14 @@
 										"appversion" : 										{
 											"major" : 9,
 											"minor" : 0,
-											"revision" : 4,
+											"revision" : 6,
 											"architecture" : "x64",
 											"modernui" : 1
 										}
 ,
 										"classnamespace" : "box",
-										"rect" : [ 250.0, 289.0, 1444.0, 484.0 ],
+										"rect" : [ 34.0, 289.0, 1309.0, 484.0 ],
 										"gridsize" : [ 15.0, 15.0 ],
-										"visible" : 1,
 										"boxes" : [ 											{
 												"box" : 												{
 													"id" : "obj-26",
@@ -1748,15 +1726,10 @@
 												}
 
 											}
- ],
-										"originid" : "pat-434"
+ ]
 									}
 ,
 									"patching_rect" : [ 353.0, 127.0, 817.0, 22.0 ],
-									"saved_object_attributes" : 									{
-										"globalpatchername" : ""
-									}
-,
 									"text" : "p riot_ircam old firmware"
 								}
 
@@ -1930,7 +1903,7 @@
 										"appversion" : 										{
 											"major" : 9,
 											"minor" : 0,
-											"revision" : 4,
+											"revision" : 6,
 											"architecture" : "x64",
 											"modernui" : 1
 										}
@@ -2019,15 +1992,10 @@
 												}
 
 											}
- ],
-										"originid" : "pat-436"
+ ]
 									}
 ,
 									"patching_rect" : [ 1313.0, 307.0, 118.0, 22.0 ],
-									"saved_object_attributes" : 									{
-										"globalpatchername" : ""
-									}
-,
 									"text" : "p battery unit"
 								}
 
@@ -2044,7 +2012,7 @@
 										"appversion" : 										{
 											"major" : 9,
 											"minor" : 0,
-											"revision" : 4,
+											"revision" : 6,
 											"architecture" : "x64",
 											"modernui" : 1
 										}
@@ -2650,15 +2618,10 @@
 												}
 
 											}
- ],
-										"originid" : "pat-438"
+ ]
 									}
 ,
 									"patching_rect" : [ 213.0, 216.0, 658.0, 22.0 ],
-									"saved_object_attributes" : 									{
-										"globalpatchername" : ""
-									}
-,
 									"text" : "p riot bitalino"
 								}
 
@@ -2774,7 +2737,7 @@
 										"appversion" : 										{
 											"major" : 9,
 											"minor" : 0,
-											"revision" : 4,
+											"revision" : 6,
 											"architecture" : "x64",
 											"modernui" : 1
 										}
@@ -3484,15 +3447,10 @@
 												}
 
 											}
- ],
-										"originid" : "pat-440"
+ ]
 									}
 ,
 									"patching_rect" : [ 253.5, 169.0, 817.0, 22.0 ],
-									"saved_object_attributes" : 									{
-										"globalpatchername" : ""
-									}
-,
 									"text" : "p riot_ircam"
 								}
 
@@ -3574,7 +3532,7 @@
 										"appversion" : 										{
 											"major" : 9,
 											"minor" : 0,
-											"revision" : 4,
+											"revision" : 6,
 											"architecture" : "x64",
 											"modernui" : 1
 										}
@@ -3657,15 +3615,10 @@
 												}
 
 											}
- ],
-										"originid" : "pat-442"
+ ]
 									}
 ,
 									"patching_rect" : [ 536.0, 307.0, 118.0, 22.0 ],
-									"saved_object_attributes" : 									{
-										"globalpatchername" : ""
-									}
-,
 									"text" : "p temperature unit"
 								}
 
@@ -4105,15 +4058,10 @@
 								}
 
 							}
- ],
-						"originid" : "pat-432"
+ ]
 					}
 ,
 					"patching_rect" : [ 389.523859441280365, 481.0, 552.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"globalpatchername" : ""
-					}
-,
 					"text" : "p riots parsing"
 				}
 
@@ -4990,8 +4938,7 @@
 				}
 
 			}
- ],
-		"originid" : "pat-420"
+ ]
 	}
 
 }
