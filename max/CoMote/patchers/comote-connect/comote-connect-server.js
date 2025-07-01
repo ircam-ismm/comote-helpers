@@ -756,6 +756,10 @@ var require_permessage_deflate = __commonJS({
     }
     function inflateOnError(err) {
       this[kPerMessageDeflate]._inflate = null;
+      if (this[kError]) {
+        this[kCallback](this[kError]);
+        return;
+      }
       err[kStatusCode] = 1007;
       this[kCallback](err);
     }
@@ -3175,7 +3179,7 @@ var require_websocket = __commonJS({
       const isIpcUrl = parsedUrl.protocol === "ws+unix:";
       let invalidUrlMessage;
       if (parsedUrl.protocol !== "ws:" && !isSecure && !isIpcUrl) {
-        invalidUrlMessage = `The URL's protocol must be one of "ws:", "wss:", "http:", "https", or "ws+unix:"`;
+        invalidUrlMessage = `The URL's protocol must be one of "ws:", "wss:", "http:", "https:", or "ws+unix:"`;
       } else if (isIpcUrl && !parsedUrl.pathname) {
         invalidUrlMessage = "The URL's pathname is empty";
       } else if (parsedUrl.hash) {
@@ -3895,9 +3899,11 @@ var require_websocket_server = __commonJS({
           abortHandshakeOrEmitwsClientError(this, req, socket, 400, message);
           return;
         }
-        if (version !== 8 && version !== 13) {
+        if (version !== 13 && version !== 8) {
           const message = "Missing or invalid Sec-WebSocket-Version header";
-          abortHandshakeOrEmitwsClientError(this, req, socket, 400, message);
+          abortHandshakeOrEmitwsClientError(this, req, socket, 400, message, {
+            "Sec-WebSocket-Version": "13, 8"
+          });
           return;
         }
         if (!this.shouldHandle(req)) {
@@ -4056,21 +4062,21 @@ var require_websocket_server = __commonJS({
 ` + Object.keys(headers).map((h) => `${h}: ${headers[h]}`).join("\r\n") + "\r\n\r\n" + message
       );
     }
-    function abortHandshakeOrEmitwsClientError(server2, req, socket, code, message) {
+    function abortHandshakeOrEmitwsClientError(server2, req, socket, code, message, headers) {
       if (server2.listenerCount("wsClientError")) {
         const err = new Error(message);
         Error.captureStackTrace(err, abortHandshakeOrEmitwsClientError);
         server2.emit("wsClientError", err, socket, req);
       } else {
-        abortHandshake(socket, code, message);
+        abortHandshake(socket, code, message, headers);
       }
     }
   }
 });
 
-// ../../../../node_modules/async/dist/async.js
+// node_modules/async/dist/async.js
 var require_async = __commonJS({
-  "../../../../node_modules/async/dist/async.js"(exports2, module2) {
+  "node_modules/async/dist/async.js"(exports2, module2) {
     (function(global, factory) {
       typeof exports2 === "object" && typeof module2 !== "undefined" ? factory(exports2) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.async = {}));
     })(exports2, function(exports3) {
@@ -5928,9 +5934,9 @@ var require_async = __commonJS({
   }
 });
 
-// ../../../../node_modules/ms/index.js
+// node_modules/ms/index.js
 var require_ms = __commonJS({
-  "../../../../node_modules/ms/index.js"(exports2, module2) {
+  "node_modules/ms/index.js"(exports2, module2) {
     var s = 1e3;
     var m = s * 60;
     var h = m * 60;
@@ -6044,9 +6050,9 @@ var require_ms = __commonJS({
   }
 });
 
-// ../../../../node_modules/debug/src/common.js
+// node_modules/debug/src/common.js
 var require_common = __commonJS({
-  "../../../../node_modules/debug/src/common.js"(exports2, module2) {
+  "node_modules/debug/src/common.js"(exports2, module2) {
     function setup(env) {
       createDebug.debug = createDebug;
       createDebug.default = createDebug;
@@ -6147,7 +6153,7 @@ var require_common = __commonJS({
         createDebug.namespaces = namespaces;
         createDebug.names = [];
         createDebug.skips = [];
-        const split = (typeof namespaces === "string" ? namespaces : "").trim().replace(" ", ",").split(",").filter(Boolean);
+        const split = (typeof namespaces === "string" ? namespaces : "").trim().replace(/\s+/g, ",").split(",").filter(Boolean);
         for (const ns of split) {
           if (ns[0] === "-") {
             createDebug.skips.push(ns.slice(1));
@@ -6221,9 +6227,9 @@ var require_common = __commonJS({
   }
 });
 
-// ../../../../node_modules/debug/src/browser.js
+// node_modules/debug/src/browser.js
 var require_browser = __commonJS({
-  "../../../../node_modules/debug/src/browser.js"(exports2, module2) {
+  "node_modules/debug/src/browser.js"(exports2, module2) {
     exports2.formatArgs = formatArgs;
     exports2.save = save;
     exports2.load = load;
@@ -6365,7 +6371,7 @@ var require_browser = __commonJS({
     function load() {
       let r;
       try {
-        r = exports2.storage.getItem("debug");
+        r = exports2.storage.getItem("debug") || exports2.storage.getItem("DEBUG");
       } catch (error) {
       }
       if (!r && typeof process !== "undefined" && "env" in process) {
@@ -6518,9 +6524,9 @@ var require_supports_color = __commonJS({
   }
 });
 
-// ../../../../node_modules/debug/src/node.js
+// node_modules/debug/src/node.js
 var require_node = __commonJS({
-  "../../../../node_modules/debug/src/node.js"(exports2, module2) {
+  "node_modules/debug/src/node.js"(exports2, module2) {
     var tty = require("tty");
     var util = require("util");
     exports2.init = init;
@@ -6692,9 +6698,9 @@ var require_node = __commonJS({
   }
 });
 
-// ../../../../node_modules/debug/src/index.js
+// node_modules/debug/src/index.js
 var require_src = __commonJS({
-  "../../../../node_modules/debug/src/index.js"(exports2, module2) {
+  "node_modules/debug/src/index.js"(exports2, module2) {
     if (typeof process === "undefined" || process.type === "renderer" || process.browser === true || process.__nwjs) {
       module2.exports = require_browser();
     } else {
@@ -6703,9 +6709,9 @@ var require_src = __commonJS({
   }
 });
 
-// ../../../../node_modules/portfinder/lib/portfinder.js
+// node_modules/portfinder/lib/portfinder.js
 var require_portfinder = __commonJS({
-  "../../../../node_modules/portfinder/lib/portfinder.js"(exports2) {
+  "node_modules/portfinder/lib/portfinder.js"(exports2) {
     "use strict";
     var fs2 = require("fs");
     var os = require("os");
@@ -6770,16 +6776,16 @@ var require_portfinder = __commonJS({
       exports2.basePath = path3;
     };
     internals.getPort = function(options, callback) {
-      options.port = Number(options.port) || Number(exports2.basePort);
+      options.port = Number(options.port) || Number(options.startPort) || Number(exports2.basePort);
       options.host = options.host || null;
       options.stopPort = Number(options.stopPort) || Number(exports2.highestPort);
       if (!options.startPort) {
-        options.startPort = Number(options.port);
+        options.startPort = options.port;
         if (options.startPort < 0) {
-          throw Error("Provided options.startPort(" + options.startPort + ") is less than 0, which are cannot be bound.");
+          return callback(Error(`Provided options.port(${options.port}) is less than 0, which are cannot be bound.`));
         }
         if (options.stopPort < options.startPort) {
-          throw Error("Provided options.stopPort(" + options.stopPort + ") is less than options.startPort (" + options.startPort + ")");
+          return callback(Error(`Provided options.stopPort(${options.stopPort}) is less than options.port(${options.startPort})`));
         }
       }
       if (options.host && exports2._defaultHosts.indexOf(options.host) === -1) {
@@ -6852,7 +6858,7 @@ var require_portfinder = __commonJS({
           });
         });
       } else {
-        return internals.getPort(options, callback);
+        internals.getPort(options, callback);
       }
     };
     exports2.getPortPromise = exports2.getPort;
@@ -6888,15 +6894,11 @@ var require_portfinder = __commonJS({
           });
         });
       } else {
-        return internals.getPorts(count, options, callback);
+        internals.getPorts(count, options, callback);
       }
     };
     exports2.getPortsPromise = exports2.getPorts;
-    exports2.getSocket = function(options, callback) {
-      if (!callback) {
-        callback = options;
-        options = {};
-      }
+    internals.getSocket = function(options, callback) {
       options.mod = options.mod || parseInt(755, 8);
       options.path = options.path || exports2.basePath + ".sock";
       function testSocket() {
@@ -6909,7 +6911,7 @@ var require_portfinder = __commonJS({
             }
           } else {
             options.path = exports2.nextSocket(options.path);
-            exports2.getSocket(options, callback);
+            internals.getSocket(options, callback);
           }
         });
       }
@@ -6934,6 +6936,26 @@ var require_portfinder = __commonJS({
       }
       return options.exists ? testSocket() : checkAndTestSocket();
     };
+    exports2.getSocket = function(options, callback) {
+      if (typeof options === "function") {
+        callback = options;
+        options = {};
+      }
+      options = options || {};
+      if (!callback) {
+        return new Promise(function(resolve, reject) {
+          internals.getSocket(options, function(err, socketPath) {
+            if (err) {
+              return reject(err);
+            }
+            resolve(socketPath);
+          });
+        });
+      } else {
+        internals.getSocket(options, callback);
+      }
+    };
+    exports2.getSocketPromise = exports2.getSocket;
     exports2.nextPort = function(port) {
       return port + 1;
     };
@@ -6971,12 +6993,12 @@ var require_portfinder = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/package.json
+// node_modules/systeminformation/package.json
 var require_package = __commonJS({
-  "../../../../node_modules/systeminformation/package.json"(exports2, module2) {
+  "node_modules/systeminformation/package.json"(exports2, module2) {
     module2.exports = {
       name: "systeminformation",
-      version: "5.25.11",
+      version: "5.27.7",
       description: "Advanced, lightweight system and OS information library",
       license: "MIT",
       author: "Sebastian Hildebrandt <hildebrandt@plus-innovations.com> (https://plus-innovations.com)",
@@ -7078,9 +7100,9 @@ var require_package = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/util.js
+// node_modules/systeminformation/lib/util.js
 var require_util = __commonJS({
-  "../../../../node_modules/systeminformation/lib/util.js"(exports2) {
+  "node_modules/systeminformation/lib/util.js"(exports2) {
     "use strict";
     var os = require("os");
     var fs2 = require("fs");
@@ -9548,7 +9570,7 @@ var require_util = __commonJS({
             time: Date.now() - t
           });
         }).setTimeout(timeout, () => {
-          request.close();
+          request.destroy();
           resolve({
             url: url2,
             statusCode: 408,
@@ -9622,776 +9644,9 @@ var require_util = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/system.js
-var require_system = __commonJS({
-  "../../../../node_modules/systeminformation/lib/system.js"(exports2) {
-    "use strict";
-    var fs2 = require("fs");
-    var os = require("os");
-    var util = require_util();
-    var exec = require("child_process").exec;
-    var execSync = require("child_process").execSync;
-    var execPromise = util.promisify(require("child_process").exec);
-    var _platform = process.platform;
-    var _linux = _platform === "linux" || _platform === "android";
-    var _darwin = _platform === "darwin";
-    var _windows = _platform === "win32";
-    var _freebsd = _platform === "freebsd";
-    var _openbsd = _platform === "openbsd";
-    var _netbsd = _platform === "netbsd";
-    var _sunos = _platform === "sunos";
-    function system(callback) {
-      return new Promise((resolve) => {
-        process.nextTick(() => {
-          let result2 = {
-            manufacturer: "",
-            model: "Computer",
-            version: "",
-            serial: "-",
-            uuid: "-",
-            sku: "-",
-            virtual: false
-          };
-          if (_linux || _freebsd || _openbsd || _netbsd) {
-            exec("export LC_ALL=C; dmidecode -t system 2>/dev/null; unset LC_ALL", function(error, stdout) {
-              let lines = stdout.toString().split("\n");
-              result2.manufacturer = cleanDefaults(util.getValue(lines, "manufacturer"));
-              result2.model = cleanDefaults(util.getValue(lines, "product name"));
-              result2.version = cleanDefaults(util.getValue(lines, "version"));
-              result2.serial = cleanDefaults(util.getValue(lines, "serial number"));
-              result2.uuid = cleanDefaults(util.getValue(lines, "uuid")).toLowerCase();
-              result2.sku = cleanDefaults(util.getValue(lines, "sku number"));
-              const cmd = `echo -n "product_name: "; cat /sys/devices/virtual/dmi/id/product_name 2>/dev/null; echo;
-            echo -n "product_serial: "; cat /sys/devices/virtual/dmi/id/product_serial 2>/dev/null; echo;
-            echo -n "product_uuid: "; cat /sys/devices/virtual/dmi/id/product_uuid 2>/dev/null; echo;
-            echo -n "product_version: "; cat /sys/devices/virtual/dmi/id/product_version 2>/dev/null; echo;
-            echo -n "sys_vendor: "; cat /sys/devices/virtual/dmi/id/sys_vendor 2>/dev/null; echo;`;
-              try {
-                lines = execSync(cmd, util.execOptsLinux).toString().split("\n");
-                result2.manufacturer = cleanDefaults(result2.manufacturer === "" ? util.getValue(lines, "sys_vendor") : result2.manufacturer);
-                result2.model = cleanDefaults(result2.model === "" ? util.getValue(lines, "product_name") : result2.model);
-                result2.version = cleanDefaults(result2.version === "" ? util.getValue(lines, "product_version") : result2.version);
-                result2.serial = cleanDefaults(result2.serial === "" ? util.getValue(lines, "product_serial") : result2.serial);
-                result2.uuid = cleanDefaults(result2.uuid === "" ? util.getValue(lines, "product_uuid").toLowerCase() : result2.uuid);
-              } catch (e) {
-                util.noop();
-              }
-              if (!result2.serial) {
-                result2.serial = "-";
-              }
-              if (!result2.manufacturer) {
-                result2.manufacturer = "";
-              }
-              if (!result2.model) {
-                result2.model = "Computer";
-              }
-              if (!result2.version) {
-                result2.version = "";
-              }
-              if (!result2.sku) {
-                result2.sku = "-";
-              }
-              if (result2.model.toLowerCase() === "virtualbox" || result2.model.toLowerCase() === "kvm" || result2.model.toLowerCase() === "virtual machine" || result2.model.toLowerCase() === "bochs" || result2.model.toLowerCase().startsWith("vmware") || result2.model.toLowerCase().startsWith("droplet")) {
-                result2.virtual = true;
-                switch (result2.model.toLowerCase()) {
-                  case "virtualbox":
-                    result2.virtualHost = "VirtualBox";
-                    break;
-                  case "vmware":
-                    result2.virtualHost = "VMware";
-                    break;
-                  case "kvm":
-                    result2.virtualHost = "KVM";
-                    break;
-                  case "bochs":
-                    result2.virtualHost = "bochs";
-                    break;
-                }
-              }
-              if (result2.manufacturer.toLowerCase().startsWith("vmware") || result2.manufacturer.toLowerCase() === "xen") {
-                result2.virtual = true;
-                switch (result2.manufacturer.toLowerCase()) {
-                  case "vmware":
-                    result2.virtualHost = "VMware";
-                    break;
-                  case "xen":
-                    result2.virtualHost = "Xen";
-                    break;
-                }
-              }
-              if (!result2.virtual) {
-                try {
-                  const disksById = execSync("ls -1 /dev/disk/by-id/ 2>/dev/null", util.execOptsLinux).toString();
-                  if (disksById.indexOf("_QEMU_") >= 0) {
-                    result2.virtual = true;
-                    result2.virtualHost = "QEMU";
-                  }
-                  if (disksById.indexOf("_VBOX_") >= 0) {
-                    result2.virtual = true;
-                    result2.virtualHost = "VirtualBox";
-                  }
-                } catch (e) {
-                  util.noop();
-                }
-              }
-              if (!result2.virtual && (os.release().toLowerCase().indexOf("microsoft") >= 0 || os.release().toLowerCase().endsWith("wsl2"))) {
-                const kernelVersion = parseFloat(os.release().toLowerCase());
-                result2.virtual = true;
-                result2.manufacturer = "Microsoft";
-                result2.model = "WSL";
-                result2.version = kernelVersion < 4.19 ? "1" : "2";
-              }
-              if ((_freebsd || _openbsd || _netbsd) && !result2.virtualHost) {
-                try {
-                  const procInfo = execSync("dmidecode -t 4", util.execOptsLinux);
-                  const procLines = procInfo.toString().split("\n");
-                  const procManufacturer = util.getValue(procLines, "manufacturer", ":", true);
-                  switch (procManufacturer.toLowerCase()) {
-                    case "virtualbox":
-                      result2.virtualHost = "VirtualBox";
-                      break;
-                    case "vmware":
-                      result2.virtualHost = "VMware";
-                      break;
-                    case "kvm":
-                      result2.virtualHost = "KVM";
-                      break;
-                    case "bochs":
-                      result2.virtualHost = "bochs";
-                      break;
-                  }
-                } catch (e) {
-                  util.noop();
-                }
-              }
-              if (fs2.existsSync("/.dockerenv") || fs2.existsSync("/.dockerinit")) {
-                result2.model = "Docker Container";
-              }
-              try {
-                const stdout2 = execSync('dmesg 2>/dev/null | grep -iE "virtual|hypervisor" | grep -iE "vmware|qemu|kvm|xen" | grep -viE "Nested Virtualization|/virtual/"');
-                let lines2 = stdout2.toString().split("\n");
-                if (lines2.length > 0) {
-                  if (result2.model === "Computer") {
-                    result2.model = "Virtual machine";
-                  }
-                  result2.virtual = true;
-                  if (stdout2.toString().toLowerCase().indexOf("vmware") >= 0 && !result2.virtualHost) {
-                    result2.virtualHost = "VMware";
-                  }
-                  if (stdout2.toString().toLowerCase().indexOf("qemu") >= 0 && !result2.virtualHost) {
-                    result2.virtualHost = "QEMU";
-                  }
-                  if (stdout2.toString().toLowerCase().indexOf("xen") >= 0 && !result2.virtualHost) {
-                    result2.virtualHost = "Xen";
-                  }
-                  if (stdout2.toString().toLowerCase().indexOf("kvm") >= 0 && !result2.virtualHost) {
-                    result2.virtualHost = "KVM";
-                  }
-                }
-              } catch (e) {
-                util.noop();
-              }
-              if (result2.manufacturer === "" && result2.model === "Computer" && result2.version === "") {
-                fs2.readFile("/proc/cpuinfo", function(error2, stdout2) {
-                  if (!error2) {
-                    let lines2 = stdout2.toString().split("\n");
-                    result2.model = util.getValue(lines2, "hardware", ":", true).toUpperCase();
-                    result2.version = util.getValue(lines2, "revision", ":", true).toLowerCase();
-                    result2.serial = util.getValue(lines2, "serial", ":", true);
-                    const model = util.getValue(lines2, "model:", ":", true);
-                    if (util.isRaspberry(lines2)) {
-                      const rPIRevision = util.decodePiCpuinfo(lines2);
-                      result2.model = rPIRevision.model;
-                      result2.version = rPIRevision.revisionCode;
-                      result2.manufacturer = "Raspberry Pi Foundation";
-                      result2.raspberry = {
-                        manufacturer: rPIRevision.manufacturer,
-                        processor: rPIRevision.processor,
-                        type: rPIRevision.type,
-                        revision: rPIRevision.revision
-                      };
-                    }
-                  }
-                  if (callback) {
-                    callback(result2);
-                  }
-                  resolve(result2);
-                });
-              } else {
-                if (callback) {
-                  callback(result2);
-                }
-                resolve(result2);
-              }
-            });
-          }
-          if (_darwin) {
-            exec("ioreg -c IOPlatformExpertDevice -d 2", function(error, stdout) {
-              if (!error) {
-                let lines = stdout.toString().replace(/[<>"]/g, "").split("\n");
-                const model = util.getAppleModel(util.getValue(lines, "model", "=", true));
-                result2.manufacturer = util.getValue(lines, "manufacturer", "=", true);
-                result2.model = model.key;
-                result2.type = macOsChassisType(model.version);
-                result2.version = model.version;
-                result2.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
-                result2.uuid = util.getValue(lines, "ioplatformuuid", "=", true).toLowerCase();
-                result2.sku = util.getValue(lines, "board-id", "=", true) || util.getValue(lines, "target-sub-type", "=", true);
-              }
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            });
-          }
-          if (_sunos) {
-            if (callback) {
-              callback(result2);
-            }
-            resolve(result2);
-          }
-          if (_windows) {
-            try {
-              util.powerShell("Get-CimInstance Win32_ComputerSystemProduct | select Name,Vendor,Version,IdentifyingNumber,UUID | fl").then((stdout, error) => {
-                if (!error) {
-                  let lines = stdout.split("\r\n");
-                  result2.manufacturer = util.getValue(lines, "vendor", ":");
-                  result2.model = util.getValue(lines, "name", ":");
-                  result2.version = util.getValue(lines, "version", ":");
-                  result2.serial = util.getValue(lines, "identifyingnumber", ":");
-                  result2.uuid = util.getValue(lines, "uuid", ":").toLowerCase();
-                  const model = result2.model.toLowerCase();
-                  if (model === "virtualbox" || model === "kvm" || model === "virtual machine" || model === "bochs" || model.startsWith("vmware") || model.startsWith("qemu") || model.startsWith("parallels")) {
-                    result2.virtual = true;
-                    if (model.startsWith("virtualbox")) {
-                      result2.virtualHost = "VirtualBox";
-                    }
-                    if (model.startsWith("vmware")) {
-                      result2.virtualHost = "VMware";
-                    }
-                    if (model.startsWith("kvm")) {
-                      result2.virtualHost = "KVM";
-                    }
-                    if (model.startsWith("bochs")) {
-                      result2.virtualHost = "bochs";
-                    }
-                    if (model.startsWith("qemu")) {
-                      result2.virtualHost = "KVM";
-                    }
-                    if (model.startsWith("parallels")) {
-                      result2.virtualHost = "Parallels";
-                    }
-                  }
-                  const manufacturer = result2.manufacturer.toLowerCase();
-                  if (manufacturer.startsWith("vmware") || manufacturer.startsWith("qemu") || manufacturer === "xen" || manufacturer.startsWith("parallels")) {
-                    result2.virtual = true;
-                    if (manufacturer.startsWith("vmware")) {
-                      result2.virtualHost = "VMware";
-                    }
-                    if (manufacturer.startsWith("xen")) {
-                      result2.virtualHost = "Xen";
-                    }
-                    if (manufacturer.startsWith("qemu")) {
-                      result2.virtualHost = "KVM";
-                    }
-                    if (manufacturer.startsWith("parallels")) {
-                      result2.virtualHost = "Parallels";
-                    }
-                  }
-                  util.powerShell('Get-CimInstance MS_Systeminformation -Namespace "root/wmi" | select systemsku | fl ').then((stdout2, error2) => {
-                    if (!error2) {
-                      let lines2 = stdout2.split("\r\n");
-                      result2.sku = util.getValue(lines2, "systemsku", ":");
-                    }
-                    if (!result2.virtual) {
-                      util.powerShell("Get-CimInstance Win32_bios | select Version, SerialNumber, SMBIOSBIOSVersion").then((stdout3, error3) => {
-                        if (!error3) {
-                          let lines2 = stdout3.toString();
-                          if (lines2.indexOf("VRTUAL") >= 0 || lines2.indexOf("A M I ") >= 0 || lines2.indexOf("VirtualBox") >= 0 || lines2.indexOf("VMWare") >= 0 || lines2.indexOf("Xen") >= 0 || lines2.indexOf("Parallels") >= 0) {
-                            result2.virtual = true;
-                            if (lines2.indexOf("VirtualBox") >= 0 && !result2.virtualHost) {
-                              result2.virtualHost = "VirtualBox";
-                            }
-                            if (lines2.indexOf("VMware") >= 0 && !result2.virtualHost) {
-                              result2.virtualHost = "VMware";
-                            }
-                            if (lines2.indexOf("Xen") >= 0 && !result2.virtualHost) {
-                              result2.virtualHost = "Xen";
-                            }
-                            if (lines2.indexOf("VRTUAL") >= 0 && !result2.virtualHost) {
-                              result2.virtualHost = "Hyper-V";
-                            }
-                            if (lines2.indexOf("A M I") >= 0 && !result2.virtualHost) {
-                              result2.virtualHost = "Virtual PC";
-                            }
-                            if (lines2.indexOf("Parallels") >= 0 && !result2.virtualHost) {
-                              result2.virtualHost = "Parallels";
-                            }
-                          }
-                          if (callback) {
-                            callback(result2);
-                          }
-                          resolve(result2);
-                        } else {
-                          if (callback) {
-                            callback(result2);
-                          }
-                          resolve(result2);
-                        }
-                      });
-                    } else {
-                      if (callback) {
-                        callback(result2);
-                      }
-                      resolve(result2);
-                    }
-                  });
-                } else {
-                  if (callback) {
-                    callback(result2);
-                  }
-                  resolve(result2);
-                }
-              });
-            } catch (e) {
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            }
-          }
-        });
-      });
-    }
-    exports2.system = system;
-    function cleanDefaults(s) {
-      const cmpStr = s.toLowerCase();
-      if (cmpStr.indexOf("o.e.m.") === -1 && cmpStr.indexOf("default string") === -1 && cmpStr !== "default") {
-        return s || "";
-      }
-      return "";
-    }
-    function bios(callback) {
-      return new Promise((resolve) => {
-        process.nextTick(() => {
-          let result2 = {
-            vendor: "",
-            version: "",
-            releaseDate: "",
-            revision: ""
-          };
-          let cmd = "";
-          if (_linux || _freebsd || _openbsd || _netbsd) {
-            if (process.arch === "arm") {
-              cmd = "cat /proc/cpuinfo | grep Serial";
-            } else {
-              cmd = "export LC_ALL=C; dmidecode -t bios 2>/dev/null; unset LC_ALL";
-            }
-            exec(cmd, function(error, stdout) {
-              let lines = stdout.toString().split("\n");
-              result2.vendor = util.getValue(lines, "Vendor");
-              result2.version = util.getValue(lines, "Version");
-              let datetime = util.getValue(lines, "Release Date");
-              result2.releaseDate = util.parseDateTime(datetime).date;
-              result2.revision = util.getValue(lines, "BIOS Revision");
-              result2.serial = util.getValue(lines, "SerialNumber");
-              let language = util.getValue(lines, "Currently Installed Language").split("|")[0];
-              if (language) {
-                result2.language = language;
-              }
-              if (lines.length && stdout.toString().indexOf("Characteristics:") >= 0) {
-                const features = [];
-                lines.forEach((line) => {
-                  if (line.indexOf(" is supported") >= 0) {
-                    const feature = line.split(" is supported")[0].trim();
-                    features.push(feature);
-                  }
-                });
-                result2.features = features;
-              }
-              const cmd2 = `echo -n "bios_date: "; cat /sys/devices/virtual/dmi/id/bios_date 2>/dev/null; echo;
-            echo -n "bios_vendor: "; cat /sys/devices/virtual/dmi/id/bios_vendor 2>/dev/null; echo;
-            echo -n "bios_version: "; cat /sys/devices/virtual/dmi/id/bios_version 2>/dev/null; echo;`;
-              try {
-                lines = execSync(cmd2, util.execOptsLinux).toString().split("\n");
-                result2.vendor = !result2.vendor ? util.getValue(lines, "bios_vendor") : result2.vendor;
-                result2.version = !result2.version ? util.getValue(lines, "bios_version") : result2.version;
-                datetime = util.getValue(lines, "bios_date");
-                result2.releaseDate = !result2.releaseDate ? util.parseDateTime(datetime).date : result2.releaseDate;
-              } catch (e) {
-                util.noop();
-              }
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            });
-          }
-          if (_darwin) {
-            result2.vendor = "Apple Inc.";
-            exec(
-              "system_profiler SPHardwareDataType -json",
-              function(error, stdout) {
-                try {
-                  const hardwareData = JSON.parse(stdout.toString());
-                  if (hardwareData && hardwareData.SPHardwareDataType && hardwareData.SPHardwareDataType.length) {
-                    let bootRomVersion = hardwareData.SPHardwareDataType[0].boot_rom_version;
-                    bootRomVersion = bootRomVersion ? bootRomVersion.split("(")[0].trim() : null;
-                    result2.version = bootRomVersion;
-                  }
-                } catch (e) {
-                  util.noop();
-                }
-                if (callback) {
-                  callback(result2);
-                }
-                resolve(result2);
-              }
-            );
-          }
-          if (_sunos) {
-            result2.vendor = "Sun Microsystems";
-            if (callback) {
-              callback(result2);
-            }
-            resolve(result2);
-          }
-          if (_windows) {
-            try {
-              util.powerShell('Get-CimInstance Win32_bios | select Description,Version,Manufacturer,@{n="ReleaseDate";e={$_.ReleaseDate.ToString("yyyy-MM-dd")}},BuildNumber,SerialNumber,SMBIOSBIOSVersion | fl').then((stdout, error) => {
-                if (!error) {
-                  let lines = stdout.toString().split("\r\n");
-                  const description = util.getValue(lines, "description", ":");
-                  const version = util.getValue(lines, "SMBIOSBIOSVersion", ":");
-                  if (description.indexOf(" Version ") !== -1) {
-                    result2.vendor = description.split(" Version ")[0].trim();
-                    result2.version = description.split(" Version ")[1].trim();
-                  } else if (description.indexOf(" Ver: ") !== -1) {
-                    result2.vendor = util.getValue(lines, "manufacturer", ":");
-                    result2.version = description.split(" Ver: ")[1].trim();
-                  } else {
-                    result2.vendor = util.getValue(lines, "manufacturer", ":");
-                    result2.version = version || util.getValue(lines, "version", ":");
-                  }
-                  result2.releaseDate = util.getValue(lines, "releasedate", ":");
-                  result2.revision = util.getValue(lines, "buildnumber", ":");
-                  result2.serial = cleanDefaults(util.getValue(lines, "serialnumber", ":"));
-                }
-                if (callback) {
-                  callback(result2);
-                }
-                resolve(result2);
-              });
-            } catch (e) {
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            }
-          }
-        });
-      });
-    }
-    exports2.bios = bios;
-    function baseboard(callback) {
-      return new Promise((resolve) => {
-        process.nextTick(() => {
-          let result2 = {
-            manufacturer: "",
-            model: "",
-            version: "",
-            serial: "-",
-            assetTag: "-",
-            memMax: null,
-            memSlots: null
-          };
-          let cmd = "";
-          if (_linux || _freebsd || _openbsd || _netbsd) {
-            if (process.arch === "arm") {
-              cmd = "cat /proc/cpuinfo | grep Serial";
-            } else {
-              cmd = "export LC_ALL=C; dmidecode -t 2 2>/dev/null; unset LC_ALL";
-            }
-            const workload = [];
-            workload.push(execPromise(cmd));
-            workload.push(execPromise("export LC_ALL=C; dmidecode -t memory 2>/dev/null"));
-            util.promiseAll(
-              workload
-            ).then((data) => {
-              let lines = data.results[0] ? data.results[0].toString().split("\n") : [""];
-              result2.manufacturer = cleanDefaults(util.getValue(lines, "Manufacturer"));
-              result2.model = cleanDefaults(util.getValue(lines, "Product Name"));
-              result2.version = cleanDefaults(util.getValue(lines, "Version"));
-              result2.serial = cleanDefaults(util.getValue(lines, "Serial Number"));
-              result2.assetTag = cleanDefaults(util.getValue(lines, "Asset Tag"));
-              const cmd2 = `echo -n "board_asset_tag: "; cat /sys/devices/virtual/dmi/id/board_asset_tag 2>/dev/null; echo;
-            echo -n "board_name: "; cat /sys/devices/virtual/dmi/id/board_name 2>/dev/null; echo;
-            echo -n "board_serial: "; cat /sys/devices/virtual/dmi/id/board_serial 2>/dev/null; echo;
-            echo -n "board_vendor: "; cat /sys/devices/virtual/dmi/id/board_vendor 2>/dev/null; echo;
-            echo -n "board_version: "; cat /sys/devices/virtual/dmi/id/board_version 2>/dev/null; echo;`;
-              try {
-                lines = execSync(cmd2, util.execOptsLinux).toString().split("\n");
-                result2.manufacturer = cleanDefaults(!result2.manufacturer ? util.getValue(lines, "board_vendor") : result2.manufacturer);
-                result2.model = cleanDefaults(!result2.model ? util.getValue(lines, "board_name") : result2.model);
-                result2.version = cleanDefaults(!result2.version ? util.getValue(lines, "board_version") : result2.version);
-                result2.serial = cleanDefaults(!result2.serial ? util.getValue(lines, "board_serial") : result2.serial);
-                result2.assetTag = cleanDefaults(!result2.assetTag ? util.getValue(lines, "board_asset_tag") : result2.assetTag);
-              } catch (e) {
-                util.noop();
-              }
-              lines = data.results[1] ? data.results[1].toString().split("\n") : [""];
-              result2.memMax = util.toInt(util.getValue(lines, "Maximum Capacity")) * 1024 * 1024 * 1024 || null;
-              result2.memSlots = util.toInt(util.getValue(lines, "Number Of Devices")) || null;
-              if (util.isRaspberry()) {
-                const rpi = util.decodePiCpuinfo();
-                result2.manufacturer = rpi.manufacturer;
-                result2.model = "Raspberry Pi";
-                result2.serial = rpi.serial;
-                result2.version = rpi.type + " - " + rpi.revision;
-                result2.memMax = os.totalmem();
-                result2.memSlots = 0;
-              }
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            });
-          }
-          if (_darwin) {
-            const workload = [];
-            workload.push(execPromise("ioreg -c IOPlatformExpertDevice -d 2"));
-            workload.push(execPromise("system_profiler SPMemoryDataType"));
-            util.promiseAll(
-              workload
-            ).then((data) => {
-              let lines = data.results[0] ? data.results[0].toString().replace(/[<>"]/g, "").split("\n") : [""];
-              result2.manufacturer = util.getValue(lines, "manufacturer", "=", true);
-              result2.model = util.getValue(lines, "model", "=", true);
-              result2.version = util.getValue(lines, "version", "=", true);
-              result2.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
-              result2.assetTag = util.getValue(lines, "board-id", "=", true);
-              let devices = data.results[1] ? data.results[1].toString().split("        BANK ") : [""];
-              if (devices.length === 1) {
-                devices = data.results[1] ? data.results[1].toString().split("        DIMM") : [""];
-              }
-              devices.shift();
-              result2.memSlots = devices.length;
-              if (os.arch() === "arm64") {
-                result2.memSlots = 0;
-                result2.memMax = os.totalmem();
-              }
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            });
-          }
-          if (_sunos) {
-            if (callback) {
-              callback(result2);
-            }
-            resolve(result2);
-          }
-          if (_windows) {
-            try {
-              const workload = [];
-              const win10plus = parseInt(os.release()) >= 10;
-              const maxCapacityAttribute = win10plus ? "MaxCapacityEx" : "MaxCapacity";
-              workload.push(util.powerShell("Get-CimInstance Win32_baseboard | select Model,Manufacturer,Product,Version,SerialNumber,PartNumber,SKU | fl"));
-              workload.push(util.powerShell(`Get-CimInstance Win32_physicalmemoryarray | select ${maxCapacityAttribute}, MemoryDevices | fl`));
-              util.promiseAll(
-                workload
-              ).then((data) => {
-                let lines = data.results[0] ? data.results[0].toString().split("\r\n") : [""];
-                result2.manufacturer = cleanDefaults(util.getValue(lines, "manufacturer", ":"));
-                result2.model = cleanDefaults(util.getValue(lines, "model", ":"));
-                if (!result2.model) {
-                  result2.model = cleanDefaults(util.getValue(lines, "product", ":"));
-                }
-                result2.version = cleanDefaults(util.getValue(lines, "version", ":"));
-                result2.serial = cleanDefaults(util.getValue(lines, "serialnumber", ":"));
-                result2.assetTag = cleanDefaults(util.getValue(lines, "partnumber", ":"));
-                if (!result2.assetTag) {
-                  result2.assetTag = cleanDefaults(util.getValue(lines, "sku", ":"));
-                }
-                lines = data.results[1] ? data.results[1].toString().split("\r\n") : [""];
-                result2.memMax = util.toInt(util.getValue(lines, maxCapacityAttribute, ":")) * (win10plus ? 1024 : 1) || null;
-                result2.memSlots = util.toInt(util.getValue(lines, "MemoryDevices", ":")) || null;
-                if (callback) {
-                  callback(result2);
-                }
-                resolve(result2);
-              });
-            } catch (e) {
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            }
-          }
-        });
-      });
-    }
-    exports2.baseboard = baseboard;
-    function macOsChassisType(model) {
-      model = model.toLowerCase();
-      if (model.indexOf("macbookair") >= 0 || model.indexOf("macbook air") >= 0) {
-        return "Notebook";
-      }
-      if (model.indexOf("macbookpro") >= 0 || model.indexOf("macbook pro") >= 0) {
-        return "Notebook";
-      }
-      if (model.indexOf("macbook") >= 0) {
-        return "Notebook";
-      }
-      if (model.indexOf("macmini") >= 0 || model.indexOf("mac mini") >= 0) {
-        return "Desktop";
-      }
-      if (model.indexOf("imac") >= 0) {
-        return "Desktop";
-      }
-      if (model.indexOf("macstudio") >= 0 || model.indexOf("mac studio") >= 0) {
-        return "Desktop";
-      }
-      if (model.indexOf("macpro") >= 0 || model.indexOf("mac pro") >= 0) {
-        return "Tower";
-      }
-      return "Other";
-    }
-    function chassis(callback) {
-      const chassisTypes = [
-        "Other",
-        "Unknown",
-        "Desktop",
-        "Low Profile Desktop",
-        "Pizza Box",
-        "Mini Tower",
-        "Tower",
-        "Portable",
-        "Laptop",
-        "Notebook",
-        "Hand Held",
-        "Docking Station",
-        "All in One",
-        "Sub Notebook",
-        "Space-Saving",
-        "Lunch Box",
-        "Main System Chassis",
-        "Expansion Chassis",
-        "SubChassis",
-        "Bus Expansion Chassis",
-        "Peripheral Chassis",
-        "Storage Chassis",
-        "Rack Mount Chassis",
-        "Sealed-Case PC",
-        "Multi-System Chassis",
-        "Compact PCI",
-        "Advanced TCA",
-        "Blade",
-        "Blade Enclosure",
-        "Tablet",
-        "Convertible",
-        "Detachable",
-        "IoT Gateway ",
-        "Embedded PC",
-        "Mini PC",
-        "Stick PC"
-      ];
-      return new Promise((resolve) => {
-        process.nextTick(() => {
-          let result2 = {
-            manufacturer: "",
-            model: "",
-            type: "",
-            version: "",
-            serial: "-",
-            assetTag: "-",
-            sku: ""
-          };
-          if (_linux || _freebsd || _openbsd || _netbsd) {
-            const cmd = `echo -n "chassis_asset_tag: "; cat /sys/devices/virtual/dmi/id/chassis_asset_tag 2>/dev/null; echo;
-            echo -n "chassis_serial: "; cat /sys/devices/virtual/dmi/id/chassis_serial 2>/dev/null; echo;
-            echo -n "chassis_type: "; cat /sys/devices/virtual/dmi/id/chassis_type 2>/dev/null; echo;
-            echo -n "chassis_vendor: "; cat /sys/devices/virtual/dmi/id/chassis_vendor 2>/dev/null; echo;
-            echo -n "chassis_version: "; cat /sys/devices/virtual/dmi/id/chassis_version 2>/dev/null; echo;`;
-            exec(cmd, function(error, stdout) {
-              let lines = stdout.toString().split("\n");
-              result2.manufacturer = cleanDefaults(util.getValue(lines, "chassis_vendor"));
-              const ctype = parseInt(util.getValue(lines, "chassis_type").replace(/\D/g, ""));
-              result2.type = cleanDefaults(ctype && !isNaN(ctype) && ctype < chassisTypes.length ? chassisTypes[ctype - 1] : "");
-              result2.version = cleanDefaults(util.getValue(lines, "chassis_version"));
-              result2.serial = cleanDefaults(util.getValue(lines, "chassis_serial"));
-              result2.assetTag = cleanDefaults(util.getValue(lines, "chassis_asset_tag"));
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            });
-          }
-          if (_darwin) {
-            exec("ioreg -c IOPlatformExpertDevice -d 2", function(error, stdout) {
-              if (!error) {
-                let lines = stdout.toString().replace(/[<>"]/g, "").split("\n");
-                const model = util.getAppleModel(util.getValue(lines, "model", "=", true));
-                result2.manufacturer = util.getValue(lines, "manufacturer", "=", true);
-                result2.model = model.key;
-                result2.type = macOsChassisType(model.model);
-                result2.version = model.version;
-                result2.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
-                result2.assetTag = util.getValue(lines, "board-id", "=", true) || util.getValue(lines, "target-type", "=", true);
-                result2.sku = util.getValue(lines, "target-sub-type", "=", true);
-              }
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            });
-          }
-          if (_sunos) {
-            if (callback) {
-              callback(result2);
-            }
-            resolve(result2);
-          }
-          if (_windows) {
-            try {
-              util.powerShell("Get-CimInstance Win32_SystemEnclosure | select Model,Manufacturer,ChassisTypes,Version,SerialNumber,PartNumber,SKU,SMBIOSAssetTag | fl").then((stdout, error) => {
-                if (!error) {
-                  let lines = stdout.toString().split("\r\n");
-                  result2.manufacturer = cleanDefaults(util.getValue(lines, "manufacturer", ":"));
-                  result2.model = cleanDefaults(util.getValue(lines, "model", ":"));
-                  const ctype = parseInt(util.getValue(lines, "ChassisTypes", ":").replace(/\D/g, ""));
-                  result2.type = ctype && !isNaN(ctype) && ctype < chassisTypes.length ? chassisTypes[ctype - 1] : "";
-                  result2.version = cleanDefaults(util.getValue(lines, "version", ":"));
-                  result2.serial = cleanDefaults(util.getValue(lines, "serialnumber", ":"));
-                  result2.assetTag = cleanDefaults(util.getValue(lines, "partnumber", ":"));
-                  if (!result2.assetTag) {
-                    result2.assetTag = cleanDefaults(util.getValue(lines, "SMBIOSAssetTag", ":"));
-                  }
-                  result2.sku = cleanDefaults(util.getValue(lines, "sku", ":"));
-                }
-                if (callback) {
-                  callback(result2);
-                }
-                resolve(result2);
-              });
-            } catch (e) {
-              if (callback) {
-                callback(result2);
-              }
-              resolve(result2);
-            }
-          }
-        });
-      });
-    }
-    exports2.chassis = chassis;
-  }
-});
-
-// ../../../../node_modules/systeminformation/lib/osinfo.js
+// node_modules/systeminformation/lib/osinfo.js
 var require_osinfo = __commonJS({
-  "../../../../node_modules/systeminformation/lib/osinfo.js"(exports2) {
+  "node_modules/systeminformation/lib/osinfo.js"(exports2) {
     "use strict";
     var os = require("os");
     var fs2 = require("fs");
@@ -10408,11 +9663,17 @@ var require_osinfo = __commonJS({
     var _sunos = _platform === "sunos";
     function time() {
       let t = (/* @__PURE__ */ new Date()).toString().split(" ");
+      let timezoneName = "";
+      try {
+        timezoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } catch {
+        timezoneName = t.length >= 7 ? t.slice(6).join(" ").replace(/\(/g, "").replace(/\)/g, "") : "";
+      }
       const result2 = {
         current: Date.now(),
         uptime: os.uptime(),
         timezone: t.length >= 7 ? t[5] : "",
-        timezoneName: Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : t.length >= 7 ? t.slice(6).join(" ").replace(/\(/g, "").replace(/\)/g, "") : ""
+        timezoneName
       };
       if (_darwin || _linux) {
         try {
@@ -10656,6 +9917,8 @@ var require_osinfo = __commonJS({
               result2.codename = result2.release.startsWith("13.") ? "Ventura" : result2.codename;
               result2.codename = result2.release.startsWith("14.") ? "Sonoma" : result2.codename;
               result2.codename = result2.release.startsWith("15.") ? "Sequoia" : result2.codename;
+              result2.codename = result2.release.startsWith("16.") ? "Tahoe" : result2.codename;
+              result2.codename = result2.release.startsWith("26.") ? "Tahoe" : result2.codename;
               result2.uefi = true;
               result2.codepage = util.getCodepage();
               if (callback) {
@@ -11547,8 +10810,8 @@ echo -n "hardware: "; cat /sys/class/dmi/id/product_uuid 2> /dev/null; echo;`;
           if (_freebsd || _openbsd || _netbsd) {
             exec("sysctl -i kern.hostid kern.hostuuid", function(error, stdout) {
               const lines = stdout.toString().split("\n");
-              result2.os = util.getValue(lines, "kern.hostid", ":").toLowerCase();
-              result2.hardware = util.getValue(lines, "kern.hostuuid", ":").toLowerCase();
+              result2.hardware = util.getValue(lines, "kern.hostid", ":").toLowerCase();
+              result2.os = util.getValue(lines, "kern.hostuuid", ":").toLowerCase();
               if (result2.os.indexOf("unknown") >= 0) {
                 result2.os = "";
               }
@@ -11586,9 +10849,793 @@ echo -n "hardware: "; cat /sys/class/dmi/id/product_uuid 2> /dev/null; echo;`;
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/cpu.js
+// node_modules/systeminformation/lib/system.js
+var require_system = __commonJS({
+  "node_modules/systeminformation/lib/system.js"(exports2) {
+    "use strict";
+    var fs2 = require("fs");
+    var os = require("os");
+    var util = require_util();
+    var { uuid } = require_osinfo();
+    var exec = require("child_process").exec;
+    var execSync = require("child_process").execSync;
+    var execPromise = util.promisify(require("child_process").exec);
+    var _platform = process.platform;
+    var _linux = _platform === "linux" || _platform === "android";
+    var _darwin = _platform === "darwin";
+    var _windows = _platform === "win32";
+    var _freebsd = _platform === "freebsd";
+    var _openbsd = _platform === "openbsd";
+    var _netbsd = _platform === "netbsd";
+    var _sunos = _platform === "sunos";
+    function system(callback) {
+      return new Promise((resolve) => {
+        process.nextTick(() => {
+          let result2 = {
+            manufacturer: "",
+            model: "Computer",
+            version: "",
+            serial: "-",
+            uuid: "-",
+            sku: "-",
+            virtual: false
+          };
+          if (_linux || _freebsd || _openbsd || _netbsd) {
+            exec("export LC_ALL=C; dmidecode -t system 2>/dev/null; unset LC_ALL", function(error, stdout) {
+              let lines = stdout.toString().split("\n");
+              result2.manufacturer = cleanDefaults(util.getValue(lines, "manufacturer"));
+              result2.model = cleanDefaults(util.getValue(lines, "product name"));
+              result2.version = cleanDefaults(util.getValue(lines, "version"));
+              result2.serial = cleanDefaults(util.getValue(lines, "serial number"));
+              result2.uuid = cleanDefaults(util.getValue(lines, "uuid")).toLowerCase();
+              result2.sku = cleanDefaults(util.getValue(lines, "sku number"));
+              const cmd = `echo -n "product_name: "; cat /sys/devices/virtual/dmi/id/product_name 2>/dev/null; echo;
+            echo -n "product_serial: "; cat /sys/devices/virtual/dmi/id/product_serial 2>/dev/null; echo;
+            echo -n "product_uuid: "; cat /sys/devices/virtual/dmi/id/product_uuid 2>/dev/null; echo;
+            echo -n "product_version: "; cat /sys/devices/virtual/dmi/id/product_version 2>/dev/null; echo;
+            echo -n "sys_vendor: "; cat /sys/devices/virtual/dmi/id/sys_vendor 2>/dev/null; echo;`;
+              try {
+                lines = execSync(cmd, util.execOptsLinux).toString().split("\n");
+                result2.manufacturer = cleanDefaults(result2.manufacturer === "" ? util.getValue(lines, "sys_vendor") : result2.manufacturer);
+                result2.model = cleanDefaults(result2.model === "" ? util.getValue(lines, "product_name") : result2.model);
+                result2.version = cleanDefaults(result2.version === "" ? util.getValue(lines, "product_version") : result2.version);
+                result2.serial = cleanDefaults(result2.serial === "" ? util.getValue(lines, "product_serial") : result2.serial);
+                result2.uuid = cleanDefaults(result2.uuid === "" ? util.getValue(lines, "product_uuid").toLowerCase() : result2.uuid);
+              } catch (e) {
+                util.noop();
+              }
+              if (!result2.serial) {
+                result2.serial = "-";
+              }
+              if (!result2.manufacturer) {
+                result2.manufacturer = "";
+              }
+              if (!result2.model) {
+                result2.model = "Computer";
+              }
+              if (!result2.version) {
+                result2.version = "";
+              }
+              if (!result2.sku) {
+                result2.sku = "-";
+              }
+              if (result2.model.toLowerCase() === "virtualbox" || result2.model.toLowerCase() === "kvm" || result2.model.toLowerCase() === "virtual machine" || result2.model.toLowerCase() === "bochs" || result2.model.toLowerCase().startsWith("vmware") || result2.model.toLowerCase().startsWith("droplet")) {
+                result2.virtual = true;
+                switch (result2.model.toLowerCase()) {
+                  case "virtualbox":
+                    result2.virtualHost = "VirtualBox";
+                    break;
+                  case "vmware":
+                    result2.virtualHost = "VMware";
+                    break;
+                  case "kvm":
+                    result2.virtualHost = "KVM";
+                    break;
+                  case "bochs":
+                    result2.virtualHost = "bochs";
+                    break;
+                }
+              }
+              if (result2.manufacturer.toLowerCase().startsWith("vmware") || result2.manufacturer.toLowerCase() === "xen") {
+                result2.virtual = true;
+                switch (result2.manufacturer.toLowerCase()) {
+                  case "vmware":
+                    result2.virtualHost = "VMware";
+                    break;
+                  case "xen":
+                    result2.virtualHost = "Xen";
+                    break;
+                }
+              }
+              if (!result2.virtual) {
+                try {
+                  const disksById = execSync("ls -1 /dev/disk/by-id/ 2>/dev/null; pciconf -lv  2>/dev/null", util.execOptsLinux).toString();
+                  if (disksById.indexOf("_QEMU_") >= 0 || disksById.indexOf("QEMU ") >= 0) {
+                    result2.virtual = true;
+                    result2.virtualHost = "QEMU";
+                  }
+                  if (disksById.indexOf("_VBOX_") >= 0) {
+                    result2.virtual = true;
+                    result2.virtualHost = "VirtualBox";
+                  }
+                } catch (e) {
+                  util.noop();
+                }
+              }
+              if (_freebsd || _openbsd || _netbsd) {
+                try {
+                  const lines2 = execSync("sysctl -i kern.hostuuid kern.hostid hw.model", util.execOptsLinux).toString().split("\n");
+                  if (!result2.uuid) {
+                    result2.uuid = util.getValue(lines2, "kern.hostuuid", ":").toLowerCase();
+                  }
+                  if (!result2.serial || result2.serial === "-") {
+                    result2.serial = util.getValue(lines2, "kern.hostid", ":").toLowerCase();
+                  }
+                  if (!result2.model || result2.model === "Computer") {
+                    result2.model = util.getValue(lines2, "hw.model", ":").trim();
+                  }
+                } catch (e) {
+                  util.noop();
+                }
+              }
+              if (!result2.virtual && (os.release().toLowerCase().indexOf("microsoft") >= 0 || os.release().toLowerCase().endsWith("wsl2"))) {
+                const kernelVersion = parseFloat(os.release().toLowerCase());
+                result2.virtual = true;
+                result2.manufacturer = "Microsoft";
+                result2.model = "WSL";
+                result2.version = kernelVersion < 4.19 ? "1" : "2";
+              }
+              if ((_freebsd || _openbsd || _netbsd) && !result2.virtualHost) {
+                try {
+                  const procInfo = execSync("dmidecode -t 4", util.execOptsLinux);
+                  const procLines = procInfo.toString().split("\n");
+                  const procManufacturer = util.getValue(procLines, "manufacturer", ":", true);
+                  switch (procManufacturer.toLowerCase()) {
+                    case "virtualbox":
+                      result2.virtualHost = "VirtualBox";
+                      break;
+                    case "vmware":
+                      result2.virtualHost = "VMware";
+                      break;
+                    case "kvm":
+                      result2.virtualHost = "KVM";
+                      break;
+                    case "bochs":
+                      result2.virtualHost = "bochs";
+                      break;
+                  }
+                } catch (e) {
+                  util.noop();
+                }
+              }
+              if (fs2.existsSync("/.dockerenv") || fs2.existsSync("/.dockerinit")) {
+                result2.model = "Docker Container";
+              }
+              try {
+                const stdout2 = execSync('dmesg 2>/dev/null | grep -iE "virtual|hypervisor" | grep -iE "vmware|qemu|kvm|xen" | grep -viE "Nested Virtualization|/virtual/"');
+                let lines2 = stdout2.toString().split("\n");
+                if (lines2.length > 0) {
+                  if (result2.model === "Computer") {
+                    result2.model = "Virtual machine";
+                  }
+                  result2.virtual = true;
+                  if (stdout2.toString().toLowerCase().indexOf("vmware") >= 0 && !result2.virtualHost) {
+                    result2.virtualHost = "VMware";
+                  }
+                  if (stdout2.toString().toLowerCase().indexOf("qemu") >= 0 && !result2.virtualHost) {
+                    result2.virtualHost = "QEMU";
+                  }
+                  if (stdout2.toString().toLowerCase().indexOf("xen") >= 0 && !result2.virtualHost) {
+                    result2.virtualHost = "Xen";
+                  }
+                  if (stdout2.toString().toLowerCase().indexOf("kvm") >= 0 && !result2.virtualHost) {
+                    result2.virtualHost = "KVM";
+                  }
+                }
+              } catch (e) {
+                util.noop();
+              }
+              if (result2.manufacturer === "" && result2.model === "Computer" && result2.version === "") {
+                fs2.readFile("/proc/cpuinfo", function(error2, stdout2) {
+                  if (!error2) {
+                    let lines2 = stdout2.toString().split("\n");
+                    result2.model = util.getValue(lines2, "hardware", ":", true).toUpperCase();
+                    result2.version = util.getValue(lines2, "revision", ":", true).toLowerCase();
+                    result2.serial = util.getValue(lines2, "serial", ":", true);
+                    const model = util.getValue(lines2, "model:", ":", true);
+                    if (util.isRaspberry(lines2)) {
+                      const rPIRevision = util.decodePiCpuinfo(lines2);
+                      result2.model = rPIRevision.model;
+                      result2.version = rPIRevision.revisionCode;
+                      result2.manufacturer = "Raspberry Pi Foundation";
+                      result2.raspberry = {
+                        manufacturer: rPIRevision.manufacturer,
+                        processor: rPIRevision.processor,
+                        type: rPIRevision.type,
+                        revision: rPIRevision.revision
+                      };
+                    }
+                  }
+                  if (callback) {
+                    callback(result2);
+                  }
+                  resolve(result2);
+                });
+              } else {
+                if (callback) {
+                  callback(result2);
+                }
+                resolve(result2);
+              }
+            });
+          }
+          if (_darwin) {
+            exec("ioreg -c IOPlatformExpertDevice -d 2", function(error, stdout) {
+              if (!error) {
+                let lines = stdout.toString().replace(/[<>"]/g, "").split("\n");
+                const model = util.getAppleModel(util.getValue(lines, "model", "=", true));
+                result2.manufacturer = util.getValue(lines, "manufacturer", "=", true);
+                result2.model = model.key;
+                result2.type = macOsChassisType(model.version);
+                result2.version = model.version;
+                result2.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
+                result2.uuid = util.getValue(lines, "ioplatformuuid", "=", true).toLowerCase();
+                result2.sku = util.getValue(lines, "board-id", "=", true) || util.getValue(lines, "target-sub-type", "=", true);
+              }
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            });
+          }
+          if (_sunos) {
+            if (callback) {
+              callback(result2);
+            }
+            resolve(result2);
+          }
+          if (_windows) {
+            try {
+              util.powerShell("Get-CimInstance Win32_ComputerSystemProduct | select Name,Vendor,Version,IdentifyingNumber,UUID | fl").then((stdout, error) => {
+                if (!error) {
+                  let lines = stdout.split("\r\n");
+                  result2.manufacturer = util.getValue(lines, "vendor", ":");
+                  result2.model = util.getValue(lines, "name", ":");
+                  result2.version = util.getValue(lines, "version", ":");
+                  result2.serial = util.getValue(lines, "identifyingnumber", ":");
+                  result2.uuid = util.getValue(lines, "uuid", ":").toLowerCase();
+                  const model = result2.model.toLowerCase();
+                  if (model === "virtualbox" || model === "kvm" || model === "virtual machine" || model === "bochs" || model.startsWith("vmware") || model.startsWith("qemu") || model.startsWith("parallels")) {
+                    result2.virtual = true;
+                    if (model.startsWith("virtualbox")) {
+                      result2.virtualHost = "VirtualBox";
+                    }
+                    if (model.startsWith("vmware")) {
+                      result2.virtualHost = "VMware";
+                    }
+                    if (model.startsWith("kvm")) {
+                      result2.virtualHost = "KVM";
+                    }
+                    if (model.startsWith("bochs")) {
+                      result2.virtualHost = "bochs";
+                    }
+                    if (model.startsWith("qemu")) {
+                      result2.virtualHost = "KVM";
+                    }
+                    if (model.startsWith("parallels")) {
+                      result2.virtualHost = "Parallels";
+                    }
+                  }
+                  const manufacturer = result2.manufacturer.toLowerCase();
+                  if (manufacturer.startsWith("vmware") || manufacturer.startsWith("qemu") || manufacturer === "xen" || manufacturer.startsWith("parallels")) {
+                    result2.virtual = true;
+                    if (manufacturer.startsWith("vmware")) {
+                      result2.virtualHost = "VMware";
+                    }
+                    if (manufacturer.startsWith("xen")) {
+                      result2.virtualHost = "Xen";
+                    }
+                    if (manufacturer.startsWith("qemu")) {
+                      result2.virtualHost = "KVM";
+                    }
+                    if (manufacturer.startsWith("parallels")) {
+                      result2.virtualHost = "Parallels";
+                    }
+                  }
+                  util.powerShell('Get-CimInstance MS_Systeminformation -Namespace "root/wmi" | select systemsku | fl ').then((stdout2, error2) => {
+                    if (!error2) {
+                      let lines2 = stdout2.split("\r\n");
+                      result2.sku = util.getValue(lines2, "systemsku", ":");
+                    }
+                    if (!result2.virtual) {
+                      util.powerShell("Get-CimInstance Win32_bios | select Version, SerialNumber, SMBIOSBIOSVersion").then((stdout3, error3) => {
+                        if (!error3) {
+                          let lines2 = stdout3.toString();
+                          if (lines2.indexOf("VRTUAL") >= 0 || lines2.indexOf("A M I ") >= 0 || lines2.indexOf("VirtualBox") >= 0 || lines2.indexOf("VMWare") >= 0 || lines2.indexOf("Xen") >= 0 || lines2.indexOf("Parallels") >= 0) {
+                            result2.virtual = true;
+                            if (lines2.indexOf("VirtualBox") >= 0 && !result2.virtualHost) {
+                              result2.virtualHost = "VirtualBox";
+                            }
+                            if (lines2.indexOf("VMware") >= 0 && !result2.virtualHost) {
+                              result2.virtualHost = "VMware";
+                            }
+                            if (lines2.indexOf("Xen") >= 0 && !result2.virtualHost) {
+                              result2.virtualHost = "Xen";
+                            }
+                            if (lines2.indexOf("VRTUAL") >= 0 && !result2.virtualHost) {
+                              result2.virtualHost = "Hyper-V";
+                            }
+                            if (lines2.indexOf("A M I") >= 0 && !result2.virtualHost) {
+                              result2.virtualHost = "Virtual PC";
+                            }
+                            if (lines2.indexOf("Parallels") >= 0 && !result2.virtualHost) {
+                              result2.virtualHost = "Parallels";
+                            }
+                          }
+                          if (callback) {
+                            callback(result2);
+                          }
+                          resolve(result2);
+                        } else {
+                          if (callback) {
+                            callback(result2);
+                          }
+                          resolve(result2);
+                        }
+                      });
+                    } else {
+                      if (callback) {
+                        callback(result2);
+                      }
+                      resolve(result2);
+                    }
+                  });
+                } else {
+                  if (callback) {
+                    callback(result2);
+                  }
+                  resolve(result2);
+                }
+              });
+            } catch (e) {
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            }
+          }
+        });
+      });
+    }
+    exports2.system = system;
+    function cleanDefaults(s) {
+      const cmpStr = s.toLowerCase();
+      if (cmpStr.indexOf("o.e.m.") === -1 && cmpStr.indexOf("default string") === -1 && cmpStr !== "default") {
+        return s || "";
+      }
+      return "";
+    }
+    function bios(callback) {
+      return new Promise((resolve) => {
+        process.nextTick(() => {
+          let result2 = {
+            vendor: "",
+            version: "",
+            releaseDate: "",
+            revision: ""
+          };
+          let cmd = "";
+          if (_linux || _freebsd || _openbsd || _netbsd) {
+            if (process.arch === "arm") {
+              cmd = "cat /proc/cpuinfo | grep Serial";
+            } else {
+              cmd = "export LC_ALL=C; dmidecode -t bios 2>/dev/null; unset LC_ALL";
+            }
+            exec(cmd, function(error, stdout) {
+              let lines = stdout.toString().split("\n");
+              result2.vendor = util.getValue(lines, "Vendor");
+              result2.version = util.getValue(lines, "Version");
+              let datetime = util.getValue(lines, "Release Date");
+              result2.releaseDate = util.parseDateTime(datetime).date;
+              result2.revision = util.getValue(lines, "BIOS Revision");
+              result2.serial = util.getValue(lines, "SerialNumber");
+              let language = util.getValue(lines, "Currently Installed Language").split("|")[0];
+              if (language) {
+                result2.language = language;
+              }
+              if (lines.length && stdout.toString().indexOf("Characteristics:") >= 0) {
+                const features = [];
+                lines.forEach((line) => {
+                  if (line.indexOf(" is supported") >= 0) {
+                    const feature = line.split(" is supported")[0].trim();
+                    features.push(feature);
+                  }
+                });
+                result2.features = features;
+              }
+              const cmd2 = `echo -n "bios_date: "; cat /sys/devices/virtual/dmi/id/bios_date 2>/dev/null; echo;
+            echo -n "bios_vendor: "; cat /sys/devices/virtual/dmi/id/bios_vendor 2>/dev/null; echo;
+            echo -n "bios_version: "; cat /sys/devices/virtual/dmi/id/bios_version 2>/dev/null; echo;`;
+              try {
+                lines = execSync(cmd2, util.execOptsLinux).toString().split("\n");
+                result2.vendor = !result2.vendor ? util.getValue(lines, "bios_vendor") : result2.vendor;
+                result2.version = !result2.version ? util.getValue(lines, "bios_version") : result2.version;
+                datetime = util.getValue(lines, "bios_date");
+                result2.releaseDate = !result2.releaseDate ? util.parseDateTime(datetime).date : result2.releaseDate;
+              } catch (e) {
+                util.noop();
+              }
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            });
+          }
+          if (_darwin) {
+            result2.vendor = "Apple Inc.";
+            exec(
+              "system_profiler SPHardwareDataType -json",
+              function(error, stdout) {
+                try {
+                  const hardwareData = JSON.parse(stdout.toString());
+                  if (hardwareData && hardwareData.SPHardwareDataType && hardwareData.SPHardwareDataType.length) {
+                    let bootRomVersion = hardwareData.SPHardwareDataType[0].boot_rom_version;
+                    bootRomVersion = bootRomVersion ? bootRomVersion.split("(")[0].trim() : null;
+                    result2.version = bootRomVersion;
+                  }
+                } catch (e) {
+                  util.noop();
+                }
+                if (callback) {
+                  callback(result2);
+                }
+                resolve(result2);
+              }
+            );
+          }
+          if (_sunos) {
+            result2.vendor = "Sun Microsystems";
+            if (callback) {
+              callback(result2);
+            }
+            resolve(result2);
+          }
+          if (_windows) {
+            try {
+              util.powerShell('Get-CimInstance Win32_bios | select Description,Version,Manufacturer,@{n="ReleaseDate";e={$_.ReleaseDate.ToString("yyyy-MM-dd")}},BuildNumber,SerialNumber,SMBIOSBIOSVersion | fl').then((stdout, error) => {
+                if (!error) {
+                  let lines = stdout.toString().split("\r\n");
+                  const description = util.getValue(lines, "description", ":");
+                  const version = util.getValue(lines, "SMBIOSBIOSVersion", ":");
+                  if (description.indexOf(" Version ") !== -1) {
+                    result2.vendor = description.split(" Version ")[0].trim();
+                    result2.version = description.split(" Version ")[1].trim();
+                  } else if (description.indexOf(" Ver: ") !== -1) {
+                    result2.vendor = util.getValue(lines, "manufacturer", ":");
+                    result2.version = description.split(" Ver: ")[1].trim();
+                  } else {
+                    result2.vendor = util.getValue(lines, "manufacturer", ":");
+                    result2.version = version || util.getValue(lines, "version", ":");
+                  }
+                  result2.releaseDate = util.getValue(lines, "releasedate", ":");
+                  result2.revision = util.getValue(lines, "buildnumber", ":");
+                  result2.serial = cleanDefaults(util.getValue(lines, "serialnumber", ":"));
+                }
+                if (callback) {
+                  callback(result2);
+                }
+                resolve(result2);
+              });
+            } catch (e) {
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            }
+          }
+        });
+      });
+    }
+    exports2.bios = bios;
+    function baseboard(callback) {
+      return new Promise((resolve) => {
+        process.nextTick(() => {
+          let result2 = {
+            manufacturer: "",
+            model: "",
+            version: "",
+            serial: "-",
+            assetTag: "-",
+            memMax: null,
+            memSlots: null
+          };
+          let cmd = "";
+          if (_linux || _freebsd || _openbsd || _netbsd) {
+            if (process.arch === "arm") {
+              cmd = "cat /proc/cpuinfo | grep Serial";
+            } else {
+              cmd = "export LC_ALL=C; dmidecode -t 2 2>/dev/null; unset LC_ALL";
+            }
+            const workload = [];
+            workload.push(execPromise(cmd));
+            workload.push(execPromise("export LC_ALL=C; dmidecode -t memory 2>/dev/null"));
+            util.promiseAll(
+              workload
+            ).then((data) => {
+              let lines = data.results[0] ? data.results[0].toString().split("\n") : [""];
+              result2.manufacturer = cleanDefaults(util.getValue(lines, "Manufacturer"));
+              result2.model = cleanDefaults(util.getValue(lines, "Product Name"));
+              result2.version = cleanDefaults(util.getValue(lines, "Version"));
+              result2.serial = cleanDefaults(util.getValue(lines, "Serial Number"));
+              result2.assetTag = cleanDefaults(util.getValue(lines, "Asset Tag"));
+              const cmd2 = `echo -n "board_asset_tag: "; cat /sys/devices/virtual/dmi/id/board_asset_tag 2>/dev/null; echo;
+            echo -n "board_name: "; cat /sys/devices/virtual/dmi/id/board_name 2>/dev/null; echo;
+            echo -n "board_serial: "; cat /sys/devices/virtual/dmi/id/board_serial 2>/dev/null; echo;
+            echo -n "board_vendor: "; cat /sys/devices/virtual/dmi/id/board_vendor 2>/dev/null; echo;
+            echo -n "board_version: "; cat /sys/devices/virtual/dmi/id/board_version 2>/dev/null; echo;`;
+              try {
+                lines = execSync(cmd2, util.execOptsLinux).toString().split("\n");
+                result2.manufacturer = cleanDefaults(!result2.manufacturer ? util.getValue(lines, "board_vendor") : result2.manufacturer);
+                result2.model = cleanDefaults(!result2.model ? util.getValue(lines, "board_name") : result2.model);
+                result2.version = cleanDefaults(!result2.version ? util.getValue(lines, "board_version") : result2.version);
+                result2.serial = cleanDefaults(!result2.serial ? util.getValue(lines, "board_serial") : result2.serial);
+                result2.assetTag = cleanDefaults(!result2.assetTag ? util.getValue(lines, "board_asset_tag") : result2.assetTag);
+              } catch (e) {
+                util.noop();
+              }
+              lines = data.results[1] ? data.results[1].toString().split("\n") : [""];
+              result2.memMax = util.toInt(util.getValue(lines, "Maximum Capacity")) * 1024 * 1024 * 1024 || null;
+              result2.memSlots = util.toInt(util.getValue(lines, "Number Of Devices")) || null;
+              if (util.isRaspberry()) {
+                const rpi = util.decodePiCpuinfo();
+                result2.manufacturer = rpi.manufacturer;
+                result2.model = "Raspberry Pi";
+                result2.serial = rpi.serial;
+                result2.version = rpi.type + " - " + rpi.revision;
+                result2.memMax = os.totalmem();
+                result2.memSlots = 0;
+              }
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            });
+          }
+          if (_darwin) {
+            const workload = [];
+            workload.push(execPromise("ioreg -c IOPlatformExpertDevice -d 2"));
+            workload.push(execPromise("system_profiler SPMemoryDataType"));
+            util.promiseAll(
+              workload
+            ).then((data) => {
+              let lines = data.results[0] ? data.results[0].toString().replace(/[<>"]/g, "").split("\n") : [""];
+              result2.manufacturer = util.getValue(lines, "manufacturer", "=", true);
+              result2.model = util.getValue(lines, "model", "=", true);
+              result2.version = util.getValue(lines, "version", "=", true);
+              result2.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
+              result2.assetTag = util.getValue(lines, "board-id", "=", true);
+              let devices = data.results[1] ? data.results[1].toString().split("        BANK ") : [""];
+              if (devices.length === 1) {
+                devices = data.results[1] ? data.results[1].toString().split("        DIMM") : [""];
+              }
+              devices.shift();
+              result2.memSlots = devices.length;
+              if (os.arch() === "arm64") {
+                result2.memSlots = 0;
+                result2.memMax = os.totalmem();
+              }
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            });
+          }
+          if (_sunos) {
+            if (callback) {
+              callback(result2);
+            }
+            resolve(result2);
+          }
+          if (_windows) {
+            try {
+              const workload = [];
+              const win10plus = parseInt(os.release()) >= 10;
+              const maxCapacityAttribute = win10plus ? "MaxCapacityEx" : "MaxCapacity";
+              workload.push(util.powerShell("Get-CimInstance Win32_baseboard | select Model,Manufacturer,Product,Version,SerialNumber,PartNumber,SKU | fl"));
+              workload.push(util.powerShell(`Get-CimInstance Win32_physicalmemoryarray | select ${maxCapacityAttribute}, MemoryDevices | fl`));
+              util.promiseAll(
+                workload
+              ).then((data) => {
+                let lines = data.results[0] ? data.results[0].toString().split("\r\n") : [""];
+                result2.manufacturer = cleanDefaults(util.getValue(lines, "manufacturer", ":"));
+                result2.model = cleanDefaults(util.getValue(lines, "model", ":"));
+                if (!result2.model) {
+                  result2.model = cleanDefaults(util.getValue(lines, "product", ":"));
+                }
+                result2.version = cleanDefaults(util.getValue(lines, "version", ":"));
+                result2.serial = cleanDefaults(util.getValue(lines, "serialnumber", ":"));
+                result2.assetTag = cleanDefaults(util.getValue(lines, "partnumber", ":"));
+                if (!result2.assetTag) {
+                  result2.assetTag = cleanDefaults(util.getValue(lines, "sku", ":"));
+                }
+                lines = data.results[1] ? data.results[1].toString().split("\r\n") : [""];
+                result2.memMax = util.toInt(util.getValue(lines, maxCapacityAttribute, ":")) * (win10plus ? 1024 : 1) || null;
+                result2.memSlots = util.toInt(util.getValue(lines, "MemoryDevices", ":")) || null;
+                if (callback) {
+                  callback(result2);
+                }
+                resolve(result2);
+              });
+            } catch (e) {
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            }
+          }
+        });
+      });
+    }
+    exports2.baseboard = baseboard;
+    function macOsChassisType(model) {
+      model = model.toLowerCase();
+      if (model.indexOf("macbookair") >= 0 || model.indexOf("macbook air") >= 0) {
+        return "Notebook";
+      }
+      if (model.indexOf("macbookpro") >= 0 || model.indexOf("macbook pro") >= 0) {
+        return "Notebook";
+      }
+      if (model.indexOf("macbook") >= 0) {
+        return "Notebook";
+      }
+      if (model.indexOf("macmini") >= 0 || model.indexOf("mac mini") >= 0) {
+        return "Desktop";
+      }
+      if (model.indexOf("imac") >= 0) {
+        return "Desktop";
+      }
+      if (model.indexOf("macstudio") >= 0 || model.indexOf("mac studio") >= 0) {
+        return "Desktop";
+      }
+      if (model.indexOf("macpro") >= 0 || model.indexOf("mac pro") >= 0) {
+        return "Tower";
+      }
+      return "Other";
+    }
+    function chassis(callback) {
+      const chassisTypes = [
+        "Other",
+        "Unknown",
+        "Desktop",
+        "Low Profile Desktop",
+        "Pizza Box",
+        "Mini Tower",
+        "Tower",
+        "Portable",
+        "Laptop",
+        "Notebook",
+        "Hand Held",
+        "Docking Station",
+        "All in One",
+        "Sub Notebook",
+        "Space-Saving",
+        "Lunch Box",
+        "Main System Chassis",
+        "Expansion Chassis",
+        "SubChassis",
+        "Bus Expansion Chassis",
+        "Peripheral Chassis",
+        "Storage Chassis",
+        "Rack Mount Chassis",
+        "Sealed-Case PC",
+        "Multi-System Chassis",
+        "Compact PCI",
+        "Advanced TCA",
+        "Blade",
+        "Blade Enclosure",
+        "Tablet",
+        "Convertible",
+        "Detachable",
+        "IoT Gateway ",
+        "Embedded PC",
+        "Mini PC",
+        "Stick PC"
+      ];
+      return new Promise((resolve) => {
+        process.nextTick(() => {
+          let result2 = {
+            manufacturer: "",
+            model: "",
+            type: "",
+            version: "",
+            serial: "-",
+            assetTag: "-",
+            sku: ""
+          };
+          if (_linux || _freebsd || _openbsd || _netbsd) {
+            const cmd = `echo -n "chassis_asset_tag: "; cat /sys/devices/virtual/dmi/id/chassis_asset_tag 2>/dev/null; echo;
+            echo -n "chassis_serial: "; cat /sys/devices/virtual/dmi/id/chassis_serial 2>/dev/null; echo;
+            echo -n "chassis_type: "; cat /sys/devices/virtual/dmi/id/chassis_type 2>/dev/null; echo;
+            echo -n "chassis_vendor: "; cat /sys/devices/virtual/dmi/id/chassis_vendor 2>/dev/null; echo;
+            echo -n "chassis_version: "; cat /sys/devices/virtual/dmi/id/chassis_version 2>/dev/null; echo;`;
+            exec(cmd, function(error, stdout) {
+              let lines = stdout.toString().split("\n");
+              result2.manufacturer = cleanDefaults(util.getValue(lines, "chassis_vendor"));
+              const ctype = parseInt(util.getValue(lines, "chassis_type").replace(/\D/g, ""));
+              result2.type = cleanDefaults(ctype && !isNaN(ctype) && ctype < chassisTypes.length ? chassisTypes[ctype - 1] : "");
+              result2.version = cleanDefaults(util.getValue(lines, "chassis_version"));
+              result2.serial = cleanDefaults(util.getValue(lines, "chassis_serial"));
+              result2.assetTag = cleanDefaults(util.getValue(lines, "chassis_asset_tag"));
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            });
+          }
+          if (_darwin) {
+            exec("ioreg -c IOPlatformExpertDevice -d 2", function(error, stdout) {
+              if (!error) {
+                let lines = stdout.toString().replace(/[<>"]/g, "").split("\n");
+                const model = util.getAppleModel(util.getValue(lines, "model", "=", true));
+                result2.manufacturer = util.getValue(lines, "manufacturer", "=", true);
+                result2.model = model.key;
+                result2.type = macOsChassisType(model.model);
+                result2.version = model.version;
+                result2.serial = util.getValue(lines, "ioplatformserialnumber", "=", true);
+                result2.assetTag = util.getValue(lines, "board-id", "=", true) || util.getValue(lines, "target-type", "=", true);
+                result2.sku = util.getValue(lines, "target-sub-type", "=", true);
+              }
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            });
+          }
+          if (_sunos) {
+            if (callback) {
+              callback(result2);
+            }
+            resolve(result2);
+          }
+          if (_windows) {
+            try {
+              util.powerShell("Get-CimInstance Win32_SystemEnclosure | select Model,Manufacturer,ChassisTypes,Version,SerialNumber,PartNumber,SKU,SMBIOSAssetTag | fl").then((stdout, error) => {
+                if (!error) {
+                  let lines = stdout.toString().split("\r\n");
+                  result2.manufacturer = cleanDefaults(util.getValue(lines, "manufacturer", ":"));
+                  result2.model = cleanDefaults(util.getValue(lines, "model", ":"));
+                  const ctype = parseInt(util.getValue(lines, "ChassisTypes", ":").replace(/\D/g, ""));
+                  result2.type = ctype && !isNaN(ctype) && ctype < chassisTypes.length ? chassisTypes[ctype - 1] : "";
+                  result2.version = cleanDefaults(util.getValue(lines, "version", ":"));
+                  result2.serial = cleanDefaults(util.getValue(lines, "serialnumber", ":"));
+                  result2.assetTag = cleanDefaults(util.getValue(lines, "partnumber", ":"));
+                  if (!result2.assetTag) {
+                    result2.assetTag = cleanDefaults(util.getValue(lines, "SMBIOSAssetTag", ":"));
+                  }
+                  result2.sku = cleanDefaults(util.getValue(lines, "sku", ":"));
+                }
+                if (callback) {
+                  callback(result2);
+                }
+                resolve(result2);
+              });
+            } catch (e) {
+              if (callback) {
+                callback(result2);
+              }
+              resolve(result2);
+            }
+          }
+        });
+      });
+    }
+    exports2.chassis = chassis;
+  }
+});
+
+// node_modules/systeminformation/lib/cpu.js
 var require_cpu = __commonJS({
-  "../../../../node_modules/systeminformation/lib/cpu.js"(exports2) {
+  "node_modules/systeminformation/lib/cpu.js"(exports2) {
     "use strict";
     var os = require("os");
     var exec = require("child_process").exec;
@@ -12124,7 +12171,22 @@ var require_cpu = __commonJS({
       69: "LGA1211",
       70: "LGA2422",
       71: "LGA5773",
-      72: "BGA5773"
+      72: "BGA5773",
+      73: "AM5",
+      74: "SP5",
+      75: "SP6",
+      76: "BGA883",
+      77: "BGA1190",
+      78: "BGA4129",
+      79: "LGA4710",
+      80: "LGA7529",
+      81: "BGA1964",
+      82: "BGA1792",
+      83: "BGA2049",
+      84: "BGA2551",
+      85: "LGA1851",
+      86: "BGA2114",
+      87: "BGA2833"
     };
     var socketTypesByName = {
       "LGA1150": "i7-5775C i3-4340 i3-4170 G3250 i3-4160T i3-4160 E3-1231 G3258 G3240 i7-4790S i7-4790K i7-4790 i5-4690K i5-4690 i5-4590T i5-4590S i5-4590 i5-4460 i3-4360 i3-4150 G1820 G3420 G3220 i7-4771 i5-4440 i3-4330 i3-4130T i3-4130 E3-1230 i7-4770S i7-4770K i7-4770 i5-4670K i5-4670 i5-4570T i5-4570S i5-4570 i5-4430",
@@ -12546,7 +12608,7 @@ var require_cpu = __commonJS({
       let avgFreq = 0;
       let cores = [];
       let speeds = [];
-      if (cpus && cpus.length && cpus[0].speed) {
+      if (cpus && cpus.length && cpus[0].hasOwnProperty("speed")) {
         for (let i in cpus) {
           speeds.push(cpus[i].speed > 100 ? (cpus[i].speed + 1) / 1e3 : cpus[i].speed / 10);
         }
@@ -12561,23 +12623,32 @@ var require_cpu = __commonJS({
         }
       }
       if (speeds && speeds.length) {
-        for (let i in speeds) {
-          avgFreq = avgFreq + speeds[i];
-          if (speeds[i] > maxFreq) {
-            maxFreq = speeds[i];
+        try {
+          for (let i in speeds) {
+            avgFreq = avgFreq + speeds[i];
+            if (speeds[i] > maxFreq) {
+              maxFreq = speeds[i];
+            }
+            if (speeds[i] < minFreq) {
+              minFreq = speeds[i];
+            }
+            cores.push(parseFloat(speeds[i].toFixed(2)));
           }
-          if (speeds[i] < minFreq) {
-            minFreq = speeds[i];
-          }
-          cores.push(parseFloat(speeds[i].toFixed(2)));
+          avgFreq = avgFreq / speeds.length;
+          return {
+            min: parseFloat(minFreq.toFixed(2)),
+            max: parseFloat(maxFreq.toFixed(2)),
+            avg: parseFloat(avgFreq.toFixed(2)),
+            cores
+          };
+        } catch (e) {
+          return {
+            min: 0,
+            max: 0,
+            avg: 0,
+            cores
+          };
         }
-        avgFreq = avgFreq / speeds.length;
-        return {
-          min: parseFloat(minFreq.toFixed(2)),
-          max: parseFloat(maxFreq.toFixed(2)),
-          avg: parseFloat(avgFreq.toFixed(2)),
-          cores
-        };
       } else {
         return {
           min: 0,
@@ -13448,9 +13519,9 @@ var require_cpu = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/memory.js
+// node_modules/systeminformation/lib/memory.js
 var require_memory = __commonJS({
-  "../../../../node_modules/systeminformation/lib/memory.js"(exports2) {
+  "node_modules/systeminformation/lib/memory.js"(exports2) {
     "use strict";
     var os = require("os");
     var exec = require("child_process").exec;
@@ -13465,40 +13536,34 @@ var require_memory = __commonJS({
     var _openbsd = _platform === "openbsd";
     var _netbsd = _platform === "netbsd";
     var _sunos = _platform === "sunos";
-    var OSX_RAM_manufacturers = {
-      "0x014F": "Transcend Information",
-      "0x2C00": "Micron Technology Inc.",
-      "0x802C": "Micron Technology Inc.",
-      "0x80AD": "Hynix Semiconductor Inc.",
-      "0x80CE": "Samsung Electronics Inc.",
-      "0xAD00": "Hynix Semiconductor Inc.",
-      "0xCE00": "Samsung Electronics Inc.",
-      "0x02FE": "Elpida",
-      "0x5105": "Qimonda AG i. In.",
-      "0x8551": "Qimonda AG i. In.",
-      "0x859B": "Crucial",
-      "0x04CD": "G-Skill"
-    };
-    var LINUX_RAM_manufacturers = {
-      "017A": "Apacer",
+    var RAM_manufacturers = {
+      "00CE": "Samsung Electronics Inc",
+      "014F": "Transcend Information Inc.",
+      "017A": "Apacer Technology Inc.",
       "0198": "HyperX",
       "029E": "Corsair",
+      "02FE": "Elpida",
       "04CB": "A-DATA",
-      "04CD": "G-Skill",
+      "04CD": "G.Skill International Enterprise",
       "059B": "Crucial",
-      "00CE": "Samsung",
       "1315": "Crucial",
-      "014F": "Transcend Information",
       "2C00": "Micron Technology Inc.",
+      "5105": "Qimonda AG i. In.",
       "802C": "Micron Technology Inc.",
       "80AD": "Hynix Semiconductor Inc.",
       "80CE": "Samsung Electronics Inc.",
+      "8551": "Qimonda AG i. In.",
+      "859B": "Crucial",
       "AD00": "Hynix Semiconductor Inc.",
       "CE00": "Samsung Electronics Inc.",
-      "02FE": "Elpida",
-      "5105": "Qimonda AG i. In.",
-      "8551": "Qimonda AG i. In.",
-      "859B": "Crucial"
+      "SAMSUNG": "Samsung Electronics Inc.",
+      "HYNIX": "Hynix Semiconductor Inc.",
+      "G-SKILL": "G-Skill International Enterprise",
+      "G.SKILL": "G-Skill International Enterprise",
+      "TRANSCEND": "Transcend Information",
+      "APACER": "Apacer Technology Inc",
+      "MICRON": "Micron Technology Inc.",
+      "QIMONDA": "Qimonda AG i. In."
     };
     function mem(callback) {
       return new Promise((resolve) => {
@@ -13515,6 +13580,7 @@ var require_memory = __commonJS({
             cached: 0,
             slab: 0,
             buffcache: 0,
+            reclaimable: 0,
             swaptotal: 0,
             swapused: 0,
             swapfree: 0,
@@ -13550,6 +13616,8 @@ var require_memory = __commonJS({
                   result2.writeback = result2.writeback ? result2.writeback * 1024 : 0;
                   result2.dirty = parseInt(util.getValue(lines, "dirty"), 10);
                   result2.dirty = result2.dirty ? result2.dirty * 1024 : 0;
+                  result2.reclaimable = parseInt(util.getValue(lines, "sreclaimable"), 10);
+                  result2.reclaimable = result2.reclaimable ? result2.reclaimable * 1024 : 0;
                 }
                 if (callback) {
                   callback(result2);
@@ -13610,10 +13678,11 @@ var require_memory = __commonJS({
               util.noop();
             }
             try {
-              exec('vm_stat 2>/dev/null | grep "Pages active"', function(error, stdout) {
+              exec('vm_stat 2>/dev/null | egrep "Pages active|Pages inactive"', function(error, stdout) {
                 if (!error) {
                   let lines = stdout.toString().split("\n");
-                  result2.active = parseInt(lines[0].split(":")[1], 10) * pageSize;
+                  result2.active = (parseInt(util.getValue(lines, "Pages active"), 10) || 0) * pageSize;
+                  result2.reclaimable = (parseInt(util.getValue(lines, "Pages inactive"), 10) || 0) * pageSize;
                   result2.buffcache = result2.used - result2.active;
                   result2.available = result2.free + result2.buffcache;
                 }
@@ -13684,16 +13753,10 @@ var require_memory = __commonJS({
     }
     exports2.mem = mem;
     function memLayout(callback) {
-      function getManufacturerDarwin(manId) {
-        if ({}.hasOwnProperty.call(OSX_RAM_manufacturers, manId)) {
-          return OSX_RAM_manufacturers[manId];
-        }
-        return manId;
-      }
-      function getManufacturerLinux(manId) {
+      function getManufacturer(manId) {
         const manIdSearch = manId.replace("0x", "").toUpperCase();
-        if (manIdSearch.length === 4 && {}.hasOwnProperty.call(LINUX_RAM_manufacturers, manIdSearch)) {
-          return LINUX_RAM_manufacturers[manIdSearch];
+        if (manIdSearch.length >= 4 && {}.hasOwnProperty.call(RAM_manufacturers, manIdSearch)) {
+          return RAM_manufacturers[manIdSearch];
         }
         return manId;
       }
@@ -13723,7 +13786,7 @@ var require_memory = __commonJS({
                       ecc: dataWidth && totalWidth ? totalWidth > dataWidth : false,
                       clockSpeed: util.getValue(lines, "Configured Clock Speed:") ? parseInt(util.getValue(lines, "Configured Clock Speed:"), 10) : util.getValue(lines, "Speed:") ? parseInt(util.getValue(lines, "Speed:"), 10) : null,
                       formFactor: util.getValue(lines, "Form Factor:"),
-                      manufacturer: getManufacturerLinux(util.getValue(lines, "Manufacturer:")),
+                      manufacturer: getManufacturer(util.getValue(lines, "Manufacturer:")),
                       partNum: util.getValue(lines, "Part Number:"),
                       serialNum: util.getValue(lines, "Serial Number:"),
                       voltageConfigured: parseFloat(util.getValue(lines, "Configured Voltage:")) || null,
@@ -13829,7 +13892,7 @@ var require_memory = __commonJS({
                       ecc: eccStatus ? eccStatus === "enabled" : null,
                       clockSpeed: parseInt(util.getValue(lines, "          Speed:"), 10),
                       formFactor: "",
-                      manufacturer: getManufacturerDarwin(util.getValue(lines, "          Manufacturer:")),
+                      manufacturer: getManufacturer(util.getValue(lines, "          Manufacturer:")),
                       partNum: util.getValue(lines, "          Part Number:"),
                       serialNum: util.getValue(lines, "          Serial Number:"),
                       voltageConfigured: null,
@@ -13867,7 +13930,7 @@ var require_memory = __commonJS({
                     ecc: false,
                     clockSpeed: null,
                     formFactor: "SOC",
-                    manufacturer: getManufacturerDarwin(manufacturerId),
+                    manufacturer: getManufacturer(manufacturerId),
                     partNum: "",
                     serialNum: "",
                     voltageConfigured: null,
@@ -13912,7 +13975,7 @@ var require_memory = __commonJS({
                         ecc: dataWidth && totalWidth ? totalWidth > dataWidth : false,
                         clockSpeed: parseInt(util.getValue(lines, "ConfiguredClockSpeed", ":"), 10) || parseInt(util.getValue(lines, "Speed", ":"), 10) || 0,
                         formFactor: FormFactors[parseInt(util.getValue(lines, "FormFactor", ":"), 10) || 0],
-                        manufacturer: util.getValue(lines, "Manufacturer", ":"),
+                        manufacturer: getManufacturer(util.getValue(lines, "Manufacturer", ":")),
                         partNum: util.getValue(lines, "PartNumber", ":"),
                         serialNum: util.getValue(lines, "SerialNumber", ":"),
                         voltageConfigured: (parseInt(util.getValue(lines, "ConfiguredVoltage", ":"), 10) || 0) / 1e3,
@@ -13941,9 +14004,9 @@ var require_memory = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/battery.js
+// node_modules/systeminformation/lib/battery.js
 var require_battery = __commonJS({
-  "../../../../node_modules/systeminformation/lib/battery.js"(exports2, module2) {
+  "node_modules/systeminformation/lib/battery.js"(exports2, module2) {
     "use strict";
     var exec = require("child_process").exec;
     var fs2 = require("fs");
@@ -14237,9 +14300,9 @@ var require_battery = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/graphics.js
+// node_modules/systeminformation/lib/graphics.js
 var require_graphics = __commonJS({
-  "../../../../node_modules/systeminformation/lib/graphics.js"(exports2) {
+  "node_modules/systeminformation/lib/graphics.js"(exports2) {
     "use strict";
     var fs2 = require("fs");
     var exec = require("child_process").exec;
@@ -14634,7 +14697,8 @@ var require_graphics = __commonJS({
             options.stdio = ["pipe", "pipe", "ignore"];
           }
           try {
-            const res = execSync(cmd, options).toString();
+            const sanitized = util.sanitizeShellString(cmd);
+            const res = execSync(sanitized, options).toString();
             return res;
           } catch (e) {
             util.noop();
@@ -15306,9 +15370,9 @@ var require_graphics = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/filesystem.js
+// node_modules/systeminformation/lib/filesystem.js
 var require_filesystem = __commonJS({
-  "../../../../node_modules/systeminformation/lib/filesystem.js"(exports2) {
+  "node_modules/systeminformation/lib/filesystem.js"(exports2) {
     "use strict";
     var util = require_util();
     var fs2 = require("fs");
@@ -15857,7 +15921,7 @@ var require_filesystem = __commonJS({
         process.nextTick(() => {
           let data = [];
           if (_linux) {
-            exec("lsblk -bPo NAME,TYPE,SIZE,FSTYPE,MOUNTPOINT,UUID,ROTA,RO,RM,TRAN,SERIAL,LABEL,MODEL,OWNER 2>/dev/null", { maxBuffer: 1024 * 1024 }, function(error, stdout) {
+            const procLsblk1 = exec("lsblk -bPo NAME,TYPE,SIZE,FSTYPE,MOUNTPOINT,UUID,ROTA,RO,RM,TRAN,SERIAL,LABEL,MODEL,OWNER 2>/dev/null", { maxBuffer: 1024 * 1024 }, function(error, stdout) {
               if (!error) {
                 let lines = blkStdoutToObject(stdout).split("\n");
                 data = parseBlk(lines);
@@ -15868,7 +15932,7 @@ var require_filesystem = __commonJS({
                 }
                 resolve(data);
               } else {
-                exec("lsblk -bPo NAME,TYPE,SIZE,FSTYPE,MOUNTPOINT,UUID,ROTA,RO,RM,LABEL,MODEL,OWNER 2>/dev/null", { maxBuffer: 1024 * 1024 }, function(error2, stdout2) {
+                const procLsblk2 = exec("lsblk -bPo NAME,TYPE,SIZE,FSTYPE,MOUNTPOINT,UUID,ROTA,RO,RM,LABEL,MODEL,OWNER 2>/dev/null", { maxBuffer: 1024 * 1024 }, function(error2, stdout2) {
                   if (!error2) {
                     let lines = blkStdoutToObject(stdout2).split("\n");
                     data = parseBlk(lines);
@@ -15879,16 +15943,34 @@ var require_filesystem = __commonJS({
                   }
                   resolve(data);
                 });
+                procLsblk2.on("error", function() {
+                  if (callback) {
+                    callback(data);
+                  }
+                  resolve(data);
+                });
               }
+            });
+            procLsblk1.on("error", function() {
+              if (callback) {
+                callback(data);
+              }
+              resolve(data);
             });
           }
           if (_darwin) {
-            exec("diskutil info -all", { maxBuffer: 1024 * 1024 }, function(error, stdout) {
+            const procDskutil = exec("diskutil info -all", { maxBuffer: 1024 * 1024 }, function(error, stdout) {
               if (!error) {
                 let lines = stdout.toString().split("\n");
                 data = parseDevices(lines);
                 data = matchDevicesMac(data);
               }
+              if (callback) {
+                callback(data);
+              }
+              resolve(data);
+            });
+            procDskutil.on("error", function() {
               if (callback) {
                 callback(data);
               }
@@ -16018,7 +16100,7 @@ var require_filesystem = __commonJS({
           let wx = 0;
           if (_fs_speed && !_fs_speed.ms || _fs_speed && _fs_speed.ms && Date.now() - _fs_speed.ms >= 500) {
             if (_linux) {
-              exec("lsblk -r 2>/dev/null | grep /", { maxBuffer: 1024 * 1024 }, function(error, stdout) {
+              const procLsblk = exec("lsblk -r 2>/dev/null | grep /", { maxBuffer: 1024 * 1024 }, function(error, stdout) {
                 if (!error) {
                   let lines = stdout.toString().split("\n");
                   let fs_filter = [];
@@ -16031,7 +16113,7 @@ var require_filesystem = __commonJS({
                     }
                   });
                   let output = fs_filter.join("|");
-                  exec('cat /proc/diskstats | egrep "' + output + '"', { maxBuffer: 1024 * 1024 }, function(error2, stdout2) {
+                  const procCat = exec('cat /proc/diskstats | egrep "' + output + '"', { maxBuffer: 1024 * 1024 }, function(error2, stdout2) {
                     if (!error2) {
                       let lines2 = stdout2.toString().split("\n");
                       lines2.forEach(function(line) {
@@ -16049,6 +16131,12 @@ var require_filesystem = __commonJS({
                     }
                     resolve(result2);
                   });
+                  procCat.on("error", function() {
+                    if (callback) {
+                      callback(result2);
+                    }
+                    resolve(result2);
+                  });
                 } else {
                   if (callback) {
                     callback(result2);
@@ -16056,9 +16144,15 @@ var require_filesystem = __commonJS({
                   resolve(result2);
                 }
               });
+              procLsblk.on("error", function() {
+                if (callback) {
+                  callback(result2);
+                }
+                resolve(result2);
+              });
             }
             if (_darwin) {
-              exec('ioreg -c IOBlockStorageDriver -k Statistics -r -w0 | sed -n "/IOBlockStorageDriver/,/Statistics/p" | grep "Statistics" | tr -cd "01234567890,\n"', { maxBuffer: 1024 * 1024 }, function(error, stdout) {
+              const procIoreg = exec('ioreg -c IOBlockStorageDriver -k Statistics -r -w0 | sed -n "/IOBlockStorageDriver/,/Statistics/p" | grep "Statistics" | tr -cd "01234567890,\n"', { maxBuffer: 1024 * 1024 }, function(error, stdout) {
                 if (!error) {
                   let lines = stdout.toString().split("\n");
                   lines.forEach(function(line) {
@@ -16071,6 +16165,12 @@ var require_filesystem = __commonJS({
                   });
                   result2 = calcFsSpeed(rx, wx);
                 }
+                if (callback) {
+                  callback(result2);
+                }
+                resolve(result2);
+              });
+              procIoreg.on("error", function() {
                 if (callback) {
                   callback(result2);
                 }
@@ -16779,9 +16879,9 @@ ${BSDName}|"; smartctl -H ${BSDName} | grep overall;`;
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/network.js
+// node_modules/systeminformation/lib/network.js
 var require_network = __commonJS({
-  "../../../../node_modules/systeminformation/lib/network.js"(exports2) {
+  "node_modules/systeminformation/lib/network.js"(exports2) {
     "use strict";
     var os = require("os");
     var exec = require("child_process").exec;
@@ -18484,9 +18584,9 @@ var require_network = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/wifi.js
+// node_modules/systeminformation/lib/wifi.js
 var require_wifi = __commonJS({
-  "../../../../node_modules/systeminformation/lib/wifi.js"(exports2) {
+  "node_modules/systeminformation/lib/wifi.js"(exports2) {
     "use strict";
     var os = require("os");
     var exec = require("child_process").exec;
@@ -18829,7 +18929,7 @@ var require_wifi = __commonJS({
         wifiObj = wifiObj.SPAirPortDataType[0].spairport_airport_interfaces[0].spairport_airport_other_local_wireless_networks;
         wifiObj.forEach(function(wifiItem) {
           let security = [];
-          const sm = wifiItem.spairport_security_mode;
+          const sm = wifiItem.spairport_security_mode || "";
           if (sm === "spairport_security_mode_wep") {
             security.push("WEP");
           } else if (sm === "spairport_security_mode_wpa2_personal") {
@@ -19082,7 +19182,7 @@ var require_wifi = __commonJS({
                 const channel = parseInt(("" + airportWifiObj.spairport_network_channel).split(" ")[0]) || 0;
                 const signalLevel = airportWifiObj.spairport_signal_noise || null;
                 let security = [];
-                const sm = airportWifiObj.spairport_security_mode;
+                const sm = airportWifiObj.spairport_security_mode || "";
                 if (sm === "spairport_security_mode_wep") {
                   security.push("WEP");
                 } else if (sm === "spairport_security_mode_wpa2_personal") {
@@ -19262,9 +19362,9 @@ var require_wifi = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/processes.js
+// node_modules/systeminformation/lib/processes.js
 var require_processes = __commonJS({
-  "../../../../node_modules/systeminformation/lib/processes.js"(exports2) {
+  "node_modules/systeminformation/lib/processes.js"(exports2) {
     "use strict";
     var os = require("os");
     var fs2 = require("fs");
@@ -19451,7 +19551,7 @@ var require_processes = __commonJS({
                         });
                       } else {
                         ps = lines.filter(function(e) {
-                          return e.toLowerCase().indexOf(" " + srv2.toLowerCase() + ":") !== -1 || e.toLowerCase().indexOf("/" + srv2.toLowerCase()) !== -1;
+                          return e.toLowerCase().indexOf(" " + srv2.toLowerCase() + ":") !== -1 || e.toLowerCase().indexOf("(" + srv2.toLowerCase() + " ") !== -1 || e.toLowerCase().indexOf("(" + srv2.toLowerCase() + ")") !== -1 || e.toLowerCase().indexOf(" " + srv2.toLowerCase().replace(/[0-9.]/g, "") + ":") !== -1 || e.toLowerCase().indexOf("/" + srv2.toLowerCase()) !== -1;
                         });
                       }
                       const pids = [];
@@ -20495,9 +20595,9 @@ var require_processes = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/users.js
+// node_modules/systeminformation/lib/users.js
 var require_users = __commonJS({
-  "../../../../node_modules/systeminformation/lib/users.js"(exports2) {
+  "node_modules/systeminformation/lib/users.js"(exports2) {
     "use strict";
     var exec = require("child_process").exec;
     var util = require_util();
@@ -20840,9 +20940,9 @@ var require_users = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/internet.js
+// node_modules/systeminformation/lib/internet.js
 var require_internet = __commonJS({
-  "../../../../node_modules/systeminformation/lib/internet.js"(exports2) {
+  "node_modules/systeminformation/lib/internet.js"(exports2) {
     "use strict";
     var util = require_util();
     var _platform = process.platform;
@@ -21051,9 +21151,9 @@ var require_internet = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/dockerSocket.js
+// node_modules/systeminformation/lib/dockerSocket.js
 var require_dockerSocket = __commonJS({
-  "../../../../node_modules/systeminformation/lib/dockerSocket.js"(exports2, module2) {
+  "node_modules/systeminformation/lib/dockerSocket.js"(exports2, module2) {
     "use strict";
     var net = require("net");
     var isWin = require("os").type() === "Windows_NT";
@@ -21324,9 +21424,9 @@ var require_dockerSocket = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/docker.js
+// node_modules/systeminformation/lib/docker.js
 var require_docker = __commonJS({
-  "../../../../node_modules/systeminformation/lib/docker.js"(exports2) {
+  "node_modules/systeminformation/lib/docker.js"(exports2) {
     "use strict";
     var util = require_util();
     var DockerSocket = require_dockerSocket();
@@ -22012,9 +22112,9 @@ var require_docker = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/virtualbox.js
+// node_modules/systeminformation/lib/virtualbox.js
 var require_virtualbox = __commonJS({
-  "../../../../node_modules/systeminformation/lib/virtualbox.js"(exports2) {
+  "node_modules/systeminformation/lib/virtualbox.js"(exports2) {
     "use strict";
     var os = require("os");
     var exec = require("child_process").exec;
@@ -22110,9 +22210,9 @@ var require_virtualbox = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/printer.js
+// node_modules/systeminformation/lib/printer.js
 var require_printer = __commonJS({
-  "../../../../node_modules/systeminformation/lib/printer.js"(exports2) {
+  "node_modules/systeminformation/lib/printer.js"(exports2) {
     "use strict";
     var exec = require("child_process").exec;
     var util = require_util();
@@ -22294,9 +22394,9 @@ var require_printer = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/usb.js
+// node_modules/systeminformation/lib/usb.js
 var require_usb = __commonJS({
-  "../../../../node_modules/systeminformation/lib/usb.js"(exports2) {
+  "node_modules/systeminformation/lib/usb.js"(exports2) {
     "use strict";
     var exec = require("child_process").exec;
     var util = require_util();
@@ -22571,9 +22671,9 @@ var require_usb = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/audio.js
+// node_modules/systeminformation/lib/audio.js
 var require_audio = __commonJS({
-  "../../../../node_modules/systeminformation/lib/audio.js"(exports2) {
+  "node_modules/systeminformation/lib/audio.js"(exports2) {
     "use strict";
     var exec = require("child_process").exec;
     var execSync = require("child_process").execSync;
@@ -22803,9 +22903,9 @@ var require_audio = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/bluetoothVendors.js
+// node_modules/systeminformation/lib/bluetoothVendors.js
 var require_bluetoothVendors = __commonJS({
-  "../../../../node_modules/systeminformation/lib/bluetoothVendors.js"(exports2, module2) {
+  "node_modules/systeminformation/lib/bluetoothVendors.js"(exports2, module2) {
     "use strict";
     module2.exports = {
       0: "Ericsson Technology Licensing",
@@ -23946,9 +24046,9 @@ var require_bluetoothVendors = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/bluetooth.js
+// node_modules/systeminformation/lib/bluetooth.js
 var require_bluetooth = __commonJS({
-  "../../../../node_modules/systeminformation/lib/bluetooth.js"(exports2) {
+  "node_modules/systeminformation/lib/bluetooth.js"(exports2) {
     "use strict";
     var exec = require("child_process").exec;
     var execSync = require("child_process").execSync;
@@ -24185,9 +24285,9 @@ var require_bluetooth = __commonJS({
   }
 });
 
-// ../../../../node_modules/systeminformation/lib/index.js
+// node_modules/systeminformation/lib/index.js
 var require_lib = __commonJS({
-  "../../../../node_modules/systeminformation/lib/index.js"(exports2) {
+  "node_modules/systeminformation/lib/index.js"(exports2) {
     "use strict";
     var lib_version = require_package().version;
     var util = require_util();
@@ -24240,7 +24340,11 @@ var require_lib = __commonJS({
             graphics.graphics(),
             network.networkInterfaces(),
             memory.memLayout(),
-            filesystem.diskLayout()
+            filesystem.diskLayout(),
+            audio.audio(),
+            bluetooth.bluetoothDevices(),
+            usb.usb(),
+            printer.printer()
           ]).then((res) => {
             data.system = res[0];
             data.bios = res[1];
@@ -24255,6 +24359,10 @@ var require_lib = __commonJS({
             data.net = res[10];
             data.memLayout = res[11];
             data.diskLayout = res[12];
+            data.audio = res[13];
+            data.bluetooth = res[14];
+            data.usb = res[15];
+            data.printer = res[16];
             if (callback) {
               callback(data);
             }
@@ -24592,7 +24700,7 @@ var import_websocket_server = __toESM(require_websocket_server(), 1);
 // server.js
 var import_portfinder = __toESM(require_portfinder(), 1);
 
-// ../../../../src/wifi-infos.js
+// node_modules/@ircam/comote-helpers/src/wifi-infos.js
 var import_systeminformation = __toESM(require_lib(), 1);
 async function getWifiInfos() {
   const wifiConnections = await import_systeminformation.default.wifiConnections();
@@ -24608,7 +24716,7 @@ async function getWifiInfos() {
   };
 }
 
-// ../../../../src/network-infos.js
+// node_modules/@ircam/comote-helpers/src/network-infos.js
 var import_systeminformation2 = __toESM(require_lib(), 1);
 async function getNetworkInterfacesInfos({
   interfaceFilter = (i) => {
