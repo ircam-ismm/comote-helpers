@@ -9,9 +9,35 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ -5.0, -1562.0, 1312.0, 1007.0 ],
+        "rect": [ -732.0, -1605.0, 1312.0, 1007.0 ],
         "style": "default",
         "boxes": [
+            {
+                "box": {
+                    "bubble": 1,
+                    "bubbleside": 2,
+                    "fontname": "Arial",
+                    "fontsize": 16.0,
+                    "id": "obj-1",
+                    "linecount": 2,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 159.0, 129.0, 183.5, 61.0 ],
+                    "text": "Choose the correct IP address in the list"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-13",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 2,
+                    "outlettype": [ "", "" ],
+                    "patching_rect": [ 46.0, 124.0, 29.5, 22.0 ],
+                    "text": "t l l"
+                }
+            },
             {
                 "box": {
                     "id": "obj-40",
@@ -181,7 +207,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 1398.0, 770.0, 70.0, 22.0 ],
-                    "text": "buttonB 0"
+                    "text": "key 0. 0."
                 }
             },
             {
@@ -193,7 +219,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 1318.0, 585.0, 99.0, 35.0 ],
-                    "text": "/control /buttonB 0"
+                    "text": "/control /key 0. 0."
                 }
             },
             {
@@ -296,21 +322,6 @@
                     "outlettype": [ "" ],
                     "patching_rect": [ 1318.0, 552.0, 47.0, 22.0 ],
                     "text": "qlim 40"
-                }
-            },
-            {
-                "box": {
-                    "bubble": 1,
-                    "bubbleside": 2,
-                    "fontname": "Arial",
-                    "fontsize": 16.0,
-                    "id": "obj-1",
-                    "linecount": 2,
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 159.0, 129.0, 183.5, 61.0 ],
-                    "text": "Choose the correct IP address in the list"
                 }
             },
             {
@@ -1396,41 +1407,6 @@
             },
             {
                 "box": {
-                    "color": [ 0.0, 0.533333, 0.168627, 1.0 ],
-                    "id": "obj-105",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 46.0, 136.41296296296298, 89.0, 22.0 ],
-                    "text": "r parameters"
-                }
-            },
-            {
-                "box": {
-                    "color": [ 0.0, 0.533333, 0.168627, 1.0 ],
-                    "id": "obj-104",
-                    "maxclass": "newobj",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 392.33333333333326, 434.0, 92.0, 22.0 ],
-                    "text": "r parameters"
-                }
-            },
-            {
-                "box": {
-                    "color": [ 0.701961, 0.415686, 0.886275, 1.0 ],
-                    "id": "obj-103",
-                    "maxclass": "newobj",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 46.0, 901.0, 92.0, 22.0 ],
-                    "text": "s parameters"
-                }
-            },
-            {
-                "box": {
                     "id": "obj-95",
                     "linecount": 9,
                     "maxclass": "comment",
@@ -1720,18 +1696,20 @@
             {
                 "patchline": {
                     "destination": [ "obj-43", 0 ],
-                    "source": [ "obj-104", 0 ]
+                    "midpoints": [ 66.0, 183.55078125, 401.83333333333326, 183.55078125 ],
+                    "source": [ "obj-13", 1 ]
                 }
             },
             {
                 "patchline": {
                     "destination": [ "obj-5", 0 ],
-                    "source": [ "obj-105", 0 ]
+                    "source": [ "obj-13", 0 ]
                 }
             },
             {
                 "patchline": {
-                    "destination": [ "obj-103", 0 ],
+                    "destination": [ "obj-13", 0 ],
+                    "midpoints": [ 55.5, 897.58203125, 29.89453125, 897.58203125, 29.89453125, 105.15625, 55.5, 105.15625 ],
                     "source": [ "obj-18", 0 ]
                 }
             },
