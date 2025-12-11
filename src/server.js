@@ -4,8 +4,6 @@ import { Server as OscServer } from 'node-osc';
 import cloneDeep from 'clone-deep';
 import assignDeep from 'assign-deep';
 
-console.log(WebSocket);
-
 /**
  * @typedef {Object} CoMoteConfig
  * @property {String} id - id of the client CoMote
@@ -27,7 +25,7 @@ console.log(WebSocket);
  *
  * @param {CoMoteConfig} config - CoMote configuration
  * @param {Object} options - options
- * @param {Object} [options.verbose=false] - logs debug informations
+ * @param {Object} [options.verbose=false] - logs debug information
  */
 export class Server {
   constructor(config, options) {
@@ -39,7 +37,6 @@ export class Server {
       interval: null,
       osc: null,
       ws: null,
-      verbose: false,
     }, config));
 
     this._verbose = !!options.verbose;
@@ -61,7 +58,7 @@ export class Server {
     let oscPromise = true;
 
     if (this.config.ws !== null) {
-      const { hostname, port } = this.config.ws;
+      const { port } = this.config.ws;
 
       if (!Number.isInteger(port)) {
         throw new Error(`Invalid port "${port}" for WebSocket server`);
@@ -72,8 +69,7 @@ export class Server {
       }
 
       this._websocketServer = new WebSocketServer({ port });
-      this._websocketServer.on('connection', (socket, request) => {
-        // const ip = request.socket.remoteAddress;
+      this._websocketServer.on('connection', (socket, _request) => {
         socket.on('message', (data, isBinary) => {
           if (isBinary) {
             // @todo
@@ -85,15 +81,13 @@ export class Server {
                 console.log(`> CoMote: new WebSocket message`, data);
               }
 
-              // console.log(data);
-              // console.log(this._wsListeners.size);
               this._wsListeners.forEach(listener => listener(data));
             }
           }
         });
 
         // When a socket closes, or disconnects, remove it from the array.
-        socket.on('close', (code, data) => {
+        socket.on('close', (_code, _data) => {
           if (this._verbose) {
             console.log('> CoMote: closed socket connection');
           }
@@ -117,7 +111,7 @@ export class Server {
     }
 
     if (this.config.osc !== null) {
-      const { hostname, port } = this.config.osc;
+      let { hostname, port } = this.config.osc;
 
       if (!Number.isInteger(port)) {
         throw new Error(`Invalid port "${port}" for OSC server`);
@@ -173,7 +167,7 @@ export class Server {
   }
 
     /**
-   * Add a listener for incomming WebSocket message
+   * Add a listener for incoming WebSocket message
    */
   addWsListener(callback) {
     this._wsListeners.add(callback);
@@ -189,7 +183,7 @@ export class Server {
   }
 
   /**
-   * Add a listener for incomming OSC message
+   * Add a listener for incoming OSC message
    */
   addOscListener(callback) {
     this._oscListeners.add(callback);
