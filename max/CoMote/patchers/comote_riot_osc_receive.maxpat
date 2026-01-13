@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 369.0, -1605.0, 1308.0, 1196.0 ],
+        "rect": [ -736.0, -1605.0, 1777.0, 1006.0 ],
         "boxes": [
             {
                 "box": {
@@ -31,7 +31,7 @@
                     "outlettype": [ "", "int", "", "" ],
                     "parameter_enable": 0,
                     "patching_rect": [ 1422.0, 804.0, 316.0, 108.0 ],
-                    "text": "/riot/v3/112/control/key 0. 0. 1848835"
+                    "text": "button1 0."
                 }
             },
             {
@@ -178,7 +178,7 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 1104.0, 658.0, 89.0, 20.0 ],
-                    "text": "temperature"
+                    "text": "thermometer"
                 }
             },
             {
@@ -533,16 +533,6 @@
                     "numoutlets": 0,
                     "patching_rect": [ 202.0, 909.0, 23.0, 20.0 ],
                     "text": "Hz"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-53",
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 451.0, 1317.0, 19.0, 20.0 ],
-                    "text": "m"
                 }
             },
             {
