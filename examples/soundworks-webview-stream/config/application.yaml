@@ -1,0 +1,8 @@
+name: soundworks-webview-stream
+author: ""
+clients:
+  webview:
+    runtime: browser
+    default: true
+  controller:
+    runtime: browser

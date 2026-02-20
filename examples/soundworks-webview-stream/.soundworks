@@ -1,0 +1,7 @@
+{
+  "configFormat": "yaml",
+  "name": "soundworks-webview-stream",
+  "createVersion": "6.0.0",
+  "template": "js",
+  "templatePackage": "@soundworks/create"
+}
