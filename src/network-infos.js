@@ -42,7 +42,7 @@ export async function getNetworkInterfacesInfos({
       && i.ip4 !== '127.0.0.1'
       && i.ip4 !== 'localhost';
   }
-}= {}) {
+} = {}) {
   const interfaces = await si.networkInterfaces();
 
   if(!interfaces) {

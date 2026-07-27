@@ -18,12 +18,8 @@
   "exports": {
     "./*.js": "./src/*.js"
   },
-  "files": [
-    "./src/**/*.js"
-  ],
   "workspaces": [
     ".",
-    "examples/*",
     "max/CoMote/sources/*"
   ],
   "dependencies": {

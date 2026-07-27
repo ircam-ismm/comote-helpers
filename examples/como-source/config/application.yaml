@@ -1,0 +1,6 @@
+name: como-health
+author: ""
+clients:
+  controller:
+    runtime: browser
+    default: true

@@ -1,0 +1,20 @@
+# build files and dependencies
+/node_modules
+.build
+.data
+
+# ignore all environment config files except default
+/config/env-*
+!/config/env-default.yaml
+
+# junk files
+package-lock.json
+.DS_Store
+Thumbs.db
+
+# TLS certificates
+/**/*.pem
+
+/projects
+# if some projects must be tracked in git, just add them manually
+!/projects
